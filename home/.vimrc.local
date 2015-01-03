@@ -1,0 +1,72 @@
+" For Ctrl-C Ctrl-V
+source $VIMRUNTIME/mswin.vim
+behave mswin
+
+" Word wrap without line breaks
+set wrap
+set linebreak
+set nolist
+
+set shiftwidth=2                " Use indents of 2 spaces
+set tabstop=2                   " An indentation every two columns
+set softtabstop=2               " Let backspace delete indent
+
+highlight clear CursorLineNr    " Remove highlight color from current line number
+
+" prevent vim from automatically inserting line breaks in newly entered text.
+"set textwidth=0
+"set wrapmargin=0
+
+set columns=80
+
+"spellcheck languages switcher
+let g:myLang = 0
+let g:myLangList = [ "nospell", "en_us", "fr" ]
+function! MySpellLang()
+  "loop through languages
+  let g:myLang = g:myLang + 1
+  if g:myLang >= len(g:myLangList) | let g:myLang = 0 | endif
+  if g:myLang == 0 | set nospell | endif
+  if g:myLang == 1 | setlocal spell spelllang=fr | endif
+  if g:myLang == 2 | setlocal spell spelllang=en_us | endif
+  echo "language:" g:myLangList[g:myLang]
+endf
+
+map <F7> :call MySpellLang()<CR>
+imap <F7> <C-o>:call MySpellLang()<CR>
+set nospell " Default to no spell
+
+"W!  save file as root
+cmap W! w !sudo tee >/dev/null % 
+
+" Mouse
+set mouse= "disable the mouse
+
+" Setup for the number plugin
+set number
+
+" Disable folding
+set nofoldenable                " disable code folding
+let g:DisableAutoPHPFolding = 1 " disable PIV's folding
+
+" Easier splits navigation
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+
+" Find merge conflict markers backward
+map <leader>Fc ?\v^[<\|=>]{7}( .*\|$)<CR>
+
+"Disaable auto-complete
+let g:neocomplcache_disable_auto_complete = 1
+
+let g:indent_guides_enable_on_vim_startup = 0
+
+" Gvim
+set guifont=Ubuntu\ Sans\ Mono\ 9.
+set guioptions-=m " Remove menubar
+set guioptions-=r  "remove right-hand scroll
+set guioptions-=L  "remove left-hand scroll bar
+
+nnoremap <silent> <leader>tt :TagbarOpenAutoClose<CR>
