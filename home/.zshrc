@@ -87,6 +87,13 @@ alias -g PV="| pv -ptrab |"
 
 # Drush
 [[ -f ~/.zshrc.drush ]] && source $HOME/.zshrc.drush
+export DRUSH_INI="$HOME/.drush/drush.ini"
+
+if ! bashcompinit >/dev/null 2>&1; then
+    autoload -U bashcompinit
+    bashcompinit -i
+fi
+source $HOME/.drush/drush.complete.sh
 
 # Open file with the right application
 function open () {
