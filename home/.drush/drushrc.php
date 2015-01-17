@@ -73,6 +73,8 @@
  * @see https://git.wiki.kernel.org/index.php/Aliases#Advanced
  */
 $options['shell-aliases']['localhost'] = '!drush en -y stage_file_proxy devel reroute_email diff && drush rap "anonymous user" "access devel information"';
+$options['shell-aliases']['sqldump'] = 'sql-dump --structure-tables-key=common --skip-tables-key=common';
+$options['shell-aliases']['sqlsync'] = 'sql-sync--structure-tables-key=common --skip-tables-key=common';
 $options['shell-aliases']['pull'] = '!git pull'; // We've all done it.
 $options['shell-aliases']['pulldb'] = '!git pull && drush updatedb';
 $options['shell-aliases']['noncore'] = 'pm-list --no-core';
@@ -247,7 +249,7 @@ $options['alias-path'] = array('/home/rhabbachi/.drush/','/home/rhabbachi/.drush
  * commands when the "--structure-tables-key=common" option is provided.
  * You may add specific tables to the existing array or add a new element.
  */
-# $options['structure-tables']['common'] = array('cache', 'cache_*', 'history', 'search_*', 'sessions', 'watchdog');
+$options['structure-tables']['common'] = array('cache', 'cache_*', 'history', 'search_*', 'sessions', 'watchdog');
 
 /**
  * List of tables to be omitted entirely from SQL dumps made by the 'sql-dump'
@@ -256,7 +258,7 @@ $options['alias-path'] = array('/home/rhabbachi/.drush/','/home/rhabbachi/.drush
  * non-Drupal tables used by some other application or during a migration for
  * example.  You may add new tables to the existing array or add a new element.
  */
-# $options['skip-tables']['common'] = array('migration_*');
+$options['skip-tables']['common'] = array('migration_*');
 
 /**
  * Override specific entries in Drupal's variable/config system or settings.php
