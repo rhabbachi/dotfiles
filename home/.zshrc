@@ -42,6 +42,13 @@ source "$HOME/.homesick/repos/homeshick/homeshick.sh"
 fpath=($HOME/.homesick/repos/homeshick/completions $fpath)
 #homeshick --quiet refresh
 
+# Android Studio
+export PATH="$HOME/Programs/android-studio/bin/:$PATH"
+
+# Go lang
+export GOPATH="$HOME/.go/"
+export PATH="$HOME/.go/bin/:$PATH"
+
 # https://wiki.archlinux.org/index.php/Sudo#Passing_aliases
 alias sudo='sudo '
 
@@ -64,7 +71,6 @@ antigen bundles <<EOBUNDLES
 command-not-found
 colored-man
 encode64
-zsh_reload
 colorize
 rsync
 
@@ -110,12 +116,13 @@ alias sf='fasd -sif'     # interactive file selection
 alias z='fasd_cd -d'     # cd, same functionality as j in autojump
 alias zz='fasd_cd -d -i' # cd with interactive selection
 
-if [ -f /etc/lsb-release ] || [ -f /etc/debian_release ] || [ -f /etc/debian_version ]; then
+if [ $(grep "Ubuntu|Debian" /etc/lsb-release) ]; then
     antigen bundle debian
     export apt_pref="apt-get"
     unalias ag
 elif [ -f /etc/arch-release ]; then
     antigen bundle archlinux
+    antigen bundle systemd
 fi
 
 # ZSH port of Fish shell's history search feature.
@@ -129,26 +136,89 @@ bindkey "$terminfo[kcud1]" history-substring-search-down
 [[ "$COLORTERM" == "gnome-terminal" ]] && export ZSH_TMUX_AUTOQUIT=true
 antigen bundle tmux
 
-# Common aliases
-antigen bundle common-aliases
-alias t="multitail -f"
-alias a2log="multitail -f /var/log/httpd/localhost.error.log /var/log/httpd/localhost.access.log"
-
 # Load the theme.
 #antigen theme robbyrussell
 
 # Tell antigen that you're done.
 antigen apply
 
-export LESS='-RS#3NM~g'
+source $HOME/.sshrc
 
+alias zshrc='vim ~/.zshrc' # Quick access to the ~/.zshrc file
+
+# Command line head / tail shortcuts
+alias -g H='| head'
+alias -g T='| tail'
+alias -g G='| grep'
+alias -g L="| less"
+alias -g M="| most"
+alias -g LL="2>&1 | less"
+alias -g CA="2>&1 | cat -A"
+alias -g NE="2> /dev/null"
+alias -g NUL="> /dev/null 2>&1"
+alias -g P="2>&1| pygmentize -l pytb"
 # PV
-alias -g PIPE="| pv -trab |"
+alias -g PV="| pv -trab |"
+
+# zsh is able to auto-do some kungfoo
+# depends on the SUFFIX :)
+if [ ${ZSH_VERSION//\./} -ge 420 ]; then
+  # open browser on urls
+  _browser_fts=(htm html de org net com at cx nl se dk dk php)
+  for ft in $_browser_fts ; do alias -s $ft=$BROWSER ; done
+
+  _editor_fts=(cpp cxx cc c hh h inl asc txt TXT tex)
+  for ft in $_editor_fts ; do alias -s $ft=$EDITOR ; done
+
+  _image_fts=(jpg jpeg png gif mng tiff tif xpm)
+  for ft in $_image_fts ; do alias -s $ft=$XIVIEWER; done
+
+  _media_fts=(ape avi flv mkv mov mp3 mpeg mpg ogg ogm rm wav webm)
+  for ft in $_media_fts ; do alias -s $ft=mplayer ; done
+
+  #read documents
+  alias -s pdf=acroread
+  alias -s ps=gv
+  alias -s dvi=xdvi
+  alias -s chm=xchm
+  alias -s djvu=djview
+
+  #list whats inside packed file
+  alias -s zip="unzip -l"
+  alias -s rar="unrar l"
+  alias -s tar="tar tf"
+  alias -s tar.gz="echo "
+  alias -s ace="unace l"
+fi
+
+# Make zsh know about hosts already accessed by SSH
+zstyle -e ':completion:*:(ssh|scp|sftp|rsh|rsync):hosts' hosts 'reply=(${=${${(f)"$(cat {/etc/ssh_,~/.ssh/known_}hosts(|2)(N) /dev/null)"}%%[# ]*}//,/ })'
+
+# reload zshrc
+function src()
+{
+    local current_pwd=`pwd`
+    cd ~
+    local cache="$ZSH/cache"
+    autoload -U compinit zrecompile
+    compinit -d "$cache/zcomp-$HOST"
+
+    for f in ~/.zshrc "$cache/zcomp-$HOST"; do
+        zrecompile -p $f && command rm -f $f.zwc.old
+    done
+
+    source ~/.zshrc
+
+    cd $current_pwd
+}
+
+# notifyosd
+[ -e $HOME/Programs/notifyosd.zsh/notifyosd.zsh ] && . $HOME/Programs/notifyosd.zsh/notifyosd.zsh
 
 # Drush
 [[ -f ~/.zshrc.drush ]] && source $HOME/.zshrc.drush
 export DRUSH_INI="$HOME/.drush/drush.ini"
-
+## Compleation
 if ! bashcompinit >/dev/null 2>&1; then
     autoload -U bashcompinit
     bashcompinit -i
@@ -165,30 +235,3 @@ alias trees='tree -L 3 | less'
 
 # AUTOSSH
 alias ssh='autossh -M 0 -o "ServerAliveInterval 45" -o "ServerAliveCountMax 2"'
-
-# TOP
-alias top="htop"
-
-# Ping www.google.com 32 times
-alias pingo="ping www.google.com -c 8"
-
-alias date-time='date +%Y%m%d-%H%M%S'
-
-alias clr="clear"
-
-# Ag
-ajs() {
-    ag --js "$@"
-}
-
-acss() {
-    ack --saas --css --less "$@"
-}
-
-fjs() {
-    ag --js -l "$@"
-}
-
-fcss() {
-    ack --saas --css --less -l "$@"
-}

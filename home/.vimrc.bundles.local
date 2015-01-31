@@ -29,19 +29,18 @@ let g:syntastic_php_checkers = ['php', 'phpmd']
 Plugin 'reedes/vim-one'
 
 " Latex
-Plugin 'LaTeX-Box-Team/LaTeX-Box'
+"Plugin 'LaTeX-Box-Team/LaTeX-Box'
 
 " Toggles between relative and absolute line numbers automatically
 Plugin 'myusuf3/numbers.vim'
 
 " Plugins from xolox
-Plugin 'xolox/vim-misc'
-let g:notes_directories = ['~/Dropbox/notes']
-Plugin 'xolox/vim-easytags'
-let g:easytags_async = 1
+"Plugin 'xolox/vim-misc'
+"Plugin 'xolox/vim-easytags'
+"let g:easytags_async = 1
 
 " Using phpctags to generate php ctags index for vim plugin tagbar.
-Plugin 'vim-php/tagbar-phpctags.vim'
+"Plugin 'vim-php/tagbar-phpctags.vim'
 
 "Drupal vim plugin
 "Plugin 'git://drupalcode.org/project/vimrc.git', {'rtp': 'bundle/vim-plugin-for-drupal/'}

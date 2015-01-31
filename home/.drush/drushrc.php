@@ -72,7 +72,7 @@
  *
  * @see https://git.wiki.kernel.org/index.php/Aliases#Advanced
  */
-$options['shell-aliases']['localhost'] = '!drush en -y stage_file_proxy devel reroute_email diff && drush rap "anonymous user" "access devel information"';
+$options['shell-aliases']['localhost'] = '!drush en -y stage_file_proxy devel reroute_email diff better_watchdog_ui && drush rap "anonymous user" "access devel information"';
 $options['shell-aliases']['sqldump'] = 'sql-dump --structure-tables-key=common --skip-tables-key=common';
 $options['shell-aliases']['sqlsync'] = 'sql-sync--structure-tables-key=common --skip-tables-key=common';
 $options['shell-aliases']['pull'] = '!git pull'; // We've all done it.
@@ -143,7 +143,7 @@ $options['shell-aliases']['site-get'] = '@none php-eval "return drush_sitealias_
  * line, paths may be separated by a colon (:) on Unix-based systems or a
  * semi-colon (;) on Windows.
  */
-$options['alias-path'] = array('/home/rhabbachi/.drush/','/home/rhabbachi/.drush/aliases/');
+$options['alias-path'] = array('/home/rhabbachi/.drush','/home/rhabbachi/.drush/aliases');
 
 /**
  * Specify the folder where 'sql-sync' should store persistent dump files.

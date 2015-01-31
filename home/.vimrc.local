@@ -63,10 +63,4 @@ let g:neocomplcache_disable_auto_complete = 1
 
 let g:indent_guides_enable_on_vim_startup = 0
 
-" Gvim
-set guifont=Ubuntu\ Sans\ Mono\ 9.
-set guioptions-=m " Remove menubar
-set guioptions-=r  "remove right-hand scroll
-set guioptions-=L  "remove left-hand scroll bar
-
 nnoremap <silent> <leader>tt :TagbarOpenAutoClose<CR>

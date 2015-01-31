@@ -28,6 +28,9 @@ $conf['devel_themer_enable'] = TRUE;
 # Increase some php variables
 ini_set('memory_limit', '512M');
 ini_set('realpath_cache_size', '24M');
+ini_set('upload_max_filesize', '10M');
+ini_set('max_input_vars', '1000');
+//ini_set('post_max_size', '10M');
 
 # display all error messages
 //$conf['error_level'] = 2;
@@ -71,7 +74,7 @@ $conf['reroute_email_address'] = "riadh+rerouted@angrycactus.biz";
 $conf['reroute_email_enable_message'] = 1;
 
 // admin_menu
-$conf['admin_menu_position_fixed'] = 0;
+//$conf['admin_menu_position_fixed'] = 0;
 $conf['admin_menu_components'] =  array (
   'admin_menu.icon' => true,
   'admin_menu.menu' => true,
