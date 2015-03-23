@@ -18,7 +18,8 @@ $conf['preprocess_css'] = FALSE;
 $conf['preprocess_js'] = FALSE;
 
 # toggle module settings
-# $conf['apachesolr_read_only'] = 1;
+//$conf['apachesolr_default_environment'] = "solr";
+$conf['apachesolr_read_only'] = 1;
 # $conf['apc_enable'] = FALSE;
 
 # enable developer modules
@@ -86,3 +87,6 @@ $conf['admin_menu_components'] =  array (
 
 // module_filter
 $conf['module_filter_use_switch'] = 0;
+
+// Omega
+$conf['omega_toggle_extension_development'] = 1;

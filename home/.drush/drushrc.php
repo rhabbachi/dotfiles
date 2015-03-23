@@ -72,10 +72,10 @@
  *
  * @see https://git.wiki.kernel.org/index.php/Aliases#Advanced
  */
-$options['shell-aliases']['localhost'] = '!drush en -y stage_file_proxy devel reroute_email diff better_watchdog_ui && drush rap "anonymous user" "access devel information"';
+$options['shell-aliases']['localhost'] = '!drush en -y stage_file_proxy devel reroute_email mandrill diff better_watchdog_ui better_watchdog_ui_rules && drush rap "anonymous user" "access devel information"';
 $options['shell-aliases']['sqldump'] = 'sql-dump --structure-tables-key=common --skip-tables-key=common';
 $options['shell-aliases']['sqlsync'] = 'sql-sync--structure-tables-key=common --skip-tables-key=common';
-$options['shell-aliases']['pull'] = '!git pull'; // We've all done it.
+$options['shell-aliases']['pull'] = '!git pull && drush cache-clear all'; // We've all done it.
 $options['shell-aliases']['pulldb'] = '!git pull && drush updatedb';
 $options['shell-aliases']['noncore'] = 'pm-list --no-core';
 $options['shell-aliases']['cca'] = 'cache-clear all';
