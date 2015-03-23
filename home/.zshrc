@@ -213,7 +213,7 @@ function src()
 }
 
 # notifyosd
-[ -e $HOME/Programs/notifyosd.zsh/notifyosd.zsh ] && . $HOME/Programs/notifyosd.zsh/notifyosd.zsh
+[ -e .zshrc.notifyosd ] && . $HOME/.zshrc.notifyosd
 
 # Drush
 [[ -f ~/.zshrc.drush ]] && source $HOME/.zshrc.drush
