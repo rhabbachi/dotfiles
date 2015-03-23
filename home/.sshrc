@@ -14,6 +14,7 @@ alias sgrep='grep -R -n -H -C 5 --exclude-dir={.git,.svn,CVS} '
 
 alias t="multitail -f"
 alias a2log="multitail -f /var/log/httpd/localhost.error.log /var/log/httpd/localhost.access.log"
+alias a2dir=" _ chown rhabbachi:http . -R && _ chmod u+w,g+w . -R"
 
 # because typing 'cd' is A LOT of work!!
 alias ..='cd ../'
@@ -60,8 +61,12 @@ alias fjs="ag --js -l"
 alias acss="ag --saas --css --less"
 alias fcss="ag --saas --css --less -l"
 
-# gitg
+# git gui
 alias gitg="setsid gitg"
+alias gk="setsid gitk --all --branches"
 
 # Tree
 alias trees='tree -L 3 | less'
+
+# Drush
+[[ -f ~/.zshrc.drush ]] && source $HOME/.zshrc.drush

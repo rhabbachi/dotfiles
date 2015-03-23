@@ -123,6 +123,16 @@ if [ $(grep "Ubuntu|Debian" /etc/lsb-release) ]; then
 elif [ -f /etc/arch-release ]; then
     antigen bundle archlinux
     antigen bundle systemd
+    # https://wiki.archlinux.org/index.php/Pacman_tips
+    # '[r]emove [o]rphans' - recursively remove ALL orphaned packages
+     alias pacro="/usr/bin/pacman -Qtdq > /dev/null && sudo /usr/bin/pacman -Rns \$(/usr/bin/pacman -Qtdq | sed -e ':a;N;\$!ba;s/\n/ /g')"
+     orphans() {
+         if [[ ! -n $(pacman -Qdt) ]]; then
+             echo "No orphans to remove."
+         else
+             sudo pacman -Rns $(pacman -Qdtq)
+         fi
+     }
 fi
 
 # ZSH port of Fish shell's history search feature.
@@ -132,8 +142,8 @@ zmodload zsh/terminfo
 bindkey "$terminfo[kcuu1]" history-substring-search-up
 bindkey "$terminfo[kcud1]" history-substring-search-down
 
-[[ "$COLORTERM" == "gnome-terminal" ]] && export ZSH_TMUX_AUTOSTART=true
-[[ "$COLORTERM" == "gnome-terminal" ]] && export ZSH_TMUX_AUTOQUIT=true
+[[ "$DESKTOP_SESSION" == "gnome" ]] && export ZSH_TMUX_AUTOSTART=true
+[[ "$DESKTOP_SESSION" == "gnome" ]] && export ZSH_TMUX_AUTOQUIT=true
 antigen bundle tmux
 
 # Load the theme.
@@ -174,7 +184,7 @@ if [ ${ZSH_VERSION//\./} -ge 420 ]; then
   for ft in $_image_fts ; do alias -s $ft=$XIVIEWER; done
 
   _media_fts=(ape avi flv mkv mov mp3 mpeg mpg ogg ogm rm wav webm)
-  for ft in $_media_fts ; do alias -s $ft=mplayer ; done
+  for ft in $_media_fts ; do alias -s $ft=cvlc ; done
 
   #read documents
   alias -s pdf=acroread
@@ -216,7 +226,6 @@ function src()
 [ -e .zshrc.notifyosd ] && . $HOME/.zshrc.notifyosd
 
 # Drush
-[[ -f ~/.zshrc.drush ]] && source $HOME/.zshrc.drush
 export DRUSH_INI="$HOME/.drush/drush.ini"
 ## Compleation
 if ! bashcompinit >/dev/null 2>&1; then
