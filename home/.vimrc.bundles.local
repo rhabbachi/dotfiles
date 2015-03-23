@@ -57,3 +57,8 @@ Plugin 'veloce/vim-behat'
 " Screen-anchored cursor movement for Vim
 "Plugin 'reedes/vim-wheel'
 
+" Vim plugin for analytics about your programming
+Plugin 'wakatime/vim-wakatime'
+
+" continuously updated session files
+Plugin 'tpope/vim-obsession'
