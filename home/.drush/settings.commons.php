@@ -19,7 +19,7 @@ $conf['preprocess_js'] = FALSE;
 
 # toggle module settings
 //$conf['apachesolr_default_environment'] = "solr";
-$conf['apachesolr_read_only'] = 1;
+//$conf['apachesolr_read_only'] = 1;
 # $conf['apc_enable'] = FALSE;
 
 # enable developer modules
@@ -90,3 +90,11 @@ $conf['module_filter_use_switch'] = 0;
 
 // Omega
 $conf['omega_toggle_extension_development'] = 1;
+
+// Environment Indicator
+$conf['environment_indicator_overwrite'] = TRUE;
+$conf['environment_indicator_overwritten_name'] = 'Localhost';
+$conf['environment_indicator_overwritten_color'] = '#088A08';
+$conf['environment_indicator_overwritten_text_color'] = '#ffffff';
+$conf['environment_indicator_overwritten_position'] = 'bottom';
+$conf['environment_indicator_overwritten_fixed'] = TRUE;
