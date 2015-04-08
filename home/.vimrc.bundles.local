@@ -1,14 +1,10 @@
 " No need for all those colors.
-UnBundle 'altercation/vim-colors-solarized'
-UnBundle 'spf13/vim-colors'
-UnBundle 'flazz/vim-colorschemes'
+"UnBundle 'altercation/vim-colors-solarized'
+"UnBundle 'spf13/vim-colors'
+"UnBundle 'flazz/vim-colorschemes'
 
-" Set the color scheme
+" base16 color schemes
 Plugin 'chriskempson/base16-vim'
-let base16colorspace=256  " Access colors present in 256 colorspace
-set t_Co=256
-set background=dark
-colorscheme base16-monokai
 
 " Simple tmux statusline generator with support for powerline symbols and statusline / airline / lightline integration
 Plugin 'edkolev/tmuxline.vim'
@@ -62,3 +58,6 @@ Plugin 'wakatime/vim-wakatime'
 
 " continuously updated session files
 Plugin 'tpope/vim-obsession'
+
+"Add additional support for Ansible in VIM
+Bundle 'chase/vim-ansible-yaml'
