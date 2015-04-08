@@ -6,9 +6,6 @@ if [ -n "$DISPLAY" -a "$TERM" = "xterm" ]; then
     export TERM=xterm-256color
 fi
 
-export EDITOR="vim"
-export VISUAL=$EDITOR
-
 ### PATHS ###
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/.bin" ]; then
@@ -48,9 +45,6 @@ export PATH="$HOME/Programs/android-studio/bin/:$PATH"
 # Go lang
 export GOPATH="$HOME/.go/"
 export PATH="$HOME/.go/bin/:$PATH"
-
-# https://wiki.archlinux.org/index.php/Sudo#Passing_aliases
-alias sudo='sudo '
 
 # Base16 Shell
 BASE16_SCHEME="monokai"
@@ -152,8 +146,7 @@ antigen bundle tmux
 # Tell antigen that you're done.
 antigen apply
 
-source $HOME/.sshrc
-
+## ZSH specific aliases (Global etc)
 alias zshrc='vim ~/.zshrc' # Quick access to the ~/.zshrc file
 
 # Command line head / tail shortcuts
@@ -239,8 +232,18 @@ function open () {
  setsid xdg-open $1
 }
 
-# Tree
-alias trees='tree -L 3 | less'
-
 # AUTOSSH
 alias ssh='autossh -M 0 -o "ServerAliveInterval 45" -o "ServerAliveCountMax 2"'
+
+# Platform.sh CLI configuration
+PLATFORMSH_CONF=~/.composer/vendor/platformsh/cli/platform.rc
+[ -f "$PLATFORMSH_CONF" ] && . "$PLATFORMSH_CONF"
+
+# Editor
+export EDITOR="vim"
+export VISUAL=$EDITOR
+
+# Load shared shell files
+# Localhost
+source $HOME/.sshrc.d/common.sshrc
+source $HOME/.sshrc.d/drush.sshrc

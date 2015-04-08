@@ -132,7 +132,7 @@ if [ -z "$d" ]; then
   d=$(alias drush | cut -f 2 -d '=' | sed "s/'//g")
 fi
 # Test that drush is an executable.
-[ -x "$d" ] || exit 0
+[ -x "$d" ] || echo "Drush not found"; return
 
 # If the file found is a symlink, resolve to the actual file.
 if [ -h "$d" ] ; then
@@ -340,5 +340,6 @@ function zip2sql() {
   command -v lbzip2 >/dev/null 2>&1 || { echo >&2 "I require lbzip2 but it's not installed.  Aborting."; exit 1; }
 
   drush sql-drop -y && atool -c $1 | pv -pterb | drush sqlc
+  drush cca
   drush localhost
 }

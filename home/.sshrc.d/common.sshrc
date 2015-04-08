@@ -1,0 +1,73 @@
+## Common aliases
+# ls, the common ones I use a lot shortened for rapid fire usage
+alias l='ls -lFh'     #size,show type,human readable
+alias la='ls -lAFh'   #long list,show almost all,show type,human readable
+alias lr='ls -tRFh'   #sorted by date,recursive,show type,human readable
+alias lt='ls -ltFh'   #long list,sorted by date,show type,human readable
+alias ll='ls -l'      #long list
+alias ldot='ls -ld .*'
+alias lS='ls -1FSsh'
+alias lart='ls -1Fcart'
+alias lrt='ls -1Fcrt'
+
+alias grep='grep --color'
+alias sgrep='grep -R -n -H -C 5 --exclude-dir={.git,.svn,CVS} '
+
+alias t="multitail -f"
+alias a2log="multitail -f /var/log/httpd/localhost.error.log /var/log/httpd/localhost.access.log"
+alias a2dir=" _ chown rhabbachi:http . -R && _ chmod u+w,g+w . -R"
+
+# because typing 'cd' is A LOT of work!!
+alias ..='cd ../'
+alias ...='cd ../../'
+alias ....='cd ../../../'
+alias .....='cd ../../../../'
+
+alias dud='du -d 1 -h'
+alias duf='du -sh *'
+alias fd='find . -type d -name'
+alias ff='find . -type f -name'
+
+alias h='history'
+alias hgrep="fc -El 0 | grep"
+alias p='ps -f'
+alias sortnr='sort -n -r'
+alias unexport='unset'
+
+alias whereami=display_info
+
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+
+# Less
+export LESS='-RS#3NM~g'
+
+# TOP
+alias top="htop"
+
+# Ping www.google.com 32 times
+alias pingo="ping www.google.com -c 8"
+
+alias date-time='date +%Y%m%d-%H%M%S'
+
+alias clr="clear"
+
+# Ag
+alias ag="ag -i --pager less"
+alias aphp="ag --php"
+alias fphp="ag --php -l"
+alias ajs="ag --js"
+alias fjs="ag --js -l"
+alias acss="ag --saas --css --less"
+alias fcss="ag --saas --css --less -l"
+
+# git 
+alias gf="git-flow"
+
+## gui
+alias gitg="setsid gitg"
+alias gk="setsid gitk --all --branches"
+
+# Tree
+alias trees='tree -L 3 | less'
