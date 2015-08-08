@@ -26,14 +26,6 @@ export _JAVA_FONTS="/usr/share/fonts/TTF"
 # NVM
 [[ -s $HOME/.nvm/nvm.sh ]] && . $HOME/.nvm/nvm.sh 
 
-# RVM
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source $HOME/.rvm/scripts/rvm
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
-
-# ChefDK
-export CHEFDK_BIN="/opt/chefdk/bin"
-export PATH="$CHEFDK_BIN:$PATH"
-
 # Homeshick
 source "$HOME/.homesick/repos/homeshick/homeshick.sh"
 fpath=($HOME/.homesick/repos/homeshick/completions $fpath)
@@ -46,105 +38,140 @@ export PATH="$HOME/Programs/android-studio/bin/:$PATH"
 export GOPATH="$HOME/.go/"
 export PATH="$HOME/.go/bin/:$PATH"
 
+# RVM
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source $HOME/.rvm/scripts/rvm
+export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+
+# ChefDK
+export CHEFDK_BIN="/opt/chefdk/bin"
+export PATH="$CHEFDK_BIN:$PATH"
+
 # Base16 Shell
-BASE16_SCHEME="monokai"
+BASE16_SCHEME="default"
 BASE16_SHELL="$HOME/.config/base16-shell/base16-$BASE16_SCHEME.dark.sh"
 [[ -s $BASE16_SHELL ]] && . $BASE16_SHELL
 
-# Better prompt
-source $HOME/.promptline.sh
-
-# Antigen
-source $HOME/.antigen/antigen.zsh
-
-# Load the oh-my-zsh's library.
-antigen use oh-my-zsh
-
-# Bundles from the default repo (robbyrussell's oh-my-zsh).
-antigen bundles <<EOBUNDLES
-command-not-found
-colored-man
-encode64
-colorize
-rsync
-
-aws
-
-git
-gitfast
-git-extras
-git-flow
-gitignore
-svn
-
-pip
-
-npm
-node
-
-vundle
-
-vagrant
-bundler
-gem
-rvm
-knife
-
-docker
-
-composer
-# Syntax highlighting bundle.
-zsh-users/zsh-syntax-highlighting
-
-# More completions
-zsh-users/zsh-completions src
-EOBUNDLES
-
-antigen bundle fasd
-alias a='fasd -a'        # any
-alias s='fasd -si'       # show / search / select
-alias d='fasd -d'        # directory
-alias f='fasd -f'        # file
-alias sd='fasd -sid'     # interactive directory selection
-alias sf='fasd -sif'     # interactive file selection
-alias z='fasd_cd -d'     # cd, same functionality as j in autojump
-alias zz='fasd_cd -d -i' # cd with interactive selection
-
-if [ $(grep "Ubuntu|Debian" /etc/lsb-release) ]; then
-    antigen bundle debian
-    export apt_pref="apt-get"
-    unalias ag
-elif [ -f /etc/arch-release ]; then
-    antigen bundle archlinux
-    antigen bundle systemd
-    # https://wiki.archlinux.org/index.php/Pacman_tips
-    # '[r]emove [o]rphans' - recursively remove ALL orphaned packages
-     alias pacro="/usr/bin/pacman -Qtdq > /dev/null && sudo /usr/bin/pacman -Rns \$(/usr/bin/pacman -Qtdq | sed -e ':a;N;\$!ba;s/\n/ /g')"
-     orphans() {
-         if [[ ! -n $(pacman -Qdt) ]]; then
-             echo "No orphans to remove."
-         else
-             sudo pacman -Rns $(pacman -Qdtq)
-         fi
-     }
-fi
-
-# ZSH port of Fish shell's history search feature.
-antigen bundle zsh-users/zsh-history-substring-search
-# bind UP and DOWN arrow keys
-zmodload zsh/terminfo
-bindkey "$terminfo[kcuu1]" history-substring-search-up
-bindkey "$terminfo[kcud1]" history-substring-search-down
-
+# TMUX plugin
 [[ "$DESKTOP_SESSION" == "gnome" ]] && export ZSH_TMUX_AUTOSTART=true
 [[ "$DESKTOP_SESSION" == "gnome" ]] && export ZSH_TMUX_AUTOQUIT=true
-antigen bundle tmux
 
-# Load the theme.
-#antigen theme robbyrussell
+# bgnotify
+bgnotify_threshold=10 ## set your own notification threshold
 
-# Tell antigen that you're done.
-antigen apply
+function bgnotify_formatted {
+  ## $1=exit_status, $2=command, $3=elapsed_time
+
+  [ $1 -eq 0 ] && title="$(tmux display-message -p '#S') -- Completed after $3 sec" || title="$(tmux display-message -p '#S') -- Failed after $3 sec"
+  [ $1 -eq 0 ] && icon="dialog-ok" || icon="dialog-error"
+
+  notify-send "$title"  "$2" -i "$icon";
+}
+
+# zgen
+source $HOME/.zgen/zgen.zsh
+# check if there's no init script
+if ! zgen saved; then
+  echo "Creating a zgen save"
+
+  # Load the oh-my-zsh's library.
+  zgen oh-my-zsh
+
+  # Bundles from the default repo (robbyrussell's oh-my-zsh).
+  ## Core
+  # Needs pkgfile installed
+  zgen oh-my-zsh plugins/command-not-found 
+  zgen oh-my-zsh plugins/colored-man
+  zgen oh-my-zsh plugins/encode64
+  zgen oh-my-zsh plugins/colorize
+  zgen oh-my-zsh plugins/rsync
+  #zgen oh-my-zsh plugins/vi-mode
+
+  #aws
+
+  ## Version Controle Systems
+  zgen oh-my-zsh plugins/git
+  zgen oh-my-zsh plugins/gitfast
+  zgen oh-my-zsh plugins/git-extras
+  zgen oh-my-zsh plugins/git-flow
+  zgen oh-my-zsh plugins/gitignore
+  #svn
+
+  ## Python
+  zgen oh-my-zsh plugins/pip
+
+  ## Node.js
+  zgen oh-my-zsh plugins/npm
+  zgen oh-my-zsh plugins/node
+
+  ## Ruby
+  zgen oh-my-zsh plugins/gem
+  zgen oh-my-zsh plugins/rvm
+  zgen oh-my-zsh plugins/bundler
+  zgen oh-my-zsh plugins/knife
+
+  # PHP
+  zgen oh-my-zsh plugins/composer
+
+  zgen oh-my-zsh plugins/vagrant
+
+  # Syntax highlighting bundle.
+  zgen load zsh-users/zsh-syntax-highlighting
+
+  # ZSH port of Fish shell's history search feature.
+  zgen oh-my-zsh plugins/history-substring-search
+  zgen oh-my-zsh plugins/bgnotify
+  # More completions
+  #zsh-users/zsh-completions src
+
+  zgen oh-my-zsh plugins/fasd
+  alias a='fasd -a'        # any
+  alias s='fasd -si'       # show / search / select
+  alias d='fasd -d'        # directory
+  alias f='fasd -f'        # file
+  alias sd='fasd -sid'     # interactive directory selection
+  alias sf='fasd -sif'     # interactive file selection
+  alias z='fasd_cd -d'     # cd, same functionality as j in autojump
+  alias zz='fasd_cd -d -i' # cd with interactive selection
+
+  if [ $(grep "Ubuntu|Debian" /etc/lsb-release) ]; then
+    zgen oh-my-zsh plugins/debian
+    export apt_pref="apt-get"
+    unalias ag
+  elif [ -f /etc/arch-release ]; then
+    zgen oh-my-zsh plugins/archlinux
+    zgen oh-my-zsh plugins/systemd
+    # https://wiki.archlinux.org/index.php/Pacman_tips
+    # '[r]emove [o]rphans' - recursively remove ALL orphaned packages
+    alias pacro="/usr/bin/pacman -Qtdq > /dev/null && sudo /usr/bin/pacman -Rns \$(/usr/bin/pacman -Qtdq | sed -e ':a;N;\$!ba;s/\n/ /g')"
+    orphans() {
+      if [[ ! -n $(pacman -Qdt) ]]; then
+        echo "No orphans to remove."
+      else
+        sudo pacman -Rns $(pacman -Qdtq)
+      fi
+    }
+  fi
+
+  zgen oh-my-zsh plugins/tmux
+
+  # theme
+  zgen load bhilburn/powerlevel9k
+
+  # save all to init script
+  zgen save
+
+fi
+
+# Enable search by globs
+# http://chneukirchen.org/blog/archive/2012/02/10-new-zsh-tricks-you-may-not-know.html
+bindkey "^R" history-incremental-pattern-search-backward
+bindkey "^S" history-incremental-pattern-search-forward
+
+# Better prompt
+export DEFAULT_USER="rhabbachi"
+POWERLEVEL9K_SHORTEN_DIR_LENGTH=4
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status time)
+source $HOME/.zgen/bhilburn/powerlevel9k-master/powerlevel9k.zsh-theme
 
 ## ZSH specific aliases (Global etc)
 alias zshrc='vim ~/.zshrc' # Quick access to the ~/.zshrc file
@@ -215,12 +242,9 @@ function src()
     cd $current_pwd
 }
 
-# notifyosd
-[ -e .zshrc.notifyosd ] && . $HOME/.zshrc.notifyosd
-
-# Drush
+## Drush
 export DRUSH_INI="$HOME/.drush/drush.ini"
-## Compleation
+# Compleation
 if ! bashcompinit >/dev/null 2>&1; then
     autoload -U bashcompinit
     bashcompinit -i

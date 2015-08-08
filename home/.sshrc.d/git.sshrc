@@ -63,7 +63,7 @@ alias gmt='git mergetool --no-prompt'
 
 alias gg='git gui citool'
 alias gga='git gui citool --amend'
-alias gk='gitk --all --branches'
+alias gk='\setsid \gitk --all $(git log -g --pretty=format:%h)'
 
 alias gsts='git stash show --text'
 alias gsta='git stash'

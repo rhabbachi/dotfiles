@@ -2,7 +2,7 @@
 let base16colorspace=256  " Access colors present in 256 colorspace
 set t_Co=256
 set background=dark
-colorscheme base16-monokai
+colorscheme base16-default
 
 " For Ctrl-C Ctrl-V
 source $VIMRUNTIME/mswin.vim
@@ -55,18 +55,12 @@ set number
 set nofoldenable                " disable code folding
 let g:DisableAutoPHPFolding = 1 " disable PIV's folding
 
-" Easier splits navigation
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
-
-" Find merge conflict markers backward
-map <leader>Fc ?\v^[<\|=>]{7}( .*\|$)<CR>
-
-"Disaable auto-complete
-let g:neocomplcache_disable_auto_complete = 1
-
 let g:indent_guides_enable_on_vim_startup = 0
 
-nnoremap <silent> <leader>tt :TagbarOpenAutoClose<CR>
+" Tagbar
+let g:tagbar_autoclose = 1
+let g:tagbar_width = 50
+let g:tagbar_zoomwidth = 1
+
+" NERDTree
+let g:NERDTreeWinSize=50

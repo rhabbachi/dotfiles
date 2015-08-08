@@ -1,4 +1,5 @@
 let g:airline_powerline_fonts = 1
 let g:airline_theme = 'base16'
 let g:airline#extensions#tabline#enabled = 1
-let g:spf13_bundle_groups=['general', 'neocomplcache', 'programming', 'php', 'ruby', 'python', 'javascript', 'html', 'misc', 'go']
+let g:airline#extensions#tmuxline#enabled = 0
+let g:spf13_bundle_groups=['general', 'programming', 'php', 'javascript', 'html', 'misc']

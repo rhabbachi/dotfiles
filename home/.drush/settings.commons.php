@@ -3,6 +3,12 @@
 Set some useful development environment variables
 */
 
+# change site name
+$conf['site_name'] = 'LOCALHOST';
+
+// Disable drupal's built in cron trigger.
+$conf['cron_safe_threshold'] = 0;
+
 //$conf array are drupal variables that cannot be overridden by db settings.
 $conf['file_directory_temp'] = "sites/default/files/tmp";
 $conf['file_directory_path'] = "sites/default/files";
@@ -27,7 +33,7 @@ $conf['devel_enable'] = TRUE;
 $conf['devel_themer_enable'] = TRUE;
 
 # Increase some php variables
-ini_set('memory_limit', '512M');
+ini_set('memory_limit', '1024M');
 ini_set('realpath_cache_size', '24M');
 ini_set('upload_max_filesize', '10M');
 ini_set('max_input_vars', '1000');

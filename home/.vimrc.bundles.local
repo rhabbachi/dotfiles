@@ -1,63 +1,55 @@
 " No need for all those colors.
-"UnBundle 'altercation/vim-colors-solarized'
-"UnBundle 'spf13/vim-colors'
-"UnBundle 'flazz/vim-colorschemes'
+UnBundle 'altercation/vim-colors-solarized'
+UnBundle 'spf13/vim-colors'
+UnBundle 'flazz/vim-colorschemes'
 
 " base16 color schemes
-Plugin 'chriskempson/base16-vim'
+Bundle 'chriskempson/base16-vim'
 
 " Simple tmux statusline generator with support for powerline symbols and statusline / airline / lightline integration
-Plugin 'edkolev/tmuxline.vim'
+Bundle 'edkolev/tmuxline.vim'
 
 " Seamless navigation between tmux panes and vim splits
-Plugin 'christoomey/vim-tmux-navigator'
+Bundle 'christoomey/vim-tmux-navigator'
 
 " vim plugin for tmux.conf
-Plugin 'tmux-plugins/vim-tmux'
+Bundle 'tmux-plugins/vim-tmux'
+
+" Make terminal vim and tmux work better together.
+Bundle 'tmux-plugins/vim-tmux-focus-events'
 
 " Generate a fast shell prompt with powerline symbols and airline colors
-Plugin 'edkolev/promptline.vim'
+UnBundle 'edkolev/promptline.vim'
 
 " Reset php checkers
 let g:syntastic_php_checkers = ['php', 'phpmd']
 
-" Because Vim's +clientserver is awesome
-Plugin 'reedes/vim-one'
-
-" Latex
-"Plugin 'LaTeX-Box-Team/LaTeX-Box'
-
 " Toggles between relative and absolute line numbers automatically
-Plugin 'myusuf3/numbers.vim'
-
-" Plugins from xolox
-"Plugin 'xolox/vim-misc'
-"Plugin 'xolox/vim-easytags'
-"let g:easytags_async = 1
+Bundle 'myusuf3/numbers.vim'
 
 " Using phpctags to generate php ctags index for vim plugin tagbar.
-"Plugin 'vim-php/tagbar-phpctags.vim'
+Bundle 'vim-php/tagbar-phpctags.vim'
 
 "Drupal vim plugin
-"Plugin 'git://drupalcode.org/project/vimrc.git', {'rtp': 'bundle/vim-plugin-for-drupal/'}
+Bundle 'git://drupalcode.org/project/vimrc.git', {'rtp': 'bundle/vim-plugin-for-drupal/'}
 
 " Vim plugins for chef (syntax highliting and autocomplete snipmate)
-Plugin 'vadv/vim-chef'
+Bundle 'vadv/vim-chef'
 
 " Debbuging
-Plugin 'joonty/vdebug'
+Bundle 'joonty/vdebug'
 
 " Behat support
-Plugin 'veloce/vim-behat'
-
-" Screen-anchored cursor movement for Vim
-"Plugin 'reedes/vim-wheel'
+Bundle 'veloce/vim-behat'
 
 " Vim plugin for analytics about your programming
-Plugin 'wakatime/vim-wakatime'
+UnBundle 'wakatime/vim-wakatime'
 
 " continuously updated session files
-Plugin 'tpope/vim-obsession'
+Bundle 'tpope/vim-obsession'
 
 "Add additional support for Ansible in VIM
 Bundle 'chase/vim-ansible-yaml'
+
+" Grammar checker for English, French, German (etc.) in Vim
+Bundle 'vim-scripts/LanguageTool'

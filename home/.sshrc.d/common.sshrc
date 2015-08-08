@@ -14,8 +14,8 @@ alias grep='grep --color'
 alias sgrep='grep -R -n -H -C 5 --exclude-dir={.git,.svn,CVS} '
 
 alias t="multitail -f"
-alias a2log="multitail -f /var/log/httpd/localhost.error.log /var/log/httpd/localhost.access.log"
-alias a2dir=" _ chown rhabbachi:http . -R && _ chmod u+w,g+w . -R"
+alias a2log="multitail -f /var/log/httpd/localhost.error.log"
+alias a2dir="find . -type d | xargs -I dir bash -c 'sudo chown rhabbachi:http \"dir\" && sudo chmod 775 \"dir\"' ; find . -type f | xargs -I file bash -c 'sudo chown rhabbachi:http \"file\" && sudo chmod 664 \"file\"'"
 
 # because typing 'cd' is A LOT of work!!
 alias ..='cd ../'
@@ -71,3 +71,5 @@ alias gk="setsid gitk --all --branches"
 
 # Tree
 alias trees='tree -L 3 | less'
+
+alias diff=colordiff
