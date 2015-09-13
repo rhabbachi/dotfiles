@@ -47,10 +47,15 @@ ini_set('max_input_vars', '1000');
 # Mandrill
 $conf['mandrill_api_key'] = 'eRvS_swm1JwZwXvB28hsBA';
 # intercept emails using Devel
-$conf['mail_system'] = array(
+//$conf['mail_system'] = array(
 	//'default-system' => 'DevelMailLog',
-	'default-system' => 'MandrillMailSystem',
-);
+	//'default-system' => 'MandrillMailSystem',
+//);
+
+# Maillog
+$conf['maillog_send'] = FALSE;
+$conf['maillog_log'] = TRUE;
+$conf['maillog_devel'] = TRUE;
 
 // Uncomment the following to disable Secure Pages
 $conf['securepages_enable'] = FALSE;
