@@ -3,7 +3,7 @@ export LANG="$LC_ALL"
 
 # Enable correct colors
 if [ -n "$DISPLAY" -a "$TERM" = "xterm" ]; then
-    export TERM=xterm-256color
+  export TERM=xterm-256color
 fi
 
 ### PATHS ###
@@ -16,6 +16,17 @@ if [ -d "$HOME/.local/bin" ]; then
   export PATH="$HOME/.local/bin:$PATH"
 fi
 
+# Android Studio
+export PATH="$HOME/Programs/android-studio/bin/:$PATH"
+
+# Go lang
+export GOPATH="$HOME/.go/"
+export PATH="$HOME/.go/bin/:$PATH"
+
+# ChefDK
+#export CHEFDK_BIN="/opt/chefdk/bin"
+#export PATH="$CHEFDK_BIN:$PATH"
+
 # Needed by Eclipse
 export MOZILLA_FIVE_HOME="/usr/lib/firefox"
 
@@ -26,25 +37,16 @@ export _JAVA_FONTS="/usr/share/fonts/TTF"
 # NVM
 [[ -s $HOME/.nvm/nvm.sh ]] && . $HOME/.nvm/nvm.sh 
 
+# RVM
+## Add RVM to PATH for scripting
+export PATH="$HOME/.rvm/bin:$PATH"
+## Load RVM into a shell session *as a function*
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+
 # Homeshick
 source "$HOME/.homesick/repos/homeshick/homeshick.sh"
 fpath=($HOME/.homesick/repos/homeshick/completions $fpath)
 #homeshick --quiet refresh
-
-# Android Studio
-export PATH="$HOME/Programs/android-studio/bin/:$PATH"
-
-# Go lang
-export GOPATH="$HOME/.go/"
-export PATH="$HOME/.go/bin/:$PATH"
-
-# RVM
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source $HOME/.rvm/scripts/rvm
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
-
-# ChefDK
-export CHEFDK_BIN="/opt/chefdk/bin"
-export PATH="$CHEFDK_BIN:$PATH"
 
 # Base16 Shell
 BASE16_SCHEME="default"
@@ -59,12 +61,12 @@ BASE16_SHELL="$HOME/.config/base16-shell/base16-$BASE16_SCHEME.dark.sh"
 bgnotify_threshold=10 ## set your own notification threshold
 
 function bgnotify_formatted {
-  ## $1=exit_status, $2=command, $3=elapsed_time
+## $1=exit_status, $2=command, $3=elapsed_time
 
-  [ $1 -eq 0 ] && title="$(tmux display-message -p '#S') -- Completed after $3 sec" || title="$(tmux display-message -p '#S') -- Failed after $3 sec"
-  [ $1 -eq 0 ] && icon="dialog-ok" || icon="dialog-error"
+[ $1 -eq 0 ] && title="$(tmux display-message -p '#S') -- Completed after $3 sec" || title="$(tmux display-message -p '#S') -- Failed after $3 sec"
+[ $1 -eq 0 ] && icon="dialog-ok" || icon="dialog-error"
 
-  notify-send "$title"  "$2" -i "$icon";
+notify-send "$title"  "$2" -i "$icon";
 }
 
 # zgen
@@ -73,6 +75,7 @@ source $HOME/.zgen/zgen.zsh
 if ! zgen saved; then
   echo "Creating a zgen save"
 
+  export DISABLE_AUTO_UPDATE="true"
   # Load the oh-my-zsh's library.
   zgen oh-my-zsh
 
@@ -85,6 +88,7 @@ if ! zgen saved; then
   zgen oh-my-zsh plugins/colorize
   zgen oh-my-zsh plugins/rsync
   #zgen oh-my-zsh plugins/vi-mode
+  zgen oh-my-zsh plugins/fasd
 
   #aws
 
@@ -117,6 +121,7 @@ if ! zgen saved; then
   # Syntax highlighting bundle.
   zgen load zsh-users/zsh-syntax-highlighting
 
+  zgen oh-my-zsh plugins/history
   # ZSH port of Fish shell's history search feature.
   zgen oh-my-zsh plugins/history-substring-search
   zgen oh-my-zsh plugins/bgnotify
@@ -154,6 +159,7 @@ if ! zgen saved; then
 
   zgen oh-my-zsh plugins/tmux
 
+  zgen oh-my-zsh sublime
   # theme
   zgen load bhilburn/powerlevel9k
 
@@ -227,33 +233,33 @@ zstyle -e ':completion:*:(ssh|scp|sftp|rsh|rsync):hosts' hosts 'reply=(${=${${(f
 # reload zshrc
 function src()
 {
-    local current_pwd=`pwd`
-    cd ~
-    local cache="$ZSH/cache"
-    autoload -U compinit zrecompile
-    compinit -d "$cache/zcomp-$HOST"
+  local current_pwd=`pwd`
+  cd ~
+  local cache="$ZSH/cache"
+  autoload -U compinit zrecompile
+  compinit -d "$cache/zcomp-$HOST"
 
-    for f in ~/.zshrc "$cache/zcomp-$HOST"; do
-        zrecompile -p $f && command rm -f $f.zwc.old
-    done
+  for f in ~/.zshrc "$cache/zcomp-$HOST"; do
+    zrecompile -p $f && command rm -f $f.zwc.old
+  done
 
-    source ~/.zshrc
+  source ~/.zshrc
 
-    cd $current_pwd
+  cd $current_pwd
 }
 
 ## Drush
 export DRUSH_INI="$HOME/.drush/drush.ini"
 # Compleation
 if ! bashcompinit >/dev/null 2>&1; then
-    autoload -U bashcompinit
-    bashcompinit -i
+  autoload -U bashcompinit
+  bashcompinit -i
 fi
 source $HOME/.drush/drush.complete.sh
 
 # Open file with the right application
 function open () {
- setsid xdg-open $1
+setsid xdg-open $1
 }
 
 # AUTOSSH
@@ -267,7 +273,12 @@ PLATFORMSH_CONF=~/.composer/vendor/platformsh/cli/platform.rc
 export EDITOR="vim"
 export VISUAL=$EDITOR
 
+# GIT
+alias gsm='git show -s --format=%B'
+command -v hub >/dev/null 2>&1 && alias git=hub
+
 # Load shared shell files
 # Localhost
-source $HOME/.sshrc.d/common.sshrc
-source $HOME/.sshrc.d/drush.sshrc
+source $HOME/.zshrc.common
+source $HOME/.zshrc.drush
+
