@@ -53,3 +53,6 @@ Bundle 'chase/vim-ansible-yaml'
 
 " Grammar checker for English, French, German (etc.) in Vim
 Bundle 'vim-scripts/LanguageTool'
+
+" A Filetype plugin for csv files
+Bundle 'chrisbra/csv.vim'

@@ -5,8 +5,8 @@ set background=dark
 colorscheme base16-default
 
 " For Ctrl-C Ctrl-V
-source $VIMRUNTIME/mswin.vim
-behave mswin
+"source $VIMRUNTIME/mswin.vim
+"behave mswin
 
 " Word wrap without line breaks
 set wrap
@@ -68,3 +68,24 @@ let g:NERDTreeWinSize=50
 " http://vim.wikia.com/wiki/Fix_syntax_highlighting
 noremap <F12> <Esc>:syntax sync fromstart<CR>
 inoremap <F12> <C-o>:syntax sync fromstart<CR>
+
+" http://stackoverflow.com/questions/1269689/to-disable-entering-ex-mode-in-vim
+nnoremap Q <Nop>
+
+" http://vim.wikia.com/wiki/Search_for_visually_selected_text
+vnoremap // y/<C-R>"<CR>
+
+" Prevent conflict between neocomplete and vim-multiple-cursors
+" Called once right before you start selecting multiple cursors
+function! Multiple_cursors_before()
+  if exists(':NeoCompleteLock')==2
+    exe 'NeoCompleteLock'
+  endif
+endfunction
+
+" Called once only when the multiple selection is canceled (default <Esc>)
+function! Multiple_cursors_after()
+  if exists(':NeoCompleteUnlock')==2
+    exe 'NeoCompleteUnlock'
+  endif
+endfunction
