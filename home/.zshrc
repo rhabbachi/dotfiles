@@ -1,3 +1,6 @@
+# http://unix.stackexchange.com/questions/72086/ctrl-s-hang-terminal-emulator
+stty -ixon
+
 export LC_ALL=en_US.utf-8
 export LANG="$LC_ALL"
 
@@ -69,13 +72,15 @@ function bgnotify_formatted {
 notify-send "$title"  "$2" -i "$icon";
 }
 
+# Disable OH-MY-ZSH updates
+export DISABLE_AUTO_UPDATE="true"
+
 # zgen
 source $HOME/.zgen/zgen.zsh
 # check if there's no init script
 if ! zgen saved; then
   echo "Creating a zgen save"
 
-  export DISABLE_AUTO_UPDATE="true"
   # Load the oh-my-zsh's library.
   zgen oh-my-zsh
 
@@ -124,9 +129,15 @@ if ! zgen saved; then
   zgen oh-my-zsh plugins/history
   # ZSH port of Fish shell's history search feature.
   zgen oh-my-zsh plugins/history-substring-search
+
+  # Desktop notification on command compleation.
   zgen oh-my-zsh plugins/bgnotify
+
   # More completions
   #zsh-users/zsh-completions src
+
+  # Pass password manager.
+  zgen oh-my-zsh plugins/pass
 
   zgen oh-my-zsh plugins/fasd
   alias a='fasd -a'        # any
@@ -167,11 +178,6 @@ if ! zgen saved; then
   zgen save
 
 fi
-
-# Enable search by globs
-# http://chneukirchen.org/blog/archive/2012/02/10-new-zsh-tricks-you-may-not-know.html
-bindkey "^R" history-incremental-pattern-search-backward
-bindkey "^S" history-incremental-pattern-search-forward
 
 # Better prompt
 export DEFAULT_USER="rhabbachi"
@@ -277,8 +283,14 @@ export VISUAL=$EDITOR
 alias gsm='git show -s --format=%B'
 command -v hub >/dev/null 2>&1 && alias git=hub
 
+# Cat
+alias dog="colorize"
+
 # Load shared shell files
 # Localhost
 source $HOME/.zshrc.common
 source $HOME/.zshrc.drush
+source $HOME/.zshrc.clip
 
+# A command-line fuzzy finder written in Go
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
