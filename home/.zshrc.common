@@ -16,6 +16,9 @@ alias sgrep='grep -R -n -H -C 5 --exclude-dir={.git,.svn,CVS} '
 alias t="multitail -f"
 alias a2log="multitail -f /var/log/httpd/localhost.error.log"
 alias a2dir="find . -type d | xargs -I dir bash -c 'sudo chown rhabbachi:http \"dir\" && sudo chmod 775 \"dir\"' ; find . -type f | xargs -I file bash -c 'sudo chown rhabbachi:http \"file\" && sudo chmod 664 \"file\"'"
+function a2link() {
+ln -sf `pwd` $HOME/public_html/$1
+}
 
 # because typing 'cd' is A LOT of work!!
 alias ..='cd ../'
