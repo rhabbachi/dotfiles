@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+wrapper() {
+  ## print the command to the logfile
+  eval "$@" >> $OUTPUT_FILE 2>&1
+}
+
+OUTPUT_FILE="/tmp/backup-home.attic-"$1
+
+if [ -e $OUTPUT_FILE ] ; then
+  wrapper \rm $OUTPUT_FILE
+fi
+
+function home_prune () {
+\attic prune $REPO_HOME --keep-daily=7 --keep-weekly=4 --keep-monthly=12
+}
+
+
+(
+wrapper echo "$1"
+
+echo "# Checkng for missing dependencies.."
+command -v \trash >/dev/null 2>&1 || { wrapper echo "Trash-cli not found. Aborting."; echo EOF; }
+command -v \attic >/dev/null 2>&1 || { wrapper echo "Attic not found. Aborting."; echo EOF; }
+command -v \findmnt >/dev/null 2>&1 || { wrapper echo "findmnt not found. Aborting."; echo EOF; }
+
+echo "# Establishing Backup mount point.."
+BACKUP_DIR=$(findmnt -runo target | grep "$1" | head -n1)
+# Skip if the mount point is empty.
+[[ -e $BACKUP_DIR ]] && { wrapper echo "Backup mount point not found!"; echo EOF; }
+
+REPO_HOME=$BACKUP_DIR"/"$(hostname)".attic"
+IGNORELIST=$HOME"/.attic/ignorelist"
+
+echo "# Emptying Trash.."
+wrapper trash-empty 30 || echo EOF
+
+echo "# Geting Attic Repo Passphrase.."
+ATTIC_PASSPHRASE=$(zenity --password --title="Attic Repo PASSPHRASE")
+export ATTIC_PASSPHRASE
+
+echo "# Checking the attic repo.."
+wrapper \attic check $REPO_HOME || echo EOF
+
+echo "# Creating new backup.."
+wrapper \attic create $REPO_HOME::$(hostname)-$(date +%Y%m%d-%H%M%S) \
+  $HOME \
+  --exclude-from $IGNORELIST \
+  --exclude-caches \
+  --stats
+
+echo "# Show backup log"
+if [ -e $OUTPUT_FILE ] ; then
+  zenity --text-info \
+    --title="Backup logs from "$OUTPUT_FILE \
+    --filename=$OUTPUT_FILE
+fi
+) | zenity --progress \
+  --title="Backup" \
+  --pulsate \
+  --auto-close
