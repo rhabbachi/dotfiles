@@ -84,3 +84,6 @@ function clippaste() {
     fi
   fi
 }
+
+# Global alias
+alias -g CLIP="| clipcopy"

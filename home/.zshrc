@@ -3,6 +3,8 @@ stty -ixon
 
 export LC_ALL=en_US.utf-8
 export LANG="$LC_ALL"
+export EDITOR="vim"
+export VISUAL=$EDITOR
 
 # Enable correct colors
 if [ -n "$DISPLAY" -a "$TERM" = "xterm" ]; then
@@ -26,181 +28,211 @@ export PATH="$HOME/Programs/android-studio/bin/:$PATH"
 export GOPATH="$HOME/.go/"
 export PATH="$HOME/.go/bin/:$PATH"
 
-# ChefDK
-#export CHEFDK_BIN="/opt/chefdk/bin"
-#export PATH="$CHEFDK_BIN:$PATH"
-
-# Needed by Eclipse
-export MOZILLA_FIVE_HOME="/usr/lib/firefox"
-
 # For Java application
 export _JAVA_OPTIONS="-Dawt.useSystemAAFontSettings=lcd -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel"
 export _JAVA_FONTS="/usr/share/fonts/TTF"
 
-# NVM
-[[ -s $HOME/.nvm/nvm.sh ]] && . $HOME/.nvm/nvm.sh 
+# Disable OH-MY-ZSH updates
+export DISABLE_AUTO_UPDATE="true"
+
+# Check if zplug is installed
+[[ -d ~/.zplug ]] || {
+  curl -fLo ~/.zplug/zplug --create-dirs https://git.io/zplug
+  source ~/.zplug/zplug && zplug update --self
+}
+source $HOME/.zplug/zplug
+# https://github.com/b4b4r07/zplug#let-zplug-manage-zplug
+zplug "b4b4r07/zplug"
+
+# Bundles from the default repo (robbyrussell's oh-my-zsh).
+# Core
+## Aliases
+zplug "plugins/common-aliases", from:oh-my-zsh
+alias top="htop"
+# Ping www.google.com 8 times
+alias pingo="ping www.google.com -c 8"
+alias date-time='date +%Y%m%d-%H%M%S'
+alias clr="clear"
+alias a2log="multitail -f /var/log/httpd/localhost.error.log"
+alias a2dir="find . -type d | xargs -I dir bash -c 'sudo chown rhabbachi:http \"dir\" && sudo chmod 775 \"dir\"' ; find . -type f | xargs -I file bash -c 'sudo chown rhabbachi:http \"file\" && sudo chmod 664 \"file\"'"
+function a2link() {
+local site_name="$1"
+if [ -e "$site_name" ]; then
+  echo "Missing site name"
+  return
+fi
+ln -sf `pwd` $HOME/public_html/$site_name
+}
+# PV
+alias -g PV="| pv -trab |"
+# Ag
+alias ag="ag -i"
+alias aphp="ag --php"
+alias fphp="ag --php -l"
+alias ajs="ag --js"
+alias fjs="ag --js -l"
+alias acss="ag --saas --css --less"
+alias fcss="ag --saas --css --less -l"
+alias gf="git-flow"
+alias gitg="setsid gitg"
+alias gk="setsid gitk --all --branches"
+alias trees='tree -L 3 | less'
+alias diff='colordiff'
+# Needs pkgfile installed
+zplug "plugins/command-not-found", from:oh-my-zsh, if:"which pkgfile"
+zplug "plugins/colored-man", from:oh-my-zsh
+zplug "plugins/encode64", from:oh-my-zsh
+zplug "plugins/colorize", from:oh-my-zsh
+alias dog="colorize"
+zplug "plugins/rsync", from:oh-my-zsh, if:"which rsync"
+
+# Fasd
+zplug "plugins/fasd", from:oh-my-zsh
+alias a='fasd -a'        # any
+alias s='fasd -si'       # show / search / select
+alias d='fasd -d'        # directory
+alias f='fasd -f'        # file
+alias sd='fasd -sid'     # interactive directory selection
+alias sf='fasd -sif'     # interactive file selection
+alias z='fasd_cd -d'     # cd, same functionality as j in autojump
+alias zz='fasd_cd -d -i' # cd with interactive selection
+
+# Git
+zplug "plugins/git", from:oh-my-zsh, if:"which git"
+zplug "plugins/gitfast", from:oh-my-zsh, if:"which git"
+zplug "plugins/git-extras", from:oh-my-zsh, if:"which git"
+zplug "plugins/git-flow", from:oh-my-zsh, if:"which git"
+zplug "plugins/gitignore", from:oh-my-zsh, if:"which git"
+zplug "github/hub", \
+  as:command, \
+  from:gh-r, \
+  of:"*linux*amd64*"
+command -v hub >/dev/null 2>&1 && eval "$(hub alias -s)"
+fpath=($ZPLUG_HOME/repos/github/hub-linux-amd64-2.2.2/etc/ $fpath)
+alias gsm='git show -s --format=%B'
+
+## Node.js
+zplug "plugins/npm", from:oh-my-zsh
+
+## Ruby
+zplug "plugins/gem", from:oh-my-zsh
+zplug "plugins/rvm", from:oh-my-zsh
+#zplug "plugins/bundler", from:oh-my-zsh
+zplug "plugins/knife", from:oh-my-zsh
+
+# PHP
+zplug "plugins/composer", from:oh-my-zsh
+
+# Vagrant
+zplug "plugins/vagrant", from:oh-my-zsh
+
+# Syntax highlighting bundle.
+zplug "zsh-users/zsh-syntax-highlighting"
+
+zplug "plugins/history", from:oh-my-zsh
+# ZSH port of Fish shell's history search feature.
+zplug "plugins/history-substring-search", from:oh-my-zsh
+
+# Desktop notification on command compleation.
+zplug "plugins/bgnotify", from:oh-my-zsh
+bgnotify_threshold=10 ## set your own notification threshold
+function bgnotify_formatted {
+
+[ $1 -eq 0 ] && title="$(tmux display-message -p '#S') -- Completed after $3 sec" \
+  || title="$(tmux display-message -p '#S') -- Failed after $3 sec"
+[ $1 -eq 0 ] && icon="dialog-ok" \
+  || icon="dialog-error"
+
+notify-send "$title"  "$2" -i "$icon";
+}
+
+# Pass password manager.
+zplug "plugins/pass", from:oh-my-zsh
+
+# A command-line fuzzy finder written in Go
+# Grab binaries from GitHub Releases
+# and rename to use "file:" tag
+zplug "junegunn/fzf-bin", \
+  as:command, \
+  from:gh-r, \
+  file:fzf, \
+  of:"*linux*amd64*"
+zplug "junegunn/fzf", as:command, of:"bin/fzf-tmux", if:"which fzf"
+zplug "junegunn/fzf", of:"shell/key-bindings.zsh", if:"which fzf-tmux"
+
+if [ $(grep "Ubuntu|Debian" /etc/lsb-release) ]; then
+  zplug "plugins/debian", from:oh-my-zsh
+  export apt_pref="apt-get"
+  unalias ag
+elif [ -f /etc/arch-release ]; then
+  zplug "plugins/archlinux", from:oh-my-zsh
+  zplug "plugins/systemd", from:oh-my-zsh
+  # https://wiki.archlinux.org/index.php/Pacman_tips
+  # '[r]emove [o]rphans' - recursively remove ALL orphaned packages
+  alias pacro="/usr/bin/pacman -Qtdq > /dev/null && sudo /usr/bin/pacman -Rns \$(/usr/bin/pacman -Qtdq | sed -e ':a;N;\$!ba;s/\n/ /g')"
+  orphans() {
+    if [[ ! -n $(pacman -Qdt) ]]; then
+      echo "No orphans to remove."
+    else
+      sudo pacman -Rns $(pacman -Qdtq)
+    fi
+  }
+fi
+
+# TMUX plugin
+zplug "plugins/tmux", from:oh-my-zsh, if:"which tmux"
+[[ "$DESKTOP_SESSION" == "gnome" ]] && export ZSH_TMUX_AUTOSTART=true
+[[ "$DESKTOP_SESSION" == "gnome" ]] && export ZSH_TMUX_AUTOQUIT=true
+
+zplug "plugins/sublime", from:oh-my-zsh, if:"which subl3"
+
+# Base16 Shell
+zplug "chriskempson/base16-shell", of:"base16-default.dark.sh"
+
+# Better prompt
+zplug "bhilburn/powerlevel9k"
+export DEFAULT_USER="rhabbachi"
+POWERLEVEL9K_SHORTEN_DIR_LENGTH=4
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status time)
+
+# Homeshick
+zplug "andsens/homeshick", of:"homeshick.sh", do:"homeshick --quiet refresh"
+fpath=($ZPLUG_HOME/repos/andsens/homeshick/completions $fpath)
+
+# Drush compleation
+export DRUSH_INI="$HOME/.drush/drush.ini"
+# Compleation
+if ! bashcompinit >/dev/null 2>&1; then
+  autoload -U bashcompinit
+  bashcompinit -i
+fi
+zplug "$HOME/.drush/drush.complete.sh", from:local
 
 # RVM
 ## Add RVM to PATH for scripting
 export PATH="$HOME/.rvm/bin:$PATH"
 ## Load RVM into a shell session *as a function*
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+zplug "$HOME/.rvm/scripts/rvm", from:local
 
-# Homeshick
-source "$HOME/.homesick/repos/homeshick/homeshick.sh"
-fpath=($HOME/.homesick/repos/homeshick/completions $fpath)
-#homeshick --quiet refresh
+# NVM
+zplug "$HOME/.nvm/nvm.sh", from:local
 
-# Base16 Shell
-BASE16_SCHEME="default"
-BASE16_SHELL="$HOME/.config/base16-shell/base16-$BASE16_SCHEME.dark.sh"
-[[ -s $BASE16_SHELL ]] && . $BASE16_SHELL
+# Platform.sh CLI configuration
+zplug "$HOME/.composer/vendor/platformsh/cli/platform.rc", from:local
 
-# TMUX plugin
-[[ "$DESKTOP_SESSION" == "gnome" ]] && export ZSH_TMUX_AUTOSTART=true
-[[ "$DESKTOP_SESSION" == "gnome" ]] && export ZSH_TMUX_AUTOQUIT=true
+# Custom zsh config/commands
+zplug "$HOME/.zplug/custom", from:local, of:"*.zsh"
 
-# bgnotify
-bgnotify_threshold=10 ## set your own notification threshold
-
-function bgnotify_formatted {
-## $1=exit_status, $2=command, $3=elapsed_time
-
-[ $1 -eq 0 ] && title="$(tmux display-message -p '#S') -- Completed after $3 sec" || title="$(tmux display-message -p '#S') -- Failed after $3 sec"
-[ $1 -eq 0 ] && icon="dialog-ok" || icon="dialog-error"
-
-notify-send "$title"  "$2" -i "$icon";
-}
-
-# Disable OH-MY-ZSH updates
-export DISABLE_AUTO_UPDATE="true"
-
-# zgen
-source $HOME/.zgen/zgen.zsh
-# check if there's no init script
-if ! zgen saved; then
-  echo "Creating a zgen save"
-
-  # Load the oh-my-zsh's library.
-  zgen oh-my-zsh
-
-  # Bundles from the default repo (robbyrussell's oh-my-zsh).
-  ## Core
-  # Needs pkgfile installed
-  zgen oh-my-zsh plugins/command-not-found 
-  zgen oh-my-zsh plugins/colored-man
-  zgen oh-my-zsh plugins/encode64
-  zgen oh-my-zsh plugins/colorize
-  zgen oh-my-zsh plugins/rsync
-  #zgen oh-my-zsh plugins/vi-mode
-  zgen oh-my-zsh plugins/fasd
-
-  #aws
-
-  ## Version Controle Systems
-  zgen oh-my-zsh plugins/git
-  zgen oh-my-zsh plugins/gitfast
-  zgen oh-my-zsh plugins/git-extras
-  zgen oh-my-zsh plugins/git-flow
-  zgen oh-my-zsh plugins/gitignore
-  #svn
-
-  ## Python
-  zgen oh-my-zsh plugins/pip
-
-  ## Node.js
-  zgen oh-my-zsh plugins/npm
-  zgen oh-my-zsh plugins/node
-
-  ## Ruby
-  zgen oh-my-zsh plugins/gem
-  zgen oh-my-zsh plugins/rvm
-  zgen oh-my-zsh plugins/bundler
-  zgen oh-my-zsh plugins/knife
-
-  # PHP
-  zgen oh-my-zsh plugins/composer
-
-  zgen oh-my-zsh plugins/vagrant
-
-  # Syntax highlighting bundle.
-  zgen load zsh-users/zsh-syntax-highlighting
-
-  zgen oh-my-zsh plugins/history
-  # ZSH port of Fish shell's history search feature.
-  zgen oh-my-zsh plugins/history-substring-search
-
-  # Desktop notification on command compleation.
-  zgen oh-my-zsh plugins/bgnotify
-
-  # More completions
-  #zsh-users/zsh-completions src
-
-  # Pass password manager.
-  zgen oh-my-zsh plugins/pass
-
-  zgen oh-my-zsh plugins/fasd
-  alias a='fasd -a'        # any
-  alias s='fasd -si'       # show / search / select
-  alias d='fasd -d'        # directory
-  alias f='fasd -f'        # file
-  alias sd='fasd -sid'     # interactive directory selection
-  alias sf='fasd -sif'     # interactive file selection
-  alias z='fasd_cd -d'     # cd, same functionality as j in autojump
-  alias zz='fasd_cd -d -i' # cd with interactive selection
-
-  if [ $(grep "Ubuntu|Debian" /etc/lsb-release) ]; then
-    zgen oh-my-zsh plugins/debian
-    export apt_pref="apt-get"
-    unalias ag
-  elif [ -f /etc/arch-release ]; then
-    zgen oh-my-zsh plugins/archlinux
-    zgen oh-my-zsh plugins/systemd
-    # https://wiki.archlinux.org/index.php/Pacman_tips
-    # '[r]emove [o]rphans' - recursively remove ALL orphaned packages
-    alias pacro="/usr/bin/pacman -Qtdq > /dev/null && sudo /usr/bin/pacman -Rns \$(/usr/bin/pacman -Qtdq | sed -e ':a;N;\$!ba;s/\n/ /g')"
-    orphans() {
-      if [[ ! -n $(pacman -Qdt) ]]; then
-        echo "No orphans to remove."
-      else
-        sudo pacman -Rns $(pacman -Qdtq)
-      fi
-    }
+# save all to init script
+if ! zplug check --verbose; then
+  printf "Install? [y/N]: "
+  if read -q; then
+    echo; zplug install
   fi
-
-  zgen oh-my-zsh plugins/tmux
-
-  zgen oh-my-zsh sublime
-  # theme
-  zgen load bhilburn/powerlevel9k
-
-  # save all to init script
-  zgen save
-
 fi
 
-# Better prompt
-export DEFAULT_USER="rhabbachi"
-POWERLEVEL9K_SHORTEN_DIR_LENGTH=4
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status time)
-source $HOME/.zgen/bhilburn/powerlevel9k-master/powerlevel9k.zsh-theme
-
-## ZSH specific aliases (Global etc)
-alias zshrc='vim ~/.zshrc' # Quick access to the ~/.zshrc file
-
-# Command line head / tail shortcuts
-alias -g H='| head'
-alias -g T='| tail'
-alias -g G='| grep'
-alias -g L="| less"
-alias -g M="| most"
-alias -g LL="2>&1 | less"
-alias -g CA="2>&1 | cat -A"
-alias -g NE="2> /dev/null"
-alias -g NUL="> /dev/null 2>&1"
-alias -g P="2>&1| pygmentize -l pytb"
-# PV
-alias -g PV="| pv -trab |"
+# Then, source plugins and add commands to $PATH
+zplug load --verbose
 
 # zsh is able to auto-do some kungfoo
 # depends on the SUFFIX :)
@@ -236,33 +268,6 @@ fi
 # Make zsh know about hosts already accessed by SSH
 zstyle -e ':completion:*:(ssh|scp|sftp|rsh|rsync):hosts' hosts 'reply=(${=${${(f)"$(cat {/etc/ssh_,~/.ssh/known_}hosts(|2)(N) /dev/null)"}%%[# ]*}//,/ })'
 
-# reload zshrc
-function src()
-{
-  local current_pwd=`pwd`
-  cd ~
-  local cache="$ZSH/cache"
-  autoload -U compinit zrecompile
-  compinit -d "$cache/zcomp-$HOST"
-
-  for f in ~/.zshrc "$cache/zcomp-$HOST"; do
-    zrecompile -p $f && command rm -f $f.zwc.old
-  done
-
-  source ~/.zshrc
-
-  cd $current_pwd
-}
-
-## Drush
-export DRUSH_INI="$HOME/.drush/drush.ini"
-# Compleation
-if ! bashcompinit >/dev/null 2>&1; then
-  autoload -U bashcompinit
-  bashcompinit -i
-fi
-source $HOME/.drush/drush.complete.sh
-
 # Open file with the right application
 function open () {
 setsid xdg-open $1
@@ -271,26 +276,14 @@ setsid xdg-open $1
 # AUTOSSH
 alias ssh='autossh -M 0 -o "ServerAliveInterval 45" -o "ServerAliveCountMax 2"'
 
-# Platform.sh CLI configuration
-PLATFORMSH_CONF=~/.composer/vendor/platformsh/cli/platform.rc
-[ -f "$PLATFORMSH_CONF" ] && . "$PLATFORMSH_CONF"
+# fe [FUZZY PATTERN] - Open the selected file with the default editor
+#   - Bypass fuzzy finder if there's only one match (--select-1)
+#   - Exit if there's no match (--exit-0)
+fag() {
+  local file
+  file=$(\ag -l $1 | \fzf --exit-0)
+  [ -n "$file" ] && ${EDITOR:-vim} "$file"
+}
 
-# Editor
-export EDITOR="vim"
-export VISUAL=$EDITOR
-
-# GIT
-alias gsm='git show -s --format=%B'
-command -v hub >/dev/null 2>&1 && alias git=hub
-
-# Cat
-alias dog="colorize"
-
-# Load shared shell files
-# Localhost
-source $HOME/.zshrc.common
-source $HOME/.zshrc.drush
-source $HOME/.zshrc.clip
-
-# A command-line fuzzy finder written in Go
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# https://wiki.archlinux.org/index.php/Systemd/User#PATH
+systemctl --user import-environment PATH
