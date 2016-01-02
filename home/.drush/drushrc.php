@@ -75,6 +75,9 @@
 $options['shell-aliases']['localhost'] = '!drush en -y devel maillog diff && drush rap "anonymous user" "access devel information" && drush rap "authenticated user" "access devel information"';
 $options['shell-aliases']['sqldump'] = 'sql-dump --structure-tables-key=common --skip-tables-key=common';
 $options['shell-aliases']['sqlsync'] = 'sql-sync--structure-tables-key=common --skip-tables-key=common';
+$options['shell-aliases']['en'] = 'pm-enable -y';
+$options['shell-aliases']['cca'] = 'cache-clear all';
+$options['shell-aliases']['ws'] = 'wd-show --tail';
 $options['shell-aliases']['pull'] = '!git pull && drush cache-clear all'; // We've all done it.
 $options['shell-aliases']['pulldb'] = '!git pull && drush updatedb';
 $options['shell-aliases']['noncore'] = 'pm-list --no-core';
