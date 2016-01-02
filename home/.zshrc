@@ -1,5 +1,7 @@
 # http://unix.stackexchange.com/questions/72086/ctrl-s-hang-terminal-emulator
 stty -ixon
+setopt HIST_IGNORE_DUPS
+setopt HIST_FIND_NO_DUPS
 
 export LC_ALL=en_US.utf-8
 export LANG="$LC_ALL"
@@ -12,15 +14,6 @@ if [ -n "$DISPLAY" -a "$TERM" = "xterm" ]; then
 fi
 
 ### PATHS ###
-# set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/.bin" ]; then
-  export PATH="$HOME/.bin:$PATH"
-fi
-
-if [ -d "$HOME/.local/bin" ]; then
-  export PATH="$HOME/.local/bin:$PATH"
-fi
-
 # Android Studio
 export PATH="$HOME/Programs/android-studio/bin/:$PATH"
 
@@ -97,6 +90,9 @@ alias sf='fasd -sif'     # interactive file selection
 alias z='fasd_cd -d'     # cd, same functionality as j in autojump
 alias zz='fasd_cd -d -i' # cd with interactive selection
 
+# Jumpapp
+zplug "mkropat/jumpapp", as:command, of:"jumpapp"
+
 # Git
 zplug "plugins/git", from:oh-my-zsh, if:"which git"
 zplug "plugins/gitfast", from:oh-my-zsh, if:"which git"
@@ -110,6 +106,18 @@ zplug "github/hub", \
 command -v hub >/dev/null 2>&1 && eval "$(hub alias -s)"
 fpath=($ZPLUG_HOME/repos/github/hub-linux-amd64-2.2.2/etc/ $fpath)
 alias gsm='git show -s --format=%B'
+
+## TLDR
+zplug "pranavraja/tldr", \
+  as:command, \
+  from:gh-r, \
+  of:"*linux*amd64*"
+
+# Backup Home
+zplug "rhabbachi/fd287c8537964e1b993b", \
+  from:gist, as:command, \
+  do:"chmod u+x backup-home.attic", \
+  of:"backup-home.attic"
 
 ## Node.js
 zplug "plugins/npm", from:oh-my-zsh
@@ -158,7 +166,7 @@ zplug "junegunn/fzf-bin", \
   file:fzf, \
   of:"*linux*amd64*"
 zplug "junegunn/fzf", as:command, of:"bin/fzf-tmux", if:"which fzf"
-zplug "junegunn/fzf", of:"shell/key-bindings.zsh", if:"which fzf-tmux"
+zplug "junegunn/fzf", of:"shell/key-bindings.zsh"
 
 if [ $(grep "Ubuntu|Debian" /etc/lsb-release) ]; then
   zplug "plugins/debian", from:oh-my-zsh
@@ -166,6 +174,7 @@ if [ $(grep "Ubuntu|Debian" /etc/lsb-release) ]; then
   unalias ag
 elif [ -f /etc/arch-release ]; then
   zplug "plugins/archlinux", from:oh-my-zsh
+  command -v yaourt >/dev/null 2>&1 && alias pacman="yaourt"
   zplug "plugins/systemd", from:oh-my-zsh
   # https://wiki.archlinux.org/index.php/Pacman_tips
   # '[r]emove [o]rphans' - recursively remove ALL orphaned packages
@@ -187,7 +196,7 @@ zplug "plugins/tmux", from:oh-my-zsh, if:"which tmux"
 zplug "plugins/sublime", from:oh-my-zsh, if:"which subl3"
 
 # Base16 Shell
-zplug "chriskempson/base16-shell", of:"base16-default.dark.sh"
+zplug "chriskempson/base16-shell", of:"base16-monokai.dark.sh"
 
 # Better prompt
 zplug "bhilburn/powerlevel9k"
@@ -212,7 +221,7 @@ zplug "$HOME/.drush/drush.complete.sh", from:local
 ## Add RVM to PATH for scripting
 export PATH="$HOME/.rvm/bin:$PATH"
 ## Load RVM into a shell session *as a function*
-zplug "$HOME/.rvm/scripts/rvm", from:local
+[[ -f "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
 
 # NVM
 zplug "$HOME/.nvm/nvm.sh", from:local
