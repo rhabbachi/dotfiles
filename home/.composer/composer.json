@@ -1,0 +1,7 @@
+{
+    "require": {
+        "drush/drush": "7.*",
+        "platformsh/cli": "@stable",
+        "techlivezheng/phpctags": "^0.6.0"
+    }
+}
