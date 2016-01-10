@@ -1,0 +1,22 @@
+[user]
+	name = Riadh Habbachi
+	email = riadh@angrycactus.biz
+[push]
+	default = simple
+[mergetool "fugitive"]
+	cmd = vim -f -c \"Gdiff\" \"$MERGED\"
+[merge]
+	tool = fugitive
+[webui]
+	autoupdate = true
+[alias]
+	webui = !/home/rhabbachi/.git-webui/release/libexec/git-core/git-webui
+[credential]
+	helper = /usr/lib/git-core/git-credential-gnome-keyring
+[core]
+	trustctime = false
+	fileMode = false
+[filter "lfs"]
+	clean = git-lfs clean %f
+	smudge = git-lfs smudge --skip %f
+	required = true
