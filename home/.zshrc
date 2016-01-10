@@ -8,11 +8,6 @@ export LANG="$LC_ALL"
 export EDITOR="vim"
 export VISUAL=$EDITOR
 
-# Enable correct colors
-if [ -n "$DISPLAY" -a "$TERM" = "xterm" ]; then
-  export TERM=xterm-256color
-fi
-
 ### PATHS ###
 # Android Studio
 export PATH="$HOME/Programs/android-studio/bin/:$PATH"
@@ -58,14 +53,16 @@ ln -sf `pwd` $HOME/public_html/$site_name
 }
 # PV
 alias -g PV="| pv -trab |"
-# Ag
-alias ag="ag -i"
-alias aphp="ag --php"
-alias fphp="ag --php -l"
-alias ajs="ag --js"
-alias fjs="ag --js -l"
-alias acss="ag --saas --css --less"
-alias fcss="ag --saas --css --less -l"
+# Aliases
+if command -v hub >/dev/null 2>&1; then
+  alias ag="ag -i"
+  alias aphp="ag --php"
+  alias fphp="ag --php -l"
+  alias ajs="ag --js"
+  alias fjs="ag --js -l"
+  alias acss="ag --saas --css --less"
+  alias fcss="ag --saas --css --less -l"
+fi
 alias gf="git-flow"
 alias gitg="setsid gitg"
 alias gk="setsid gitk --all --branches"
@@ -165,17 +162,19 @@ zplug "junegunn/fzf-bin", \
   from:gh-r, \
   file:fzf, \
   of:"*linux*amd64*"
-zplug "junegunn/fzf", as:command, of:"bin/fzf-tmux", if:"which fzf"
+zplug "junegunn/fzf", as:command, of:"bin/fzf-tmux"
 zplug "junegunn/fzf", of:"shell/key-bindings.zsh"
 
-if [ $(grep "Ubuntu|Debian" /etc/lsb-release) ]; then
+# Load systemd plugin if using systemd.
+zplug "plugins/systemd", from:oh-my-zsh, if:"pidof systemd"
+
+if grep -q "Ubuntu|Debian" /etc/lsb-release >/dev/null 2>&1; then
   zplug "plugins/debian", from:oh-my-zsh
   export apt_pref="apt-get"
   unalias ag
 elif [ -f /etc/arch-release ]; then
   zplug "plugins/archlinux", from:oh-my-zsh
   command -v yaourt >/dev/null 2>&1 && alias pacman="yaourt"
-  zplug "plugins/systemd", from:oh-my-zsh
   # https://wiki.archlinux.org/index.php/Pacman_tips
   # '[r]emove [o]rphans' - recursively remove ALL orphaned packages
   alias pacro="/usr/bin/pacman -Qtdq > /dev/null && sudo /usr/bin/pacman -Rns \$(/usr/bin/pacman -Qtdq | sed -e ':a;N;\$!ba;s/\n/ /g')"
@@ -283,7 +282,8 @@ setsid xdg-open $1
 }
 
 # AUTOSSH
-alias ssh='autossh -M 0 -o "ServerAliveInterval 45" -o "ServerAliveCountMax 2"'
+
+command -v autossh >/dev/null 2>&1 && alias ssh='autossh -M 0 -o "ServerAliveInterval 45" -o "ServerAliveCountMax 2"'
 
 # fe [FUZZY PATTERN] - Open the selected file with the default editor
 #   - Bypass fuzzy finder if there's only one match (--select-1)
