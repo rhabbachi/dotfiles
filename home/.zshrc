@@ -66,7 +66,7 @@ fi
 alias gf="git-flow"
 alias gitg="setsid gitg"
 alias gk="setsid gitk --all --branches"
-alias trees='tree -L 3 | less'
+command -v tree >/dev/null 2>&1 && alias trees='tree -L 3 | less'
 alias diff='colordiff'
 # Needs pkgfile installed
 zplug "plugins/command-not-found", from:oh-my-zsh, if:"which pkgfile"
@@ -189,7 +189,6 @@ fi
 
 # TMUX plugin
 zplug "plugins/tmux", from:oh-my-zsh, if:"which tmux"
-[[ "$DESKTOP_SESSION" == "gnome" ]] && export ZSH_TMUX_AUTOSTART=true
 [[ "$DESKTOP_SESSION" == "gnome" ]] && export ZSH_TMUX_AUTOQUIT=true
 
 zplug "plugins/sublime", from:oh-my-zsh, if:"which subl3"
