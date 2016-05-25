@@ -24,13 +24,19 @@ export _JAVA_FONTS="/usr/share/fonts/TTF"
 export DISABLE_AUTO_UPDATE="true"
 
 # Check if zplug is installed
-[[ -d ~/.zplug ]] || {
-  curl -fLo ~/.zplug/zplug --create-dirs https://git.io/zplug
-  source ~/.zplug/zplug && zplug update --self
+[[ -f $HOME/.zplug/init.zsh ]] || {
+  curl -sL get.zplug.sh | zsh
+  source ~/.zplug/init.zsh && zplug update --self
 }
-source $HOME/.zplug/zplug
-# https://github.com/b4b4r07/zplug#let-zplug-manage-zplug
-zplug "b4b4r07/zplug"
+
+zstyle ":zplug:tag" nice 10
+
+source ~/.zplug/init.zsh
+
+autoload -Uz is-at-least
+zplug "robbyrussell/oh-my-zsh", use:"lib/*.zsh", nice:0
+
+zplug "zplug/zplug"
 
 # Bundles from the default repo (robbyrussell's oh-my-zsh).
 # Core
@@ -42,8 +48,20 @@ alias pingo="ping www.google.com -c 8"
 alias date-time='date +%Y%m%d-%H%M%S'
 alias clr="clear"
 alias a2log="multitail -f /var/log/httpd/localhost.error.log"
-alias a2dir="find . -type d | xargs -I dir bash -c 'sudo chown rhabbachi:http \"dir\" && sudo chmod 775 \"dir\"' ; find . -type f | xargs -I file bash -c 'sudo chown rhabbachi:http \"file\" && sudo chmod 664 \"file\"'"
+alias a2dir="find . | xargs -I PATH bash -c \"sudo chown rhabbachi:http 'PATH'; [[ -f 'PATH' ]] && sudo chmod 664 'PATH' || sudo chmod 775 'PATH'\""
+
+# Vim
+zplug "plugins/vundle", from:oh-my-zsh
+alias vim-clear="trash ~/.vimswap ~/.vimviews/ ~/.vimbackup ~/.vimundo"
+
+function a2dir () {
+find . \
+\( -type f -exec sudo chown rhabbachi:http {}; sudo chmod 664 {} \; \) , \
+\( -type d -exec sudo chown rhabbachi:http {}; sudo chmod 775 {} \; \)
+}
+
 function a2link() {
+# TODO check nade for underscores and uppercases.
 local site_name="$1"
 if [ -e "$site_name" ]; then
   echo "Missing site name"
@@ -54,7 +72,7 @@ ln -sf `pwd` $HOME/public_html/$site_name
 # PV
 alias -g PV="| pv -trab |"
 # Aliases
-if command -v hub >/dev/null 2>&1; then
+if command -v ag >/dev/null 2>&1; then
   alias ag="ag -i"
   alias aphp="ag --php"
   alias fphp="ag --php -l"
@@ -77,7 +95,7 @@ alias dog="colorize"
 zplug "plugins/rsync", from:oh-my-zsh, if:"which rsync"
 
 # Fasd
-zplug "plugins/fasd", from:oh-my-zsh
+zplug "plugins/fasd", from:oh-my-zsh, lazy:true, nice:0
 alias a='fasd -a'        # any
 alias s='fasd -si'       # show / search / select
 alias d='fasd -d'        # directory
@@ -88,33 +106,23 @@ alias z='fasd_cd -d'     # cd, same functionality as j in autojump
 alias zz='fasd_cd -d -i' # cd with interactive selection
 
 # Jumpapp
-zplug "mkropat/jumpapp", as:command, of:"jumpapp"
+zplug "mkropat/jumpapp", as:command, use:"jumpapp"
 
 # Git
 zplug "plugins/git", from:oh-my-zsh, if:"which git"
 zplug "plugins/gitfast", from:oh-my-zsh, if:"which git"
 zplug "plugins/git-extras", from:oh-my-zsh, if:"which git"
-zplug "plugins/git-flow", from:oh-my-zsh, if:"which git"
 zplug "plugins/gitignore", from:oh-my-zsh, if:"which git"
-zplug "github/hub", \
-  as:command, \
-  from:gh-r, \
-  of:"*linux*amd64*"
+zplug "Seinh/git-prune", if:"which git"
 command -v hub >/dev/null 2>&1 && eval "$(hub alias -s)"
 fpath=($ZPLUG_HOME/repos/github/hub-linux-amd64-2.2.2/etc/ $fpath)
 alias gsm='git show -s --format=%B'
 
-## TLDR
-zplug "pranavraja/tldr", \
-  as:command, \
-  from:gh-r, \
-  of:"*linux*amd64*"
-
 # Backup Home
 zplug "rhabbachi/fd287c8537964e1b993b", \
   from:gist, as:command, \
-  do:"chmod u+x backup-home.attic", \
-  of:"backup-home.attic"
+  hook-build:"chmod u+x backup-home.attic", \
+  use:"backup-home.attic"
 
 ## Node.js
 zplug "plugins/npm", from:oh-my-zsh
@@ -128,13 +136,14 @@ zplug "plugins/knife", from:oh-my-zsh
 # PHP
 zplug "plugins/composer", from:oh-my-zsh
 
-# Vagrant
-zplug "plugins/vagrant", from:oh-my-zsh
-
 # Syntax highlighting bundle.
 zplug "zsh-users/zsh-syntax-highlighting"
 
+# Fish-like autosuggestions for zsh
+#zplug "zsh-users/zsh-autosuggestions"
+
 zplug "plugins/history", from:oh-my-zsh
+
 # ZSH port of Fish shell's history search feature.
 zplug "plugins/history-substring-search", from:oh-my-zsh
 
@@ -154,16 +163,12 @@ notify-send "$title"  "$2" -i "$icon";
 # Pass password manager.
 zplug "plugins/pass", from:oh-my-zsh
 
-# A command-line fuzzy finder written in Go
-# Grab binaries from GitHub Releases
-# and rename to use "file:" tag
-zplug "junegunn/fzf-bin", \
+# A utility to run commands within docker containers
+zplug "devinci-code/ahoy", \
   as:command, \
   from:gh-r, \
-  file:fzf, \
-  of:"*linux*amd64*"
-zplug "junegunn/fzf", as:command, of:"bin/fzf-tmux"
-zplug "junegunn/fzf", of:"shell/key-bindings.zsh"
+  use:"*linux*amd64*", \
+  hook-load:"complete -F 'ahoy --generate-bash-completion' ahoy"
 
 # Load systemd plugin if using systemd.
 zplug "plugins/systemd", from:oh-my-zsh, if:"pidof systemd"
@@ -174,7 +179,7 @@ if grep -q "Ubuntu|Debian" /etc/lsb-release >/dev/null 2>&1; then
   unalias ag
 elif [ -f /etc/arch-release ]; then
   zplug "plugins/archlinux", from:oh-my-zsh
-  command -v yaourt >/dev/null 2>&1 && alias pacman="yaourt"
+  command -v pacaur >/dev/null 2>&1 && alias pacman="pacaur"
   # https://wiki.archlinux.org/index.php/Pacman_tips
   # '[r]emove [o]rphans' - recursively remove ALL orphaned packages
   alias pacro="/usr/bin/pacman -Qtdq > /dev/null && sudo /usr/bin/pacman -Rns \$(/usr/bin/pacman -Qtdq | sed -e ':a;N;\$!ba;s/\n/ /g')"
@@ -191,19 +196,17 @@ fi
 zplug "plugins/tmux", from:oh-my-zsh, if:"which tmux"
 [[ "$DESKTOP_SESSION" == "gnome" ]] && export ZSH_TMUX_AUTOQUIT=true
 
-zplug "plugins/sublime", from:oh-my-zsh, if:"which subl3"
-
 # Base16 Shell
-zplug "chriskempson/base16-shell", of:"base16-monokai.dark.sh"
+zplug "chriskempson/base16-shell", use:"base16-monokai.dark.sh"
 
 # Better prompt
-zplug "bhilburn/powerlevel9k"
 export DEFAULT_USER="rhabbachi"
-POWERLEVEL9K_SHORTEN_DIR_LENGTH=4
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status time)
+zplug "bhilburn/powerlevel9k"
+export POWERLEVEL9K_SHORTEN_DIR_LENGTH=4
+export POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status time)
 
 # Homeshick
-zplug "andsens/homeshick", of:"homeshick.sh", do:"homeshick --quiet refresh"
+zplug "andsens/homeshick", use:"homeshick.sh", hook-load:"homeshick --quiet refresh"
 fpath=($ZPLUG_HOME/repos/andsens/homeshick/completions $fpath)
 
 # Drush compleation
@@ -222,13 +225,17 @@ export PATH="$HOME/.rvm/bin:$PATH"
 [[ -f "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
 
 # NVM
-zplug "$HOME/.nvm/nvm.sh", from:local
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
 
 # Platform.sh CLI configuration
-zplug "$HOME/.composer/vendor/platformsh/cli/platform.rc", from:local
+#zplug "$HOME/.composer/vendor/platformsh/cli/platform.rc", from:local
 
 # Custom zsh config/commands
-zplug "$HOME/.zplug/custom", from:local, of:"*.zsh"
+zplug "$HOME/.zplug/custom", from:local
+
+# Colorization for mysql
+zplug "horosgrisa/mysql-colorize"
 
 # save all to init script
 if ! zplug check --verbose; then
@@ -240,6 +247,9 @@ fi
 
 # Then, source plugins and add commands to $PATH
 zplug load --verbose
+
+unalias rm
+alias l="ls -lFh --group-directories-first"
 
 # zsh is able to auto-do some kungfoo
 # depends on the SUFFIX :)
@@ -295,3 +305,16 @@ fag() {
 
 # https://wiki.archlinux.org/index.php/Systemd/User#PATH
 systemctl --user import-environment PATH
+
+## Ahoy Docker Nucivic env
+function ahoydocker() {
+  [[ $(docker-machine status) == "Stopped" ]] && docker-machine start default
+  eval "$(docker-machine env default)"
+  export VIRTUAL_HOST="default.docker"
+  export AHOY_CMD_PROXY="DOCKER"
+}
+ahoydocker
+
+function currentworkspace() {
+  echo $(wmctrl -d | gawk '{if ($2 == "*") print tolower($10)"_"($11)}')
+}
