@@ -1,58 +1,359 @@
-" No need for all those colors.
-UnBundle 'altercation/vim-colors-solarized'
-UnBundle 'spf13/vim-colors'
-UnBundle 'flazz/vim-colorschemes'
+" Override bundles config.
+let g:spf13_bundle_groups=['general', 'programming', 'php', 'javascript', 'html', 'misc', 'tmux', 'devops', 'drupal', 'snipmate']
 
-" base16 color schemes
-Bundle 'chriskempson/base16-vim'
+" General {
+if count(g:spf13_bundle_groups, 'general')
+  " base16 color schemes
+  Bundle 'chriskempson/base16-vim'
+  let base16colorspace=256  " Access colors present in 256 colorspace
+  set t_Co=256
+  set background=dark
+  colorscheme base16-monokai
 
-" Simple tmux statusline generator with support for powerline symbols and statusline / airline / lightline integration
-Bundle 'edkolev/tmuxline.vim'
+  " A tree explorer plugin for vim. {
+  "Bundle 'scrooloose/nerdtree'
+  "Bundle 'jistr/vim-nerdtree-tabs'
+  let g:NERDTreeWinSize=50
+  "}
 
-" Seamless navigation between tmux panes and vim splits
-Bundle 'christoomey/vim-tmux-navigator'
+  " vinegar.vim: combine with netrw to create a delicious salad dressing
+  "Bundle 'tpope/vim-vinegar'
+  let g:netrw_liststyle=3
 
-" vim plugin for tmux.conf
-Bundle 'tmux-plugins/vim-tmux'
+  Bundle 'tpope/vim-surround'
+  Bundle 'tpope/vim-repeat'
 
-" Make terminal vim and tmux work better together.
-Bundle 'tmux-plugins/vim-tmux-focus-events'
+  " Weapon to fight against conflicts in Vim.
+  Bundle 'rhysd/conflict-marker.vim'
 
-" Generate a fast shell prompt with powerline symbols and airline colors
-UnBundle 'edkolev/promptline.vim'
+  " Vim plugin, insert or delete brackets, parens, quotes in pair
+  " http://www.vim.org/scripts/script.php?script_id=3599
+  Bundle 'jiangmiao/auto-pairs'
+
+  " Active fork of kien/ctrlp.vim—Fuzzy file, buffer, mru, tag, etc finder.
+   Bundle 'ctrlpvim/ctrlp.vim'
+   Bundle 'tacahiroy/ctrlp-funky'
+
+  " https://github.com/terryma/vim-multiple-cursors. {
+  Bundle 'terryma/vim-multiple-cursors'
+  " Prevent conflict between neocomplete and vim-multiple-cursors
+  " Called once right before you start selecting multiple cursors
+  function! Multiple_cursors_before()
+    if exists(':NeoCompleteLock')==2
+      exe 'NeoCompleteLock'
+    endif
+  endfunction
+
+  " Called once only when the multiple selection is canceled (default <Esc>)
+  function! Multiple_cursors_after()
+    if exists(':NeoCompleteUnlock')==2
+      exe 'NeoCompleteUnlock'
+    endif
+  endfunction
+  "}
+
+  Bundle 'vim-scripts/sessionman.vim'
+  " continuously updated session files
+  Bundle 'tpope/vim-obsession'
+
+  " Load the version of matchit.vim that ships with Vim.
+  runtime! macros/matchit.vim
+
+  if (has("python") || has("python3")) && exists('g:spf13_use_powerline') && !exists('g:spf13_use_old_powerline')
+    Bundle 'Lokaltog/powerline', {'rtp':'/powerline/bindings/vim'}
+  elseif exists('g:spf13_use_powerline') && exists('g:spf13_use_old_powerline')
+    Bundle 'Lokaltog/vim-powerline'
+  else
+    Bundle 'vim-airline/vim-airline'
+    Bundle 'vim-airline/vim-airline-themes'
+  endif
+
+  Bundle 'bling/vim-bufferline'
+
+  " Minimalist path navigator designed to work with Vim's built-in mechanisms and complementary plugins.
+  Bundle 'justinmk/vim-dirvish'
+
+  " EasyMotion {
+  " Vim motions on speed!.
+  Bundle 'easymotion/vim-easymotion'
+  " This setting makes EasyMotion work similarly to Vim's smartcase option for
+  " global searches.
+  let g:EasyMotion_smartcase = 1
+  " Select, yank, paste, delete, or other operation of lines.
+  Bundle 'haya14busa/vim-easyoperator-line'
+  " Select, yank, paste, delete, or other operation of phrase.
+  Bundle 'haya14busa/vim-easyoperator-phrase'
+  " }
+
+  Bundle 'mbbill/undotree'
+
+  " A Vim plugin for visually displaying indent levels in code
+  "Bundle 'nathanaelkane/vim-indent-guides'
+  "let g:indent_guides_enable_on_vim_startup = 0
+
+  if !exists('g:spf13_no_views')
+    Bundle 'vim-scripts/restore_view.vim'
+  endif
+  Bundle 'mhinz/vim-signify'
+  Bundle 'tpope/vim-abolish.git'
+
+  " :substitute preview
+  " Bundle 'osyo-manga/vim-over'
+  " noremap <silent> : :OverCommandLine<CR>
+
+  " Vim plugin that provides additional text objects
+  Bundle 'wellle/targets.vim'
+
+  " Toggles between relative and absolute line numbers automatically
+  Bundle 'myusuf3/numbers.vim'
+  " Setup for the number plugin
+  set number
+
+  " A Filetype plugin for csv files
+  Bundle 'chrisbra/csv.vim'
+  " Grammar checker for English, French, German (etc.) in Vim
+  Bundle 'vim-scripts/LanguageTool'
+
+  " Simplified clipboard functionality for Vim
+  let g:EasyClipUseSubstituteDefaults = 1
+  Bundle 'svermeulen/vim-easyclip'
+
+  "vim-searchindex: display number of search matches & index of a current match.
+  Bundle 'google/vim-searchindex'
+endif
+" }
+
+" Writing {
+if count(g:spf13_bundle_groups, 'writing')
+  Bundle 'reedes/vim-litecorrect'
+  Bundle 'reedes/vim-textobj-sentence'
+  Bundle 'reedes/vim-textobj-quote'
+  Bundle 'reedes/vim-wordy'
+endif
+" }
+
+" General Programming {
+if count(g:spf13_bundle_groups, 'programming')
+  " A solid language pack for Vim.
+  Bundle 'sheerun/vim-polyglot'
+
+  " Pick one of the checksyntax, jslint, or syntastic
+  Bundle 'scrooloose/syntastic'
+  Bundle 'tpope/vim-fugitive'
+  Bundle 'mattn/webapi-vim'
+  Bundle 'mattn/gist-vim'
+
+  " Vim plugin for intensely orgasmic commenting
+  Bundle 'scrooloose/nerdcommenter'
+
+  " Vim script for text filtering and alignment.
+  Bundle 'godlygeek/tabular'
+
+  Bundle 'luochen1990/rainbow'
+  if executable('ctags')
+    Bundle 'majutsushi/tagbar'
+    let g:tagbar_autoclose = 1
+    let g:tagbar_width = 50
+    let g:tagbar_zoomwidth = 1
+  endif
+
+  " Provide easy code formatting in Vim by integrating existing code
+  " formatters.
+  Bundle 'Chiel92/vim-autoformat'
+  let g:formatdef_phpfmt ="'phpfmt --no-backup --smart_linebreak_after_curly --passes=RestoreComments,MergeElseIf,ReindentSwitchBlocks,PrettyPrintDocBlocks,PHPDocTypesToFunctionTypehint --indent_with_space='.shiftwidth().' -'"
+  let g:formatters_php = ['phpfmt']
+  let g:autoformat_verbosemode=1
+
+  " Multi-language DBGP debugger client for Vim (PHP, Python, Perl, Ruby,
+  " etc.)
+  Bundle 'joonty/vdebug'
+
+  " A vim plugin to perform diffs on blocks of code
+  Bundle 'AndrewRadev/linediff.vim'
+endif
+" }
+
+" Snippets & AutoComplete {
+if count(g:spf13_bundle_groups, 'snipmate')
+  Bundle 'garbas/vim-snipmate'
+  Bundle 'honza/vim-snippets'
+  " Source support_function.vim to support vim-snippets.
+  if filereadable(expand("~/.vim/bundle/vim-snippets/snippets/support_functions.vim"))
+    source ~/.vim/bundle/vim-snippets/snippets/support_functions.vim
+  endif
+elseif count(g:spf13_bundle_groups, 'youcompleteme')
+  Bundle 'Valloric/YouCompleteMe'
+  Bundle 'SirVer/ultisnips'
+  Bundle 'honza/vim-snippets'
+elseif count(g:spf13_bundle_groups, 'neocomplcache')
+  Bundle 'Shougo/neocomplcache'
+  Bundle 'Shougo/neosnippet'
+  Bundle 'Shougo/neosnippet-snippets'
+  Bundle 'honza/vim-snippets'
+elseif count(g:spf13_bundle_groups, 'neocomplete')
+  Bundle 'Shougo/neocomplete.vim.git'
+  Bundle 'Shougo/neosnippet'
+  Bundle 'Shougo/neosnippet-snippets'
+  Bundle 'honza/vim-snippets'
+endif
+" }
+
+" PHP {
+if count(g:spf13_bundle_groups, 'php')
+  "Bundle 'StanAngeloff/php.vim'
+
+  " The official VIm indent script for PHP.
+  "Bundle '2072/PHP-Indenting-for-VIm'
+
+  Bundle 'arnaud-lb/vim-php-namespace'
+  "Bundle 'beyondwords/vim-twig'
+
+  if isdirectory(expand("~/.vim/bundle/tagbar/"))
+    " Using phpctags to generate php ctags index for vim plugin tagbar.
+    Bundle 'vim-php/tagbar-phpctags.vim'
+  end
+
+  " Behat support
+  Bundle 'veloce/vim-behat'
+
+  " Improved PHP omnicompletion
+  Bundle 'shawncplus/phpcomplete.vim'
+endif
+" }
+
+" Python {
+if count(g:spf13_bundle_groups, 'python')
+  " Pick either python-mode or pyflakes & pydoc
+  Bundle 'klen/python-mode'
+  Bundle 'yssource/python.vim'
+  Bundle 'python_match.vim'
+  Bundle 'pythoncomplete'
+endif
+" }
+
+" Javascript {
+if count(g:spf13_bundle_groups, 'javascript')
+  "Bundle 'elzr/vim-json'
+  "Bundle 'groenewege/vim-less'
+  "Bundle 'pangloss/vim-javascript'
+  "Bundle 'briancollins/vim-jst'
+  "Bundle 'kchmck/vim-coffee-script'
+endif
+" }
+
+" Scala {
+if count(g:spf13_bundle_groups, 'scala')
+  "Bundle 'derekwyatt/vim-scala'
+  "Bundle 'derekwyatt/vim-sbt'
+  Bundle 'xptemplate'
+endif
+" }
+
+" Haskell {
+if count(g:spf13_bundle_groups, 'haskell')
+  Bundle 'travitch/hasksyn'
+  Bundle 'dag/vim2hs'
+  Bundle 'Twinside/vim-haskellConceal'
+  Bundle 'Twinside/vim-haskellFold'
+  Bundle 'lukerandall/haskellmode-vim'
+  Bundle 'eagletmt/neco-ghc'
+  Bundle 'eagletmt/ghcmod-vim'
+  Bundle 'Shougo/vimproc.vim'
+  Bundle 'adinapoli/cumino'
+  Bundle 'bitc/vim-hdevtools'
+endif
+" }
+
+" HTML {
+if count(g:spf13_bundle_groups, 'html')
+  Bundle 'amirh/HTML-AutoCloseTag'
+  Bundle 'hail2u/vim-css3-syntax'
+  Bundle 'gorodinskiy/vim-coloresque'
+  Bundle 'tpope/vim-haml'
+  Bundle 'mattn/emmet-vim'
+endif
+" }
+
+" Ruby {
+if count(g:spf13_bundle_groups, 'ruby')
+  Bundle 'tpope/vim-rails'
+  let g:rubycomplete_buffer_loading = 1
+  "let g:rubycomplete_classes_in_global = 1
+  "let g:rubycomplete_rails = 1
+
+  " Vim Cucumber runtime files.
+  "Bundle 'tpope/vim-cucumber'
+  if isdirectory(expand("~/.vim/bundle/tabular/"))
+    " Align pipes when you are editing Cucumber tables.
+    Bundle 'quentindecock/vim-cucumber-align-pipes'
+  end
+endif
+" }
+
+" Puppet {
+if count(g:spf13_bundle_groups, 'puppet')
+  "Bundle 'rodjek/vim-puppet'
+endif
+" }
+
+" Go Lang {
+if count(g:spf13_bundle_groups, 'go')
+  "Bundle 'Blackrush/vim-gocode'
+  "Bundle 'fatih/vim-go'
+endif
+" }
+
+" Elixir {
+if count(g:spf13_bundle_groups, 'elixir')
+  Bundle 'elixir-lang/vim-elixir'
+  Bundle 'carlosgaldino/elixir-snippets'
+  Bundle 'mattreduce/vim-mix'
+endif
+" }
+
+" Tmux {
+if count(g:spf13_bundle_groups, 'tmux')
+  " Simple tmux statusline generator with support for powerline symbols and statusline / airline / lightline integration
+  Bundle 'edkolev/tmuxline.vim'
+  " Seamless navigation between tmux panes and vim splits
+  Bundle 'christoomey/vim-tmux-navigator'
+  " vim plugin for tmux.conf
+  Bundle 'tmux-plugins/vim-tmux'
+  " Make terminal vim and tmux work better together.
+  Bundle 'tmux-plugins/vim-tmux-focus-events'
+endif
+" }
+
+" DevOps {
+if count(g:spf13_bundle_groups, 'devops')
+  " Vim plugins for chef (syntax highliting and autocomplete snipmate)
+  Bundle 'vadv/vim-chef'
+  " Add additional support for Ansible in VIM
+  Bundle 'chase/vim-ansible-yaml'
+
+  " Vim sugar for the UNIX shell commands that need it the most.
+  Bundle 'tpope/vim-eunuch'
+  "W!  save file as root
+  cmap W! SudoWrite
+
+endif
+" }
+
+" Drupal  {
+if count(g:spf13_bundle_groups, 'drupal')
+  " Drupal vim plugin
+  Bundle 'git://drupalcode.org/project/vimrc.git', {'name': 'vim-plugin-for-drupal'}
+endif
+" }
+
+" Misc {
+if count(g:spf13_bundle_groups, 'misc')
+  "Bundle 'rust-lang/rust.vim'
+  "Bundle 'tpope/vim-markdown'
+  "Bundle 'cespare/vim-toml'
+  Bundle 'saltstack/salt-vim'
+endif
+" }
 
 " Reset php checkers
 let g:syntastic_php_checkers = ['php', 'phpmd']
-
-" Toggles between relative and absolute line numbers automatically
-Bundle 'myusuf3/numbers.vim'
-
-" Using phpctags to generate php ctags index for vim plugin tagbar.
-Bundle 'vim-php/tagbar-phpctags.vim'
-
-"Drupal vim plugin
-Bundle 'git://drupalcode.org/project/vimrc.git', {'rtp': 'bundle/vim-plugin-for-drupal/'}
-
-" Vim plugins for chef (syntax highliting and autocomplete snipmate)
-Bundle 'vadv/vim-chef'
-
-" Debbuging
-Bundle 'joonty/vdebug'
-
-" Behat support
-Bundle 'veloce/vim-behat'
-
-" Vim plugin for analytics about your programming
-UnBundle 'wakatime/vim-wakatime'
-
-" continuously updated session files
-Bundle 'tpope/vim-obsession'
-
-"Add additional support for Ansible in VIM
-Bundle 'chase/vim-ansible-yaml'
-
-" Grammar checker for English, French, German (etc.) in Vim
-Bundle 'vim-scripts/LanguageTool'
-
-" A Filetype plugin for csv files
-Bundle 'chrisbra/csv.vim'

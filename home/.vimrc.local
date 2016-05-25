@@ -1,9 +1,3 @@
-" Change colorscheme
-let base16colorspace=256  " Access colors present in 256 colorspace
-set t_Co=256
-set background=dark
-colorscheme base16-monokai
-
 " For Ctrl-C Ctrl-V
 "source $VIMRUNTIME/mswin.vim
 "behave mswin
@@ -13,15 +7,12 @@ set wrap
 set linebreak
 set nolist
 
+set smartindent " Indent on new line.
 set shiftwidth=2                " Use indents of 2 spaces
 set tabstop=2                   " An indentation every two columns
 set softtabstop=2               " Let backspace delete indent
 
 highlight clear CursorLineNr    " Remove highlight color from current line number
-
-" prevent vim from automatically inserting line breaks in newly entered text.
-"set textwidth=0
-"set wrapmargin=0
 
 set columns=80
 
@@ -42,28 +33,11 @@ map <F7> :call MySpellLang()<CR>
 imap <F7> <C-o>:call MySpellLang()<CR>
 set nospell " Default to no spell
 
-"W!  save file as root
-cmap W! w !sudo tee >/dev/null % 
-
 " Mouse
 set mouse= "disable the mouse
 
-" Setup for the number plugin
-set number
-
 " Disable folding
 set nofoldenable                " disable code folding
-let g:DisableAutoPHPFolding = 1 " disable PIV's folding
-
-let g:indent_guides_enable_on_vim_startup = 0
-
-" Tagbar
-let g:tagbar_autoclose = 1
-let g:tagbar_width = 50
-let g:tagbar_zoomwidth = 1
-
-" NERDTree
-let g:NERDTreeWinSize=50
 
 " http://vim.wikia.com/wiki/Fix_syntax_highlighting
 noremap <F12> <Esc>:syntax sync fromstart<CR>
@@ -74,18 +48,3 @@ nnoremap Q <Nop>
 
 " http://vim.wikia.com/wiki/Search_for_visually_selected_text
 vnoremap // y/<C-R>"<CR>
-
-" Prevent conflict between neocomplete and vim-multiple-cursors
-" Called once right before you start selecting multiple cursors
-function! Multiple_cursors_before()
-  if exists(':NeoCompleteLock')==2
-    exe 'NeoCompleteLock'
-  endif
-endfunction
-
-" Called once only when the multiple selection is canceled (default <Esc>)
-function! Multiple_cursors_after()
-  if exists(':NeoCompleteUnlock')==2
-    exe 'NeoCompleteUnlock'
-  endif
-endfunction
