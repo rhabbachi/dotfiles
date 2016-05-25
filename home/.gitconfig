@@ -1,6 +1,6 @@
 [user]
 	name = Riadh Habbachi
-	email = riadh@angrycactus.biz
+	email = habbachi.riadh@gmail.com
 [push]
 	default = simple
 [mergetool "fugitive"]
@@ -20,3 +20,9 @@
 	clean = git-lfs clean %f
 	smudge = git-lfs smudge --skip %f
 	required = true
+[gui]
+	fontui = -family Ubuntu -size 9 -weight normal -slant roman -underline 0 -overstrike 0
+	fontdiff = -family \"Ubuntu Mono\" -size 9 -weight normal -slant roman -underline 0 -overstrike 0
+	tabsize = 2
+[commit]
+	template = /home/rhabbachi/.git-commit-template.txt
