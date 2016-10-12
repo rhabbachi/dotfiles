@@ -120,6 +120,14 @@ if count(g:spf13_bundle_groups, 'general')
 
   "vim-searchindex: display number of search matches & index of a current match.
   Bundle 'google/vim-searchindex'
+
+  " A Personal Wiki For Vim
+  Bundle 'vimwiki/vimwiki'
+  let g:vimwiki_list = [{'path': '~/Notes/',
+        \ 'auto_toc': 1,
+        \ 'syntax': 'markdown',
+        \ 'ext': '.md',
+        \'template_path': '~/Notes/templates/'}]
 endif
 " }
 

@@ -11,6 +11,10 @@ export VISUAL=$EDITOR
 ### PATHS ###
 # Android Studio
 export PATH="$HOME/Programs/android-studio/bin/:$PATH"
+# Android SDK
+export PATH="$HOME/Programs/Android/Sdk/tools:$PATH"
+export PATH="$HOME/Programs/Android/Sdk/platform-tools:$PATH"
+
 
 # Go lang
 export GOPATH="$HOME/.go/"
@@ -88,13 +92,12 @@ command -v tree >/dev/null 2>&1 && alias trees='tree -L 3 | less'
 alias diff='colordiff'
 # Needs pkgfile installed
 zplug "plugins/command-not-found", from:oh-my-zsh, if:"which pkgfile"
-zplug "plugins/colored-man", from:oh-my-zsh
+zplug "plugins/colored-man-pages", from:oh-my-zsh
 zplug "plugins/encode64", from:oh-my-zsh
 zplug "plugins/colorize", from:oh-my-zsh
 alias dog="colorize"
 zplug "plugins/rsync", from:oh-my-zsh, if:"which rsync"
 
-# Fasd
 zplug "plugins/fasd", from:oh-my-zsh, lazy:true, nice:0
 alias a='fasd -a'        # any
 alias s='fasd -si'       # show / search / select
@@ -154,8 +157,8 @@ function bgnotify_formatted {
 
 [ $1 -eq 0 ] && title="$(tmux display-message -p '#S') -- Completed after $3 sec" \
   || title="$(tmux display-message -p '#S') -- Failed after $3 sec"
-[ $1 -eq 0 ] && icon="dialog-ok" \
-  || icon="dialog-error"
+[ $1 -eq 0 ] && icon="process-completed" \
+  || icon="process-error"
 
 notify-send "$title"  "$2" -i "$icon";
 }
@@ -164,7 +167,7 @@ notify-send "$title"  "$2" -i "$icon";
 zplug "plugins/pass", from:oh-my-zsh
 
 # A utility to run commands within docker containers
-zplug "devinci-code/ahoy", \
+zplug "DevinciHQ/ahoy", \
   as:command, \
   from:gh-r, \
   use:"*linux*amd64*", \
@@ -197,16 +200,17 @@ zplug "plugins/tmux", from:oh-my-zsh, if:"which tmux"
 [[ "$DESKTOP_SESSION" == "gnome" ]] && export ZSH_TMUX_AUTOQUIT=true
 
 # Base16 Shell
-zplug "chriskempson/base16-shell", use:"base16-monokai.dark.sh"
+zplug "chriskempson/base16-shell", use:"scripts/base16-monokai.sh"
 
 # Better prompt
 export DEFAULT_USER="rhabbachi"
-zplug "bhilburn/powerlevel9k"
+zplug "bhilburn/powerlevel9k", nice:0
 export POWERLEVEL9K_SHORTEN_DIR_LENGTH=4
+export POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon context dir rbenv docker_machine vcs)
 export POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status time)
 
 # Homeshick
-zplug "andsens/homeshick", use:"homeshick.sh", hook-load:"homeshick --quiet refresh"
+zplug "andsens/homeshick", use:"homeshick.sh"
 fpath=($ZPLUG_HOME/repos/andsens/homeshick/completions $fpath)
 
 # Drush compleation
@@ -227,6 +231,18 @@ export PATH="$HOME/.rvm/bin:$PATH"
 # NVM
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
+# place this after nvm initialization!
+autoload -U add-zsh-hook
+load-nvmrc() {
+  if [[ -f .nvmrc && -r .nvmrc ]]; then
+    nvm use
+  elif [[ $(nvm version) != $(nvm version default)  ]]; then
+    echo "Reverting to nvm default version"
+    nvm use default
+  fi
+}
+add-zsh-hook chpwd load-nvmrc
+load-nvmrc
 
 # Platform.sh CLI configuration
 #zplug "$HOME/.composer/vendor/platformsh/cli/platform.rc", from:local
@@ -313,7 +329,7 @@ function ahoydocker() {
   export VIRTUAL_HOST="default.docker"
   export AHOY_CMD_PROXY="DOCKER"
 }
-ahoydocker
+#ahoydocker
 
 function currentworkspace() {
   echo $(wmctrl -d | gawk '{if ($2 == "*") print tolower($10)"_"($11)}')

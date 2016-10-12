@@ -26,3 +26,5 @@
 	tabsize = 2
 [commit]
 	template = /home/rhabbachi/.git-commit-template.txt
+[github]
+	user = rhabbachi

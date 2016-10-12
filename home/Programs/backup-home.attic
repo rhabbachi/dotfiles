@@ -25,7 +25,8 @@ command -v \attic >/dev/null 2>&1 || { wrapper echo "Attic not found. Aborting."
 command -v \findmnt >/dev/null 2>&1 || { wrapper echo "findmnt not found. Aborting."; echo EOF; }
 
 echo "# Establishing Backup mount point.."
-BACKUP_DIR=$(findmnt -runo target | grep "$1" | head -n1)
+#BACKUP_DIR=$(findmnt -runo target | grep "$1" | head -n1)
+BACKUP_DIR=$1
 # Skip if the mount point is empty.
 [[ -e $BACKUP_DIR ]] && { wrapper echo "Backup mount point not found!"; echo EOF; }
 

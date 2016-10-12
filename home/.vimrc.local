@@ -48,3 +48,19 @@ nnoremap Q <Nop>
 
 " http://vim.wikia.com/wiki/Search_for_visually_selected_text
 vnoremap // y/<C-R>"<CR>
+
+function! CheckFileType()
+    if exists("b:countCheck") == 0
+        let b:countCheck = 0
+    endif
+    let b:countCheck += 1
+    if &filetype == "" && b:countCheck > 40 && b:countCheck < 200
+        filetype detect
+    elseif b:countCheck >= 200 || &filetype != ""
+        autocmd! newFiletypeDetection
+    endif
+endfunction
+
+augroup newFiletypeDetection
+    autocmd CursorMovedI * call CheckFileType()
+augroup END
