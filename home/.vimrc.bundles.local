@@ -1,5 +1,5 @@
 " Override bundles config.
-let g:spf13_bundle_groups=['general', 'programming', 'php', 'javascript', 'html', 'misc', 'tmux', 'devops', 'drupal', 'snipmate']
+let g:spf13_bundle_groups=['general', 'programming', 'php', 'javascript', 'html', 'misc', 'tmux', 'devops', 'drupal', 'completor']
 
 " General {
 if count(g:spf13_bundle_groups, 'general')
@@ -31,8 +31,9 @@ if count(g:spf13_bundle_groups, 'general')
   Bundle 'jiangmiao/auto-pairs'
 
   " Active fork of kien/ctrlp.vim—Fuzzy file, buffer, mru, tag, etc finder.
-   Bundle 'ctrlpvim/ctrlp.vim'
-   Bundle 'tacahiroy/ctrlp-funky'
+  Bundle 'ctrlpvim/ctrlp.vim'
+  " CtrlP extension for fuzzy-search in tag matches (:tjump replacement).
+  Bundle 'ivalkeen/vim-ctrlp-tjump'
 
   " https://github.com/terryma/vim-multiple-cursors. {
   Bundle 'terryma/vim-multiple-cursors'
@@ -70,7 +71,8 @@ if count(g:spf13_bundle_groups, 'general')
 
   Bundle 'bling/vim-bufferline'
 
-  " Minimalist path navigator designed to work with Vim's built-in mechanisms and complementary plugins.
+  " Minimalist path navigator designed to work with Vim's built-in mechanisms
+  " and complementary plugins.
   Bundle 'justinmk/vim-dirvish'
 
   " EasyMotion {
@@ -121,13 +123,8 @@ if count(g:spf13_bundle_groups, 'general')
   "vim-searchindex: display number of search matches & index of a current match.
   Bundle 'google/vim-searchindex'
 
-  " A Personal Wiki For Vim
-  Bundle 'vimwiki/vimwiki'
-  let g:vimwiki_list = [{'path': '~/Notes/',
-        \ 'auto_toc': 1,
-        \ 'syntax': 'markdown',
-        \ 'ext': '.md',
-        \'template_path': '~/Notes/templates/'}]
+  " Better whitespace stripping for Vim
+  Bundle 'thirtythreeforty/lessspace.vim'
 endif
 " }
 
@@ -146,7 +143,11 @@ if count(g:spf13_bundle_groups, 'programming')
   Bundle 'sheerun/vim-polyglot'
 
   " Pick one of the checksyntax, jslint, or syntastic
-  Bundle 'scrooloose/syntastic'
+  Bundle 'w0rp/ale'
+  let g:ale_linters = {
+  \   'drupal': ['phpcs --standard=Drupal'],
+  \}
+
   Bundle 'tpope/vim-fugitive'
   Bundle 'mattn/webapi-vim'
   Bundle 'mattn/gist-vim'
@@ -172,9 +173,14 @@ if count(g:spf13_bundle_groups, 'programming')
   let g:formatters_php = ['phpfmt']
   let g:autoformat_verbosemode=1
 
+  " vdebug {
   " Multi-language DBGP debugger client for Vim (PHP, Python, Perl, Ruby,
   " etc.)
   Bundle 'joonty/vdebug'
+  if !exists('g:vdebug_options')
+    let g:vdebug_options = {}
+  endif
+  "}
 
   " A vim plugin to perform diffs on blocks of code
   Bundle 'AndrewRadev/linediff.vim'
@@ -203,18 +209,17 @@ elseif count(g:spf13_bundle_groups, 'neocomplete')
   Bundle 'Shougo/neosnippet'
   Bundle 'Shougo/neosnippet-snippets'
   Bundle 'honza/vim-snippets'
+elseif count(g:spf13_bundle_groups, 'completor')
+  Bundle 'maralla/completor.vim'
 endif
 " }
 
 " PHP {
 if count(g:spf13_bundle_groups, 'php')
-  "Bundle 'StanAngeloff/php.vim'
-
   " The official VIm indent script for PHP.
-  "Bundle '2072/PHP-Indenting-for-VIm'
-
+  Bundle '2072/PHP-Indenting-for-VIm'
   Bundle 'arnaud-lb/vim-php-namespace'
-  "Bundle 'beyondwords/vim-twig'
+  "Bundle 'lumiliet/vim-twig'
 
   if isdirectory(expand("~/.vim/bundle/tagbar/"))
     " Using phpctags to generate php ctags index for vim plugin tagbar.
@@ -341,6 +346,7 @@ if count(g:spf13_bundle_groups, 'devops')
 
   " Vim sugar for the UNIX shell commands that need it the most.
   Bundle 'tpope/vim-eunuch'
+
   "W!  save file as root
   cmap W! SudoWrite
 
@@ -350,16 +356,23 @@ endif
 " Drupal  {
 if count(g:spf13_bundle_groups, 'drupal')
   " Drupal vim plugin
-  Bundle 'git://drupalcode.org/project/vimrc.git', {'name': 'vim-plugin-for-drupal'}
+  Bundle 'git://drupalcode.org/project/vimrc.git', {'rtp': 'bundle/vim-plugin-for-drupal/'}
 endif
 " }
 
 " Misc {
 if count(g:spf13_bundle_groups, 'misc')
+  " Vim configuration for Rust.
   "Bundle 'rust-lang/rust.vim'
+
+  " Vim Markdown runtime files
   "Bundle 'tpope/vim-markdown'
+
+  " Vim syntax for TOML
   "Bundle 'cespare/vim-toml'
-  Bundle 'saltstack/salt-vim'
+
+  " Vim files for editing Salt files
+  "Bundle 'saltstack/salt-vim'
 endif
 " }
 

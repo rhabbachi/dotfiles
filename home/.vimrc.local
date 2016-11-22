@@ -49,6 +49,9 @@ nnoremap Q <Nop>
 " http://vim.wikia.com/wiki/Search_for_visually_selected_text
 vnoremap // y/<C-R>"<CR>
 
+" http://vim.wikia.com/wiki/Search_and_replace_in_a_visual_selection#Searching_with_.2F_and_.3F
+vnoremap <M-/> <Esc>/\%V
+
 function! CheckFileType()
     if exists("b:countCheck") == 0
         let b:countCheck = 0
@@ -64,3 +67,11 @@ endfunction
 augroup newFiletypeDetection
     autocmd CursorMovedI * call CheckFileType()
 augroup END
+
+" http://superuser.com/questions/286985/reload-vimrc-in-vim-without-restart
+if has ('autocmd') " Remain compatible with earlier versions
+  augroup vimrc     " Source vim configuration upon save
+    autocmd! BufWritePost $MYVIMRC source % | echom "Reloaded " . $MYVIMRC | redraw
+    autocmd! BufWritePost $MYGVIMRC if has('gui_running') | so % | echom "Reloaded " . $MYGVIMRC | endif | redraw
+  augroup END
+endif " has autocmd
