@@ -42,6 +42,9 @@ zplug "robbyrussell/oh-my-zsh", use:"lib/*.zsh", nice:0
 
 zplug "zplug/zplug"
 
+#Additional completion definitions for Zsh.
+zplug "zsh-users/zsh-completions", depth:1, nice:0
+
 # Bundles from the default repo (robbyrussell's oh-my-zsh).
 # Core
 ## Aliases
@@ -74,7 +77,11 @@ fi
 ln -sf `pwd` $HOME/public_html/$site_name
 }
 # PV
-alias -g PV="| pv -trab |"
+command -v pv >/dev/null 2>&1 && alias -g PV="| pv -trab |"
+
+# Facebook path picker
+command -v fpp >/dev/null 2>&1 && alias -g FPP="| fpp"
+
 # Aliases
 if command -v ag >/dev/null 2>&1; then
   alias ag="ag -i"
@@ -132,9 +139,6 @@ zplug "plugins/npm", from:oh-my-zsh
 
 ## Ruby
 zplug "plugins/gem", from:oh-my-zsh
-zplug "plugins/rvm", from:oh-my-zsh
-#zplug "plugins/bundler", from:oh-my-zsh
-zplug "plugins/knife", from:oh-my-zsh
 
 # PHP
 zplug "plugins/composer", from:oh-my-zsh
@@ -157,8 +161,8 @@ function bgnotify_formatted {
 
 [ $1 -eq 0 ] && title="$(tmux display-message -p '#S') -- Completed after $3 sec" \
   || title="$(tmux display-message -p '#S') -- Failed after $3 sec"
-[ $1 -eq 0 ] && icon="process-completed" \
-  || icon="process-error"
+[ $1 -eq 0 ] && icon="process-completed-symbolic" \
+  || icon="process-error-symbolic"
 
 notify-send "$title"  "$2" -i "$icon";
 }
@@ -167,7 +171,7 @@ notify-send "$title"  "$2" -i "$icon";
 zplug "plugins/pass", from:oh-my-zsh
 
 # A utility to run commands within docker containers
-zplug "DevinciHQ/ahoy", \
+zplug "ahoy-cli/ahoy", \
   as:command, \
   from:gh-r, \
   use:"*linux*amd64*", \
@@ -221,12 +225,6 @@ if ! bashcompinit >/dev/null 2>&1; then
   bashcompinit -i
 fi
 zplug "$HOME/.drush/drush.complete.sh", from:local
-
-# RVM
-## Add RVM to PATH for scripting
-export PATH="$HOME/.rvm/bin:$PATH"
-## Load RVM into a shell session *as a function*
-[[ -f "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
 
 # NVM
 export NVM_DIR="$HOME/.nvm"
@@ -329,8 +327,20 @@ function ahoydocker() {
   export VIRTUAL_HOST="default.docker"
   export AHOY_CMD_PROXY="DOCKER"
 }
-#ahoydocker
+
+[[ $(docker-machine status) == "Running" ]] && { eval "$(docker-machine env default)"; export VIRTUAL_HOST="default.docker"; export AHOY_CMD_PROXY="DOCKER"; }
 
 function currentworkspace() {
   echo $(wmctrl -d | gawk '{if ($2 == "*") print tolower($10)"_"($11)}')
 }
+
+# Open command in vim quickfix
+function vimq () {
+  vim -q <($@) +cw
+}
+
+# RVM
+## Add RVM to PATH for scripting
+export PATH="$HOME/.rvm/bin:$PATH"
+## Load RVM into a shell session *as a function*
+[[ -f "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
