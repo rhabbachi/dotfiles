@@ -144,9 +144,7 @@ if count(g:spf13_bundle_groups, 'programming')
 
   " Pick one of the checksyntax, jslint, or syntastic
   Bundle 'w0rp/ale'
-  let g:ale_linters = {
-  \   'drupal': ['phpcs --standard=Drupal'],
-  \}
+  let g:ale_php_phpcs_standard="Drupal"
 
   Bundle 'tpope/vim-fugitive'
   Bundle 'mattn/webapi-vim'
