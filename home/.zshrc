@@ -29,7 +29,8 @@ export DISABLE_AUTO_UPDATE="true"
 
 # Check if zplug is installed
 [[ -f $HOME/.zplug/init.zsh ]] || {
-  curl -sL get.zplug.sh | zsh
+  echo "Installing zplug"
+  curl -sL zplug.sh/installer | zsh
   source ~/.zplug/init.zsh && zplug update --self
 }
 
@@ -39,8 +40,6 @@ source ~/.zplug/init.zsh
 
 autoload -Uz is-at-least
 zplug "robbyrussell/oh-my-zsh", use:"lib/*.zsh", nice:0
-
-zplug "zplug/zplug"
 
 #Additional completion definitions for Zsh.
 zplug "zsh-users/zsh-completions", depth:1, nice:0
@@ -172,10 +171,8 @@ zplug "plugins/pass", from:oh-my-zsh
 
 # A utility to run commands within docker containers
 zplug "ahoy-cli/ahoy", \
-  as:command, \
   from:gh-r, \
-  use:"*linux*amd64*", \
-  hook-load:"complete -F 'ahoy --generate-bash-completion' ahoy"
+  as:command
 
 # Load systemd plugin if using systemd.
 zplug "plugins/systemd", from:oh-my-zsh, if:"pidof systemd"
@@ -208,7 +205,7 @@ zplug "chriskempson/base16-shell", use:"scripts/base16-monokai.sh"
 
 # Better prompt
 export DEFAULT_USER="rhabbachi"
-zplug "bhilburn/powerlevel9k", nice:0
+zplug "bhilburn/powerlevel9k", as:theme
 export POWERLEVEL9K_SHORTEN_DIR_LENGTH=4
 export POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon context dir rbenv docker_machine vcs)
 export POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status time)
@@ -250,6 +247,23 @@ zplug "$HOME/.zplug/custom", from:local
 
 # Colorization for mysql
 zplug "horosgrisa/mysql-colorize"
+
+# A utility to run commands within docker containers
+zplug "Netflix-Skunkworks/go-jira", \
+  from:gh-r, \
+  as:command, \
+  rename-to:"jira"
+
+# A command-line fuzzy finder written in Go.
+## Main go binary.
+zplug "junegunn/fzf-bin", \
+    from:gh-r, \
+    as:command, \
+    rename-to:"fzf"
+## Helper bash script.
+zplug "junegunn/fzf", \
+    as:command, \
+    use:"bin/fzf-tmux"
 
 # save all to init script
 if ! zplug check --verbose; then
@@ -305,7 +319,6 @@ setsid xdg-open $1
 }
 
 # AUTOSSH
-
 command -v autossh >/dev/null 2>&1 && alias ssh='autossh -M 0 -o "ServerAliveInterval 45" -o "ServerAliveCountMax 2"'
 
 # fe [FUZZY PATTERN] - Open the selected file with the default editor
