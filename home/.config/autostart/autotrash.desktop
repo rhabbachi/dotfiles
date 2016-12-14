@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Autotrash
+GenericName=Clean Trash Tool
+Comment=Tool to automatically purge old trashed files https://bneijt.nl/pr/autotrash/
+Exec=/usr/bin/autotrash -d 30
+Icon=Terminal
+Terminal=false
+Type=Application
+Categories=Utility;
