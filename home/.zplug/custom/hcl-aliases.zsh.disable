@@ -1,0 +1,52 @@
+if command -v hcl >/dev/null 2>&1; then
+  # HHS
+  hcl alias hhs-dev 7727329 3186061	#Carahsoft - DKAN for HHS - Development : Custom Development
+  hcl alias hhs-qa 7727329 1991932	#Carahsoft - DKAN for HHS - Quality Assurance
+  hcl alias hhs-dis 7727329 4369463	#Carahsoft - DKAN for HHS - Discovery: 
+  hcl alias hhs-init 7727329 4237347	#Carahsoft - DKAN for HHS - Initiation
+  hcl alias hhs-deploy 7727329 1750326	#Carahsoft - DKAN for HHS - Site Launch
+
+  # Admin
+  hcl alias admin-admin 5934504 877508	#NuCivic - Administration & planning FY2015 - Admin
+  hcl alias admin-skill 5934504 2686161	#NuCivic - Administration & planning FY2015 - Developer skill-building
+  hcl alias admin-talk 5934504 894638	#NuCivic - Administration & planning FY2015 - Discussion
+  hcl alias admin-doc 5934504 1752812	#NuCivic - Administration & planning FY2015 - Documentation
+  hcl alias admin-hol 5934504 1565652	#NuCivic - Administration & planning FY2015 - Holiday
+  hcl alias admin-sick 5934504 1565653	#NuCivic - Administration & planning FY2015 - Sick
+  hcl alias admin-trav 5934504 976527	#NuCivic - Administration & planning FY2015 - Travel
+  hcl alias admin-vac 5934504 877511	#NuCivic - Administration & planning FY2015 - Vacation
+
+  # Helpdesk.
+  hcl alias help-admin 7280439 877508	#NuCivic - Administration: helpdesk and neptune - Admin
+  hcl alias help-skill 7280439 2686161	#NuCivic - Administration: helpdesk and neptune - Developer skill-building
+  hcl alias help-dev 7280439 2078815	#NuCivic - Administration: helpdesk and neptune - Development
+  hcl alias help-dis 7280439 1878190	#NuCivic - Administration: helpdesk and neptune - Discovery
+  hcl alias help-talk 7280439 894638	#NuCivic - Administration: helpdesk and neptune - Discussion
+  hcl alias help-doc 7280439 1752812	#NuCivic - Administration: helpdesk and neptune - Documentation
+  hcl alias help-qa 7280439 1991932	#NuCivic - Administration: helpdesk and neptune - Quality Assurance
+  hcl alias help-deploy 7280439 1750326	#NuCivic - Administration: helpdesk and neptune - Site Launch
+
+  # Product
+  hcl alias product-amdin 5883337 877508	#NuCivic - NuCivic Data Product Development FY2015 - Admin
+  hcl alias product-deploy 5883337 2105153	#NuCivic - NuCivic Data Product Development FY2015 - Deployment
+  hcl alias product-dev 5883337 2078815	#NuCivic - NuCivic Data Product Development FY2015 - Development
+  hcl alias product-dis 5883337 1878190	#NuCivic - NuCivic Data Product Development FY2015 - Discovery
+  hcl alias product-talk 5883337 894638	#NuCivic - NuCivic Data Product Development FY2015 - Discussion
+  hcl alias product-doc 5883337 1752812	#NuCivic - NuCivic Data Product Development FY2015 - Documentation
+  hcl alias product-qa 5883337 1991932	#NuCivic - NuCivic Data Product Development FY2015 - Quality Assurance
+
+  # Pluto
+  hcl alias pluto-admin 7273838 877508	#NuCivic - NuCivic Platform (use this for IBM Blue Mix, hosting, devops) - Admin
+  hcl alias pluto-conf 7273838 877518	#NuCivic - NuCivic Platform (use this for IBM Blue Mix, hosting, devops) - Configuration
+  hcl alias pluto-deploy 7273838 2105153	#NuCivic - NuCivic Platform (use this for IBM Blue Mix, hosting, devops) - Deployment
+  hcl alias pluto-dev 7273838 2078815	#NuCivic - NuCivic Platform (use this for IBM Blue Mix, hosting, devops) - Development
+  hcl alias pluto-dis 7273838 1878190	#NuCivic - NuCivic Platform (use this for IBM Blue Mix, hosting, devops) - Discovery
+  hcl alias pluto-doc 7273838 1752812	#NuCivic - NuCivic Platform (use this for IBM Blue Mix, hosting, devops) - Documentation
+  hcl alias pluto-qa 7273838 1991932	#NuCivic - NuCivic Platform (use this for IBM Blue Mix, hosting, devops) - Quality Assurance
+
+  # USDA
+  hcl alias usda-dev 9016491 3186061 #Carahsoft - USDAOC - USDA - DKAN Administrator - Development : Custom Development
+  hcl alias usda-dis 9016491 4369463 #Carahsoft - USDAOC - USDA - DKAN Administrator - Discovery: 
+  hcl alias usda-qa 9016491 4416034 #Carahsoft - USDAOC - USDA - DKAN Administrator - QA: User Acceptance Testing
+  hcl alias usda-deploy 9016491 1750326 #Carahsoft - USDAOC - USDA - DKAN Administrator - Site Launch
+fi
