@@ -1,5 +1,5 @@
 " Override bundles config.
-let g:spf13_bundle_groups=['general', 'programming', 'php', 'javascript', 'html', 'misc', 'tmux', 'devops', 'drupal', 'completor']
+let g:spf13_bundle_groups=['general', 'programming', 'php', 'javascript', 'html', 'xml', 'misc', 'tmux', 'devops', 'drupal', 'completor']
 
 " General {
 if count(g:spf13_bundle_groups, 'general')
@@ -114,7 +114,7 @@ if count(g:spf13_bundle_groups, 'general')
   " A Filetype plugin for csv files
   Bundle 'chrisbra/csv.vim'
   " Grammar checker for English, French, German (etc.) in Vim
-  Bundle 'vim-scripts/LanguageTool'
+  Bundle 'rhysd/vim-grammarous'
 
   " Simplified clipboard functionality for Vim
   let g:EasyClipUseSubstituteDefaults = 1
@@ -125,6 +125,11 @@ if count(g:spf13_bundle_groups, 'general')
 
   " Better whitespace stripping for Vim
   Bundle 'thirtythreeforty/lessspace.vim'
+
+  " Vim plugin: Create your own text objects
+  " http://www.vim.org/scripts/script.php…
+  " Dependency for most of the plugins providing textobj.
+  Bundle 'kana/vim-textobj-user'
 endif
 " }
 
@@ -357,6 +362,19 @@ if count(g:spf13_bundle_groups, 'drupal')
   Bundle 'git://drupalcode.org/project/vimrc.git', {'rtp': 'bundle/vim-plugin-for-drupal/'}
 endif
 " }
+
+" XML {
+if count(g:spf13_bundle_groups, 'xml')
+
+  " A vim text object for XML/HTML attributes.
+  " requires vim-textobj-user.
+  Bundle 'whatyouhide/vim-textobj-xmlattr'
+
+  " A filetype plugin for VIM to help edit XML files
+  " http://www.vim.org/scripts/script.php…
+  Bundle 'sukima/xmledit'
+endif
+"}
 
 " Misc {
 if count(g:spf13_bundle_groups, 'misc')
