@@ -43,4 +43,5 @@ command -v atool >/dev/null 2>&1 || { echo >&2 "I require lbzip2 but it's not in
 trap "exit 1" SIGHUP SIGINT SIGTERM
 drush sql-drop -y && atool -c $1 | pv -pterb | drush sqlc
 drush updb -y
+#drush localhost
 }

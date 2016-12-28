@@ -1,7 +1,7 @@
 # fe [FUZZY PATTERN] - Open the selected file with the default editor
 #   - Bypass fuzzy finder if there's only one match (--select-1)
 #   - Exit if there's no match (--exit-0)
-fe() {
+function fe() {
   IFS='
 '
   local declare files=($(fzf-tmux --query="$1" --select-1 --exit-0))
@@ -12,7 +12,7 @@ fe() {
 # Modified version of fe() where you can press
 #   - CTRL-O to open with `xdg-open` command,
 #   - CTRL-E or Enter key to open with the $EDITOR
-fo() {
+function fo() {
   local out file key
   IFS=$'\n' read -d '' -r -a out < <(fzf-tmux --query="$1" --exit-0 --expect=ctrl-o,ctrl-e)
   key=${out[0]}
@@ -27,18 +27,18 @@ fo() {
 }
 
 # fd - cd to selected directory
-fd() {
+function fd() {
   DIR=`find ${1:-*} -path '*/\.*' -prune -o -type d -print 2> /dev/null | fzf-tmux` \
     && cd "$DIR"
 }
 
 # fda - including hidden directories
-fda() {
+function fda() {
   DIR=`find ${1:-.} -type d 2> /dev/null | fzf-tmux` && cd "$DIR"
 }
 
 # fdr - cd to selected parent directory
-fdr() {
+function fdr() {
   local declare dirs=()
   get_parent_dirs() {
     if [[ -d "${1}" ]]; then dirs+=("$1"); else return; fi
@@ -53,29 +53,29 @@ fdr() {
 }
 
 # cdf - cd into the directory of the selected file
-cdf() {
+function cdf() {
    local file
    local dir
    file=$(fzf +m -q "$1") && dir=$(dirname "$file") && cd "$dir"
 }
 
 # utility function used to write the command in the shell
-writecmd() {
+function writecmd() {
   perl -e '$TIOCSTI = 0x5412; $l = <STDIN>; $lc = $ARGV[0] eq "-run" ? "\n" : ""; $l =~ s/\s*$/$lc/; map { ioctl STDOUT, $TIOCSTI, $_; } split "", $l;' -- $1
 }
 
 # fh - repeat history
-fh() {
+function fh() {
   ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed -re 's/^\s*[0-9]+\s*//' | writecmd -run
 }
 
 # fhe - repeat history edit
-fhe() {
+function fhe() {
   ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed -re 's/^\s*[0-9]+\s*//' | writecmd
 }
 
 # fkill - kill process
-fkill() {
+function fkill() {
   pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
 
   if [ "x$pid" != "x" ]
@@ -85,7 +85,7 @@ fkill() {
 }
 
 # fbr - checkout git branch (including remote branches)
-fbr() {
+function fbr() {
   local branches branch
   branches=$(git branch --all | grep -v HEAD) &&
   branch=$(echo "$branches" |
@@ -94,7 +94,7 @@ fbr() {
 }
 
 # fco - checkout git branch/tag
-fco() {
+function fco() {
   local tags branches target
   tags=$(
     git tag | awk '{print "\x1b[31;1mtag\x1b[m\t" $1}') || return
@@ -109,7 +109,7 @@ fco() {
 }
 
 # fcoc - checkout git commit
-fcoc() {
+function fcoc() {
   local commits commit
   commits=$(git log --pretty=oneline --abbrev-commit --reverse) &&
   commit=$(echo "$commits" | fzf --tac +s +m -e) &&
@@ -117,9 +117,9 @@ fcoc() {
 }
 
 # fshow - git commit browser
-fshow() {
+function fshow() {
   git log --graph \
-      --pretty="\''%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'\'" "$@" |
+      --pretty="%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" "$@" |
   fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
       --bind "ctrl-m:execute:
                 (grep -o '[a-f0-9]\{7\}' | head -1 |
@@ -130,7 +130,7 @@ FZF-EOF"
 
 # fcs - get git commit sha
 # example usage: git rebase -i `fcs`
-fcs() {
+function fcs() {
   local commits commit
   commits=$(git log --color=always --pretty=oneline --abbrev-commit --reverse) &&
   commit=$(echo "$commits" | fzf --tac +s +m -e --ansi --reverse) &&
@@ -142,7 +142,7 @@ fcs() {
 # enter shows you the contents of the stash
 # ctrl-d shows a diff of the stash against your current HEAD
 # ctrl-b checks the stash out as a branch, for easier merging
-fstash() {
+function fstash() {
   local out q k sha
   while out=$(
     git stash list --pretty="%C(yellow)%h %>(14)%Cgreen%cr %C(blue)%gs" |
@@ -167,7 +167,7 @@ fstash() {
 }
 
 # ftags - search ctags
-ftags() {
+function ftags() {
   local line
   [ -e tags ] &&
   line=$(
@@ -180,7 +180,7 @@ ftags() {
 # fs [FUZZY PATTERN] - Select selected tmux session
 #   - Bypass fuzzy finder if there's only one match (--select-1)
 #   - Exit if there's no match (--exit-0)
-fs() {
+function fs() {
   local session
   session=$(tmux list-sessions -F "#{session_name}" | \
     fzf-tmux --query="$1" --select-1 --exit-0) &&
@@ -188,7 +188,7 @@ fs() {
 }
 
 # ftpane - switch pane (@george-b)
-ftpane() {
+function ftpane() {
   local panes current_window current_pane target target_window target_pane
   panes=$(tmux list-panes -s -F '#I:#P - #{pane_current_path} #{pane_current_command}')
   current_pane=$(tmux display-message -p '#I:#P')
@@ -208,7 +208,7 @@ ftpane() {
 }
 
 # v - open files in ~/.viminfo
-v() {
+function v() {
   local files
   files=$(grep '^>' ~/.viminfo | cut -c3- |
           while read line; do
