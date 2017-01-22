@@ -130,6 +130,9 @@ if count(g:spf13_bundle_groups, 'general')
   " http://www.vim.org/scripts/script.php…
   " Dependency for most of the plugins providing textobj.
   Bundle 'kana/vim-textobj-user'
+
+  " Toggle the cursor shape in the terminal for Vim.
+  Bundle 'jszakmeister/vim-togglecursor'
 endif
 " }
 
@@ -150,6 +153,11 @@ if count(g:spf13_bundle_groups, 'programming')
   " Pick one of the checksyntax, jslint, or syntastic
   Bundle 'w0rp/ale'
   let g:ale_php_phpcs_standard="Drupal"
+  " Run the lint only on file save.
+  let g:ale_lint_on_save = 1
+  let g:ale_lint_on_text_changed = 0
+  " Run the linter on file open.
+  let g:ale_lint_on_enter = 1
 
   Bundle 'tpope/vim-fugitive'
   Bundle 'mattn/webapi-vim'
@@ -161,12 +169,19 @@ if count(g:spf13_bundle_groups, 'programming')
   " Vim script for text filtering and alignment.
   Bundle 'godlygeek/tabular'
 
+  " Rainbow parentheses improved, shorter code, no level limit, smooth and
+  " fast, powerful configuration.
   Bundle 'luochen1990/rainbow'
+
+  " Ctags
   if executable('ctags')
     Bundle 'majutsushi/tagbar'
     let g:tagbar_autoclose = 1
     let g:tagbar_width = 50
     let g:tagbar_zoomwidth = 1
+
+    Bundle 'ludovicchabant/vim-gutentags'
+    let g:gutentags_cache_dir = "~/.vimtags"
   endif
 
   " Provide easy code formatting in Vim by integrating existing code
@@ -382,10 +397,10 @@ if count(g:spf13_bundle_groups, 'misc')
   "Bundle 'rust-lang/rust.vim'
 
   " Vim Markdown runtime files
-  "Bundle 'tpope/vim-markdown'
+  Bundle 'tpope/vim-markdown'
 
   " Vim syntax for TOML
-  "Bundle 'cespare/vim-toml'
+  Bundle 'cespare/vim-toml'
 
   " Vim files for editing Salt files
   "Bundle 'saltstack/salt-vim'
