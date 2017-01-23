@@ -1,7 +1,5 @@
 # http://unix.stackexchange.com/questions/72086/ctrl-s-hang-terminal-emulator
 stty -ixon
-setopt HIST_IGNORE_DUPS
-setopt HIST_FIND_NO_DUPS
 
 # Misc
 export LC_ALL=en_US.utf-8
@@ -24,7 +22,10 @@ zstyle ":zplug:tag" defer 2
 
 source ~/.zplug/init.zsh
 
-zplug "robbyrussell/oh-my-zsh", use:"lib/*.zsh", defer:0
+zplug "robbyrussell/oh-my-zsh", \
+  use:"lib/{clipboard,compfix,completion,functions,git,grep,history,key-bindings,misc,spectrum,termsupport,theme-and-appearance}\.zsh", \
+  defer:0
+setopt HIST_FIND_NO_DUPS
 
 #Additional completion definitions for Zsh.
 zplug "zsh-users/zsh-completions", depth:1, defer:0
@@ -134,14 +135,7 @@ elif [ -f /etc/arch-release ]; then
   command -v pacaur >/dev/null 2>&1 && alias pacman="pacaur"
   # https://wiki.archlinux.org/index.php/Pacman_tips
   # '[r]emove [o]rphans' - recursively remove ALL orphaned packages
-  alias pacro="/usr/bin/pacman -Qtdq > /dev/null && sudo /usr/bin/pacman -Rns \$(/usr/bin/pacman -Qtdq | sed -e ':a;N;\$!ba;s/\n/ /g')"
-  orphans() {
-    if [[ ! -n $(pacman -Qdt) ]]; then
-      echo "No orphans to remove."
-    else
-      sudo pacman -Rns $(pacman -Qdtq)
-    fi
-  }
+  alias pacman-remove-orphans="/usr/bin/pacman -Qtdq > /dev/null && sudo /usr/bin/pacman -Rns \$(/usr/bin/pacman -Qtdq | sed -e ':a;N;\$!ba;s/\n/ /g')"
 fi
 
 # TMUX plugin
@@ -186,15 +180,11 @@ zplug "Netflix-Skunkworks/go-jira", \
   rename-to:"jira"
 
 # A command-line fuzzy finder written in Go.
-## Main go binary.
-zplug "junegunn/fzf-bin", \
-    from:gh-r, \
-    as:command, \
-    rename-to:"fzf"
 ## Helper bash script.
 zplug "junegunn/fzf", \
     as:command, \
-    use:"bin/fzf-tmux"
+    use:"bin/fzf-tmux", \
+    rename-to:"fzf-tmux"
 
 # Simple delightful note taking, with none of the lock-in
 zplug "pimterry/notes", \
@@ -206,14 +196,14 @@ export NOTES_DIRECTORY="$HOME/Notes"
 export DEFAULT_USER="rhabbachi"
 zplug "bhilburn/powerlevel9k", as:theme, defer:3
 export POWERLEVEL9K_SHORTEN_DIR_LENGTH=4
-export POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon context root_indicator dir rbenv docker_machine vcs)
+export POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon context root_indicator dir rbenv docker_machine vcs pyenv virtualenv)
 export POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status vi_mode time)
 
 # Base16 Shell
 zplug "chriskempson/base16-shell", use:"scripts/base16-monokai.sh", defer:3
 
 # Load local scripts and ustom zsh config/commands
-zplug "$HOME/.drush/drush.complete.sh", from:local
+zplug "$HOME/.drush", from:local, use:"*complete\.sh", defer:0
 zplug "$HOME/.zplug/custom", from:local
 
 BASE16_SHELL="$HOME/.zplug/repos/chriskempson/base16-shell/"
@@ -281,7 +271,7 @@ if ! zplug check --verbose; then
   fi
 fi
 
-zplug load --verbose
+zplug load
 
 ### PATHS ###
 # Android Studio
@@ -296,7 +286,8 @@ export GOPATH="$HOME/.go/"
 export PATH="$HOME/.go/bin/:$PATH"
 
 # For Java application
-export _JAVA_OPTIONS="-Dawt.useSystemAAFontSettings=lcd -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel"
+# https://wiki.archlinux.org/index.php/java#Better_font_rendering
+export _JAVA_OPTIONS="-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel"
 export _JAVA_FONTS="/usr/share/fonts/TTF"
 
 # Disable OH-MY-ZSH updates
