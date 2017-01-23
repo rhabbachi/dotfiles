@@ -1,3 +1,4 @@
+let g:override_spf13_bundles = 1
 " Override bundles config.
 let g:spf13_bundle_groups=['general', 'programming', 'php', 'javascript', 'html', 'xml', 'misc', 'tmux', 'devops', 'drupal', 'completor']
 
