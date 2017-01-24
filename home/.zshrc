@@ -54,7 +54,7 @@ ln -sf `pwd` $HOME/public_html/$site_name
 }
 
 # command-not-found Needs pkgfile installed
-zplug "plugins/command-not-found", from:oh-my-zsh, if:"which pkgfile"
+zplug "plugins/command-not-found", from:oh-my-zsh
 
 zplug "plugins/colored-man-pages", from:oh-my-zsh
 zplug "plugins/encode64", from:oh-my-zsh
