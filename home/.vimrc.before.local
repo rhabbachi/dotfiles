@@ -1,16 +1,11 @@
-" disable neocomplcache auto compleat
-let g:neocomplcache_disable_auto_complete = 1
-
-" Enable powerline symbols
-let g:airline_powerline_fonts = 1
+" Leader keys
+let g:spf13_leader = "\<Space>"
 
 " Airline
+let g:airline_powerline_fonts = 1
 let g:airline_theme = 'base16'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tmuxline#enabled = 0
 
 " Use local bundle config in .vimrc.bundles.local
 let g:override_spf13_bundles = 1
-
-" Disable whitespace stripping
-let g:spf13_keep_trailing_whitespace = 1

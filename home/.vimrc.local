@@ -37,7 +37,7 @@ set nospell " Default to no spell
 set mouse= "disable the mouse
 
 " Disable folding
-set nofoldenable                " disable code folding
+set nofoldenable
 
 " http://vim.wikia.com/wiki/Fix_syntax_highlighting
 noremap <F12> <Esc>:syntax sync fromstart<CR>
@@ -75,3 +75,9 @@ if has ('autocmd') " Remain compatible with earlier versions
     autocmd! BufWritePost $MYGVIMRC if has('gui_running') | so % | echom "Reloaded " . $MYGVIMRC | endif | redraw
   augroup END
 endif " has autocmd
+
+" http://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/
+" Automatically jump to end of text you pasted
+vnoremap <silent> y y`]
+vnoremap <silent> p p`]
+nnoremap <silent> p p`]

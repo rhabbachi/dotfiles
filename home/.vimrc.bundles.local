@@ -1,4 +1,3 @@
-let g:override_spf13_bundles = 1
 " Override bundles config.
 let g:spf13_bundle_groups=['general', 'programming', 'php', 'javascript', 'html', 'xml', 'misc', 'tmux', 'devops', 'drupal', 'completor']
 
@@ -31,10 +30,14 @@ if count(g:spf13_bundle_groups, 'general')
   " http://www.vim.org/scripts/script.php?script_id=3599
   Bundle 'jiangmiao/auto-pairs'
 
-  " Active fork of kien/ctrlp.vim—Fuzzy file, buffer, mru, tag, etc finder.
-  Bundle 'ctrlpvim/ctrlp.vim'
-  " CtrlP extension for fuzzy-search in tag matches (:tjump replacement).
-  Bundle 'ivalkeen/vim-ctrlp-tjump'
+  " Vim plugin which asks for the right file to open
+  Bundle 'EinfachToll/DidYouMean'
+
+  " Vim plugin that allows you to visually select increasingly larger regions
+  " of text using the same key combination.
+  Bundle 'terryma/vim-expand-region'
+  vmap v <Plug>(expand_region_expand)
+  vmap <C-v> <Plug>(expand_region_shrink)
 
   " https://github.com/terryma/vim-multiple-cursors. {
   Bundle 'terryma/vim-multiple-cursors'
