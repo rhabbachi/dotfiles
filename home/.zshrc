@@ -202,9 +202,8 @@ export POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status vi_mode time)
 # Base16 Shell
 zplug "chriskempson/base16-shell", use:"scripts/base16-monokai.sh", defer:3
 
-# Load local scripts and ustom zsh config/commands
-zplug "$HOME/.drush", from:local, use:"*complete\.sh", defer:0
-zplug "$HOME/.zplug/custom", from:local
+# Custom local files.
+zplug "$HOME/.zshrc.d", from:local
 
 BASE16_SHELL="$HOME/.zplug/repos/chriskempson/base16-shell/"
 [ -n "$PS1" ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
