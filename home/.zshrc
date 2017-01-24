@@ -180,8 +180,7 @@ load-nvmrc() {
     nvm use default
   fi
 }
-add-zsh-hook chpwd load-nvmrc
-load-nvmrc
+command -v nvm >/dev/null 2>&1 && { add-zsh-hook chpwd load-nvmrc; load-nvmrc; }
 
 # A utility to run commands within docker containers
 zplug "Netflix-Skunkworks/go-jira", \
@@ -238,15 +237,13 @@ systemctl --user import-environment PATH
 ## Ahoy Docker Nucivic env
 function ahoydocker() {
   [[ $(docker-machine status) == "Stopped" ]] && docker-machine start default
-  eval "$(docker-machine env default)"
-  export VIRTUAL_HOST="default.docker"
-  export AHOY_CMD_PROXY="DOCKER"
+  load-ahoydocker
 }
 
 function load-ahoydocker() {
   [[ $(docker-machine status) == "Running" ]] && { eval "$(docker-machine env default)"; export VIRTUAL_HOST="default.docker"; export AHOY_CMD_PROXY="DOCKER"; }
 }
-load-ahoydocker
+command -v docker-machine >/dev/null 2>&1 && load-ahoydocker
 
 function tmux-project() {
   name=${1-$(basename $(pwd))}
