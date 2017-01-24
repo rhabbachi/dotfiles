@@ -126,17 +126,27 @@ zplug "ahoy-cli/ahoy", \
 # Load systemd plugin if using systemd.
 zplug "plugins/systemd", from:oh-my-zsh, if:"pidof systemd"
 
-if grep -q "Ubuntu|Debian" /etc/lsb-release >/dev/null 2>&1; then
-  zplug "plugins/debian", from:oh-my-zsh
-  export apt_pref="apt-get"
-  unalias ag
-elif [ -f /etc/arch-release ]; then
-  zplug "plugins/archlinux", from:oh-my-zsh
-  command -v pacaur >/dev/null 2>&1 && alias pacman="pacaur"
-  # https://wiki.archlinux.org/index.php/Pacman_tips
-  # '[r]emove [o]rphans' - recursively remove ALL orphaned packages
-  alias pacman-remove-orphans="/usr/bin/pacman -Qtdq > /dev/null && sudo /usr/bin/pacman -Rns \$(/usr/bin/pacman -Qtdq | sed -e ':a;N;\$!ba;s/\n/ /g')"
-fi
+# Distro specific code. I have an archlinux laptop and an ubuntu server and I
+# want to load different plugins and vars for each platform.
+# GIT_CONTRIB is needed for git contrib scripts.
+source /etc/os-release
+
+case "$ID" in
+  ubuntu*)
+    zplug "plugins/debian", from:oh-my-zsh
+    export apt_pref="apt-get"
+    unalias ag
+    export GIT_CONTRIB="/usr/share/doc/git/contrib"
+    ;;
+  arch*)
+    zplug "plugins/archlinux", from:oh-my-zsh
+    command -v pacaur >/dev/null 2>&1 && alias pacman="pacaur"
+    # https://wiki.archlinux.org/index.php/Pacman_tips
+    # '[r]emove [o]rphans' - recursively remove ALL orphaned packages
+    alias pacman-remove-orphans="/usr/bin/pacman -Qtdq > /dev/null && sudo /usr/bin/pacman -Rns \$(/usr/bin/pacman -Qtdq | sed -e ':a;N;\$!ba;s/\n/ /g')"
+    export GIT_CONTRIB="/usr/share/git"
+    ;;
+esac
 
 # TMUX plugin
 zplug "plugins/tmux", from:oh-my-zsh, if:"which tmux"
