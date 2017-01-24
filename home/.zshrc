@@ -133,9 +133,9 @@ source /etc/os-release
 
 case "$ID" in
   ubuntu*)
-    zplug "plugins/debian", from:oh-my-zsh
+    # Unalias ag since it's our search app.
+    zplug "plugins/debian", from:oh-my-zsh, hook-load:"unalias ag"
     export apt_pref="apt-get"
-    unalias ag
     export GIT_CONTRIB="/usr/share/doc/git/contrib"
     ;;
   arch*)
