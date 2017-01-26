@@ -148,6 +148,15 @@ case "$ID" in
     ;;
 esac
 
+# MOSH
+zplug "plugins/mosh", from:oh-my-zsh, if:"which mosh"
+
+# NMAP
+zplug "plugins/nmap", from:oh-my-zsh, if:"which nmap"
+
+# JSON
+zplug "plugins/jsontools", from:oh-my-zsh
+
 # TMUX plugin
 zplug "plugins/tmux", from:oh-my-zsh, if:"which tmux"
 [[ "$DESKTOP_SESSION" == "gnome" ]] && export ZSH_TMUX_AUTOQUIT=true
@@ -233,6 +242,10 @@ fag() {
 
 # https://wiki.archlinux.org/index.php/Systemd/User#PATH
 systemctl --user import-environment PATH
+
+# Docker
+zplug "plugins/docker", from:oh-my-zsh, if:"which docker", defer:0
+zplug "plugins/docker-compose", from:oh-my-zsh, if:"which docker-compose", defer:0
 
 ## Ahoy Docker Nucivic env
 function ahoydocker() {
