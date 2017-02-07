@@ -19,6 +19,9 @@ if count(g:spf13_bundle_groups, 'general')
   " vinegar.vim: combine with netrw to create a delicious salad dressing
   "Bundle 'tpope/vim-vinegar'
   let g:netrw_liststyle=3
+  "sleuth.vim: Heuristically set buffer options
+  "http://www.vim.org/scripts/script.php
+  Bundle 'tpope/vim-sleuth'
 
   Bundle 'tpope/vim-surround'
   Bundle 'tpope/vim-repeat'

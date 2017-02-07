@@ -8,9 +8,6 @@ set linebreak
 set nolist
 
 set smartindent " Indent on new line.
-set shiftwidth=2                " Use indents of 2 spaces
-set tabstop=2                   " An indentation every two columns
-set softtabstop=2               " Let backspace delete indent
 
 highlight clear CursorLineNr    " Remove highlight color from current line number
 
