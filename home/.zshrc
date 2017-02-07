@@ -1,6 +1,14 @@
 # http://unix.stackexchange.com/questions/72086/ctrl-s-hang-terminal-emulator
 stty -ixon
 
+# For Java application
+# https://wiki.archlinux.org/index.php/java#Better_font_rendering
+export _JAVA_OPTIONS="-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel"
+export _JAVA_FONTS="/usr/share/fonts/TTF"
+
+# Disable OH-MY-ZSH updates
+export DISABLE_AUTO_UPDATE="true"
+
 # Misc
 export LC_ALL=en_US.utf-8
 export LANG="$LC_ALL"
@@ -240,9 +248,6 @@ fag() {
   [ -n "$file" ] && ${EDITOR:-vim} "$file"
 }
 
-# https://wiki.archlinux.org/index.php/Systemd/User#PATH
-systemctl --user import-environment PATH
-
 # Docker
 zplug "plugins/docker", from:oh-my-zsh, if:"which docker", defer:0
 zplug "plugins/docker-compose", from:oh-my-zsh, if:"which docker-compose", defer:0
@@ -299,21 +304,15 @@ export PATH="$HOME/Programs/android-studio/bin/:$PATH"
 export PATH="$HOME/Programs/Android/Sdk/tools:$PATH"
 export PATH="$HOME/Programs/Android/Sdk/platform-tools:$PATH"
 
-
 # Go lang
 export GOPATH="$HOME/.go/"
 export PATH="$HOME/.go/bin/:$PATH"
-
-# For Java application
-# https://wiki.archlinux.org/index.php/java#Better_font_rendering
-export _JAVA_OPTIONS="-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel"
-export _JAVA_FONTS="/usr/share/fonts/TTF"
-
-# Disable OH-MY-ZSH updates
-export DISABLE_AUTO_UPDATE="true"
 
 # RVM
 ## Add RVM to PATH for scripting
 export PATH="$HOME/.rvm/bin:$PATH"
 ## Load RVM into a shell session *as a function*
 [[ -f "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+
+# https://wiki.archlinux.org/index.php/Systemd/User#PATH
+systemctl --user import-environment PATH
