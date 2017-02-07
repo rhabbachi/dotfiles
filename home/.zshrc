@@ -240,12 +240,16 @@ export POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status docker_machine rbenv virtualen
 
 # Base16 Shell
 zplug "chriskempson/base16-shell", use:"scripts/base16-monokai.sh", defer:3
+BASE16_SHELL="$HOME/.zplug/repos/chriskempson/base16-shell/"
+[ -n "$PS1" ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
+
+# Direnv: environment switcher for the shell.
+eval "$(direnv hook zsh)"
+## https://github.com/direnv/direnv/wiki/Tmux
+alias tmux='direnv exec / tmux'
 
 # Custom local files.
 zplug "$HOME/.zshrc.d", from:local
-
-BASE16_SHELL="$HOME/.zplug/repos/chriskempson/base16-shell/"
-[ -n "$PS1" ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
 
 # Open file with the right application
 function open () {
