@@ -35,6 +35,8 @@ zplug "robbyrussell/oh-my-zsh", \
   defer:0
 setopt HIST_FIND_NO_DUPS
 
+alias clipcopy='sed "s/\x1B\[\([0-9]\{1,2\}\(;[0-9]\{1,2\}\)\?\)\?[mGK]//g" | tee /dev/tty | clipcopy'
+
 #Additional completion definitions for Zsh.
 zplug "zsh-users/zsh-completions", depth:1, defer:0
 
