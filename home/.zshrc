@@ -219,11 +219,24 @@ zplug "pimterry/notes", \
 export NOTES_DIRECTORY="$HOME/Notes"
 
 # Better prompt
-export DEFAULT_USER="rhabbachi"
+export DEFAULT_USER="$USER"
+export POWERLEVEL9K_MODE='awesome-fontconfig'
 zplug "bhilburn/powerlevel9k", as:theme, defer:3
-export POWERLEVEL9K_SHORTEN_DIR_LENGTH=4
-export POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon context root_indicator dir rbenv docker_machine vcs pyenv virtualenv)
-export POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status vi_mode time)
+## OS_ICON
+export POWERLEVEL9K_OS_ICON_BACKGROUND="white"
+export POWERLEVEL9K_OS_ICON_FOREGROUND="black"
+## STATUS
+export POWERLEVEL9K_STATUS_OK_BACKGROUND="green"
+export POWERLEVEL9K_STATUS_OK_FOREGROUND="black"
+export POWERLEVEL9K_STATUS_ERROR_BACKGROUND="red"
+export POWERLEVEL9K_STATUS_ERROR_FOREGROUND="black"
+## Misc
+export POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+export POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=""
+export POWERLEVEL9K_MULTILINE_SECOND_PROMPT_PREFIX="\uf054 "
+## PROMPT
+export POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon background_jobs context dir vcs vi_mode root_indicator)
+export POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status docker_machine rbenv virtualenv nvm aws time)
 
 # Base16 Shell
 zplug "chriskempson/base16-shell", use:"scripts/base16-monokai.sh", defer:3
@@ -236,7 +249,7 @@ BASE16_SHELL="$HOME/.zplug/repos/chriskempson/base16-shell/"
 
 # Open file with the right application
 function open () {
-setsid xdg-open $1
+  setsid xdg-open $1
 }
 
 # fe [FUZZY PATTERN] - Open the selected file with the default editor
