@@ -235,8 +235,8 @@ export POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 export POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=""
 export POWERLEVEL9K_MULTILINE_SECOND_PROMPT_PREFIX="\uf054 "
 ## PROMPT
-export POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon background_jobs context dir vcs vi_mode root_indicator)
-export POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status docker_machine rbenv virtualenv nvm aws time)
+export POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir virtualenv nvm vcs vi_mode root_indicator)
+export POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status background_jobs docker_machine rbenv aws ip time os_icon)
 
 # Base16 Shell
 zplug "chriskempson/base16-shell", use:"scripts/base16-monokai.sh", defer:3
