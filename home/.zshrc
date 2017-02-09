@@ -199,7 +199,7 @@ load-nvmrc() {
 }
 command -v nvm >/dev/null 2>&1 && { add-zsh-hook chpwd load-nvmrc; load-nvmrc; }
 
-# A utility to run commands within docker containers
+# Simple jira command line client in Go
 zplug "Netflix-Skunkworks/go-jira", \
   from:gh-r, \
   as:command, \
