@@ -10,8 +10,8 @@ export _JAVA_FONTS="/usr/share/fonts/TTF"
 export DISABLE_AUTO_UPDATE="true"
 
 # Misc
-export LC_ALL=en_US.utf-8
-export LANG="$LC_ALL"
+#export LC_ALL=en_US.utf-8
+#export LANG="$LC_ALL"
 export EDITOR="vim"
 export VISUAL=$EDITOR
 
@@ -167,7 +167,7 @@ zplug "plugins/jsontools", from:oh-my-zsh
 
 # TMUX plugin
 zplug "plugins/tmux", from:oh-my-zsh, if:"which tmux"
-[[ "$DESKTOP_SESSION" == "gnome" ]] && export ZSH_TMUX_AUTOQUIT=true
+[[ "$XDG_CURRENT_DESKTOP" == "GNOME" ]] && export ZSH_TMUX_AUTOQUIT=true
 
 # Homeshick
 zplug "andsens/homeshick", use:"homeshick.sh", defer:0
