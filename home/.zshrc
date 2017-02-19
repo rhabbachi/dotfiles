@@ -221,7 +221,7 @@ export NOTES_DIRECTORY="$HOME/Notes"
 # Better prompt
 export DEFAULT_USER="$USER"
 export POWERLEVEL9K_MODE='awesome-fontconfig'
-zplug "bhilburn/powerlevel9k", as:theme, defer:3
+zplug "bhilburn/powerlevel9k", as:theme, defer:3, at:next
 ## OS_ICON
 export POWERLEVEL9K_OS_ICON_BACKGROUND="white"
 export POWERLEVEL9K_OS_ICON_FOREGROUND="black"
@@ -233,7 +233,7 @@ export POWERLEVEL9K_STATUS_ERROR_FOREGROUND="black"
 ## Misc
 export POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 export POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=""
-export POWERLEVEL9K_MULTILINE_SECOND_PROMPT_PREFIX="\uf054 "
+export POWERLEVEL9K_MULTILINE_SECOND_PROMPT_PREFIX="\uf04e "
 ## PROMPT
 export POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir virtualenv nvm vcs vi_mode root_indicator)
 export POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status background_jobs docker_machine rbenv aws ip time os_icon)
