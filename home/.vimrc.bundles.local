@@ -1,5 +1,5 @@
 " Override bundles config.
-let g:spf13_bundle_groups=['general', 'programming', 'php', 'javascript', 'html', 'xml', 'misc', 'tmux', 'devops', 'drupal', 'completor']
+let g:spf13_bundle_groups=['general', 'programming', 'php', 'javascript', 'html', 'xml', 'misc', 'tmux', 'devops', 'drupal', 'completor', 'markdown']
 
 " General {
 if count(g:spf13_bundle_groups, 'general')
@@ -140,6 +140,10 @@ if count(g:spf13_bundle_groups, 'general')
 
   " Toggle the cursor shape in the terminal for Vim.
   Bundle 'jszakmeister/vim-togglecursor'
+
+  " A better JSON for Vim: distinct highlighting of keywords vs values,
+  " JSON-specific (non-JS) warnings, quote concealing. Pathogen-friendly.
+  Bundle 'elzr/vim-json'
 endif
 " }
 
@@ -166,7 +170,11 @@ if count(g:spf13_bundle_groups, 'programming')
   " Run the linter on file open.
   let g:ale_lint_on_enter = 1
 
+  " fugitive.vim: a Git wrapper so awesome, it should be illegal
   Bundle 'tpope/vim-fugitive'
+  " gitk for Vim.
+  Bundle 'gregsexton/gitv'
+
   Bundle 'mattn/webapi-vim'
   Bundle 'mattn/gist-vim'
 
@@ -244,7 +252,7 @@ if count(g:spf13_bundle_groups, 'php')
   " The official VIm indent script for PHP.
   Bundle '2072/PHP-Indenting-for-VIm'
   Bundle 'arnaud-lb/vim-php-namespace'
-  "Bundle 'lumiliet/vim-twig'
+  Bundle 'lumiliet/vim-twig'
 
   if isdirectory(expand("~/.vim/bundle/tagbar/"))
     " Using phpctags to generate php ctags index for vim plugin tagbar.
@@ -271,7 +279,6 @@ endif
 
 " Javascript {
 if count(g:spf13_bundle_groups, 'javascript')
-  "Bundle 'elzr/vim-json'
   "Bundle 'groenewege/vim-less'
   "Bundle 'pangloss/vim-javascript'
   "Bundle 'briancollins/vim-jst'
@@ -399,13 +406,22 @@ if count(g:spf13_bundle_groups, 'xml')
 endif
 "}
 
+" Markdown {
+if count(g:spf13_bundle_groups, 'markdown')
+  " Vim Markdown runtime files
+  Bundle 'tpope/vim-markdown'
+
+  " A light Vim plugin for previewing markdown files in a browser - without
+  " having to leave Vim. Requires system package 'python-grep' and 'xdotool'
+  Bundle 'JamshedVesuna/vim-markdown-preview'
+  let vim_markdown_preview_github=1
+endif
+" }
+
 " Misc {
 if count(g:spf13_bundle_groups, 'misc')
   " Vim configuration for Rust.
   "Bundle 'rust-lang/rust.vim'
-
-  " Vim Markdown runtime files
-  Bundle 'tpope/vim-markdown'
 
   " Vim syntax for TOML
   Bundle 'cespare/vim-toml'
