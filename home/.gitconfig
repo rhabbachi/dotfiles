@@ -10,12 +10,13 @@
 [webui]
 	autoupdate = true
 [alias]
-	webui = !/home/rhabbachi/.git-webui/release/libexec/git-core/git-webui
+	webui = !~/.git-webui/release/libexec/git-core/git-webui
 [credential]
 	helper = /usr/lib/git-core/git-credential-gnome-keyring
 [core]
 	trustctime = false
 	fileMode = false
+	excludesfile = ~/.config/git/gitignore
 [filter "lfs"]
 	clean = git-lfs clean %f
 	smudge = git-lfs smudge --skip %f
@@ -25,7 +26,7 @@
 	fontdiff = -family \"Ubuntu Mono\" -size 9 -weight normal -slant roman -underline 0 -overstrike 0
 	tabsize = 2
 [commit]
-	template = /home/rhabbachi/.git-commit-template.txt
+	template = ~/.config/git/commit.template
 [github]
 	user = rhabbachi
 [pager]
