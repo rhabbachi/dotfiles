@@ -1,5 +1,5 @@
 " Override bundles config.
-let g:spf13_bundle_groups=['general', 'programming', 'php', 'javascript', 'html', 'xml', 'misc', 'tmux', 'devops', 'drupal', 'completor', 'markdown']
+let g:spf13_bundle_groups=['general', 'programming', 'php', 'javascript', 'html', 'xml', 'misc', 'tmux', 'devops', 'drupal', 'completor', 'markdown', 'css']
 
 " General {
 if count(g:spf13_bundle_groups, 'general')
@@ -313,10 +313,17 @@ endif
 if count(g:spf13_bundle_groups, 'html')
   " This is no longer available.
   "Bundle 'amirh/HTML-AutoCloseTag'
-  Bundle 'hail2u/vim-css3-syntax'
   Bundle 'gorodinskiy/vim-coloresque'
   Bundle 'tpope/vim-haml'
   Bundle 'mattn/emmet-vim'
+endif
+" }
+
+" CSS {
+if count(g:spf13_bundle_groups, 'css')
+  Bundle 'hail2u/vim-css3-syntax'
+  "Bundle 'gorodinskiy/vim-coloresque'
+  Bundle 'JulesWang/css.vim'
 endif
 " }
 
