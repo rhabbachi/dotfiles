@@ -239,9 +239,9 @@ export POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir virtualenv nvm vcs vi_mode
 export POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status background_jobs docker_machine rbenv aws ip time os_icon)
 
 # Base16 Shell
-zplug "chriskempson/base16-shell", use:"scripts/base16-monokai.sh", defer:3
-BASE16_SHELL="$HOME/.zplug/repos/chriskempson/base16-shell/"
-[ -n "$PS1" ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
+zplug "chriskempson/base16-shell", defer:3
+eval "$($ZPLUG_REPOS/chriskempson/base16-shell/profile_helper.sh)"
+base16_ocean
 
 # Direnv: environment switcher for the shell.
 eval "$(direnv hook zsh)"

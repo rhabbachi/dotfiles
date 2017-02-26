@@ -8,7 +8,7 @@ if count(g:spf13_bundle_groups, 'general')
   let base16colorspace=256  " Access colors present in 256 colorspace
   set t_Co=256
   set background=dark
-  colorscheme base16-monokai
+  colorscheme base16-ocean
 
   " A tree explorer plugin for vim. {
   "Bundle 'scrooloose/nerdtree'
