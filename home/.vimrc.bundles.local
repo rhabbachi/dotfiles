@@ -201,10 +201,10 @@ if count(g:spf13_bundle_groups, 'programming')
 
   " Provide easy code formatting in Vim by integrating existing code
   " formatters.
-  Bundle 'Chiel92/vim-autoformat'
-  let g:formatdef_phpfmt ="'phpfmt --no-backup --smart_linebreak_after_curly --passes=RestoreComments,MergeElseIf,ReindentSwitchBlocks,PrettyPrintDocBlocks,PHPDocTypesToFunctionTypehint --indent_with_space='.shiftwidth().' -'"
-  let g:formatters_php = ['phpfmt']
-  let g:autoformat_verbosemode=1
+  "Bundle 'Chiel92/vim-autoformat'
+  "let g:formatdef_phpfmt ="'phpfmt --no-backup --smart_linebreak_after_curly --passes=RestoreComments,MergeElseIf,ReindentSwitchBlocks,PrettyPrintDocBlocks,PHPDocTypesToFunctionTypehint --indent_with_space='.shiftwidth().' -'"
+  "let g:formatters_php = ['phpfmt']
+  "let g:autoformat_verbosemode=1
 
   " vdebug {
   " Multi-language DBGP debugger client for Vim (PHP, Python, Perl, Ruby,
