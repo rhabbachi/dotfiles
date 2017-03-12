@@ -204,13 +204,29 @@ zplug "Netflix-Skunkworks/go-jira", \
   from:gh-r, \
   as:command, \
   rename-to:"jira"
+function jira-summary () {
+  jira view $1 -t summary
+}
 
-# A command-line fuzzy finder written in Go.
+# FZF: A command-line fuzzy finder written in Go.
 ## Helper bash script.
 zplug "junegunn/fzf", \
     as:command, \
     use:"bin/fzf-tmux", \
-    rename-to:"fzf-tmux"
+    rename-to:"fzf-tmux", \
+    at:$(fzf --version), \
+    if:"command -v fzf >/dev/null 2>&1"
+## If we are inside a Tmux session open fzf in a pane.
+[[ ! -z "$TMUX" ]] && export FZF_TMUX=1
+## Load shell files
+zplug "$ZPLUG_REPOS/junegunn/fzf/shell", \
+  from:local, \
+  use:"*.zsh", \
+  on:"junegunn/fzf"
+## Extras
+zplug "atweiden/fzf-extras", \
+  use:"fzf-extras.zsh", \
+  on:"junegunn/fzf"
 
 # Simple delightful note taking, with none of the lock-in
 zplug "pimterry/notes", \
