@@ -35,3 +35,5 @@
 	diff = "$GIT_CONTRIB"/diff-highlight/diff-highlight | less
 [interactive]
 	diffFilter = "$GIT_CONTRIB"/diff-highlight/diff-highlight
+[url "https://aur.archlinux.org/"]
+  insteadOf = aur://
