@@ -52,260 +52,427 @@
         endif
     " }
 
-    " Setup Bundle Support {
-        " The next three lines ensure that the ~/.vim/bundle/ system works
-        filetype off
-        set rtp+=~/.vim/bundle/Vundle.vim
-        call vundle#rc()
-    " }
-
-    " Add an UnBundle command {
-    function! UnBundle(arg, ...)
-      let bundle = vundle#config#init_bundle(a:arg, a:000)
-      call filter(g:vundle#bundles, 'v:val["name_spec"] != "' . a:arg . '"')
-    endfunction
-
-    com! -nargs=+         UnBundle
-    \ call UnBundle(<args>)
-    " }
-
 " }
 
-" Bundles {
-
-    " Deps {
-        Bundle 'VundleVim/Vundle.vim'
-        Bundle 'MarcWeber/vim-addon-mw-utils'
-        Bundle 'tomtom/tlib_vim'
-        if executable('ag')
-            Bundle 'mileszs/ack.vim'
-            let g:ackprg = 'ag --nogroup --nocolor --column --smart-case'
-        elseif executable('ack-grep')
-            let g:ackprg="ack-grep -H --nocolor --nogroup --column"
-            Bundle 'mileszs/ack.vim'
-        elseif executable('ack')
-            Bundle 'mileszs/ack.vim'
-        endif
-    " }
-
-    " In your .vimrc.before.local file
-    " list only the plugin groups you will use
-    if !exists('g:spf13_bundle_groups')
-        let g:spf13_bundle_groups=['general', 'writing', 'neocomplete', 'programming', 'php', 'ruby', 'python', 'javascript', 'html', 'misc',]
+" Plugins {
+    " Make sure the plug.vim is available.
+    if empty(glob('~/.vim/autoload/plug.vim'))
+      silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+      autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
     endif
 
-    " To override all the included bundles, add the following to your
-    " .vimrc.bundles.local file:
-    "   let g:override_spf13_bundles = 1
-    if !exists("g:override_spf13_bundles")
+    call plug#begin('~/.vim/plugged')
+
+    " System {
+    " vim: interpret a file by function and cache file automatically
+    Plug 'MarcWeber/vim-addon-mw-utils'
+
+    " Some utility functions for VIM http://www.vim.org/scripts/script.php…
+    Plug 'tomtom/tlib_vim'
+
+    " vim interface to Web API
+    Plug 'mattn/webapi-vim'
+
+    " Vim plugin: Create your own text objects
+    " http://www.vim.org/scripts/script.php…
+    " Dependency for most of the plugins providing textobj.
+    Plug 'kana/vim-textobj-user'
+
+    " Vim sugar for the UNIX shell commands that need it the most.
+    Plug 'tpope/vim-eunuch'
+    " }
 
     " General {
-        if count(g:spf13_bundle_groups, 'general')
-            Bundle 'scrooloose/nerdtree'
-            Bundle 'altercation/vim-colors-solarized'
-            Bundle 'spf13/vim-colors'
-            Bundle 'tpope/vim-surround'
-            Bundle 'tpope/vim-repeat'
-            Bundle 'rhysd/conflict-marker.vim'
-            Bundle 'jiangmiao/auto-pairs'
-            Bundle 'ctrlpvim/ctrlp.vim'
-            Bundle 'tacahiroy/ctrlp-funky'
-            Bundle 'terryma/vim-multiple-cursors'
-            Bundle 'vim-scripts/sessionman.vim'
-            Bundle 'matchit.zip'
-            if (has("python") || has("python3")) && exists('g:spf13_use_powerline') && !exists('g:spf13_use_old_powerline')
-                Bundle 'Lokaltog/powerline', {'rtp':'/powerline/bindings/vim'}
-            elseif exists('g:spf13_use_powerline') && exists('g:spf13_use_old_powerline')
-                Bundle 'Lokaltog/vim-powerline'
-            else
-                Bundle 'vim-airline/vim-airline'
-                Bundle 'vim-airline/vim-airline-themes'
-            endif
-            Bundle 'powerline/fonts'
-            Bundle 'bling/vim-bufferline'
-            Bundle 'easymotion/vim-easymotion'
-            Bundle 'jistr/vim-nerdtree-tabs'
-            Bundle 'flazz/vim-colorschemes'
-            Bundle 'mbbill/undotree'
-            Bundle 'nathanaelkane/vim-indent-guides'
-            if !exists('g:spf13_no_views')
-                Bundle 'vim-scripts/restore_view.vim'
-            endif
-            Bundle 'mhinz/vim-signify'
-            Bundle 'tpope/vim-abolish.git'
-            Bundle 'osyo-manga/vim-over'
-            Bundle 'kana/vim-textobj-user'
-            Bundle 'kana/vim-textobj-indent'
-            Bundle 'gcmt/wildfire.vim'
-        endif
+      " NERDTree: A tree explorer plugin for vim. {
+          "Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+          "Plug 'jistr/vim-nerdtree-tabs'
+      " }
+
+      "sleuth.vim: Heuristically set buffer options
+      "http://www.vim.org/scripts/script.php
+      Plug 'tpope/vim-sleuth'
+
+      Plug 'tpope/vim-surround'
+
+      " repeat.vim: enable repeating supported plugin maps with "."
+      " http://www.vim.org/scripts/script.php…
+      Plug 'tpope/vim-repeat'
+
+      " Weapon to fight against conflicts in Vim.
+      Plug 'rhysd/conflict-marker.vim'
+
+      " Vim plugin, insert or delete brackets, parens, quotes in pair
+      " http://www.vim.org/scripts/script.php?script_id=3599
+      Plug 'jiangmiao/auto-pairs'
+
+      " Vim plugin which asks for the right file to open
+      Plug 'EinfachToll/DidYouMean'
+
+      " Vim plugin that allows you to visually select increasingly larger regions
+      " of text using the same key combination.
+      Plug 'terryma/vim-expand-region'
+
+      " True Sublime Text style multiple selections for Vim
+      " Plug 'terryma/vim-multiple-cursors'
+
+      Plug 'vim-scripts/sessionman.vim'
+
+      " Continuously updated session files
+      Plug 'tpope/vim-obsession'
+
+      " Load the version of matchit.vim that ships with Vim.
+      runtime! macros/matchit.vim
+
+      " Minimalist path navigator designed to work with Vim's built-in mechanisms
+      " and complementary plugins.
+      Plug 'justinmk/vim-dirvish'
+
+      " EasyMotion {
+          " Vim motions on speed!.
+          Plug 'easymotion/vim-easymotion'
+          " Select, yank, paste, delete, or other operation of lines.
+          Plug 'haya14busa/vim-easyoperator-line'
+          " Select, yank, paste, delete, or other operation of phrase.
+          Plug 'haya14busa/vim-easyoperator-phrase'
+      " }
+
+      Plug 'mbbill/undotree'
+
+      " A Vim plugin for visually displaying indent levels in code
+      "Plug 'nathanaelkane/vim-indent-guides'
+      "let g:indent_guides_enable_on_vim_startup = 0
+
+      if !exists('g:spf13_no_views')
+        Plug 'vim-scripts/restore_view.vim'
+      endif
+
+      " Show a diff using Vim its sign column.
+      Plug 'mhinz/vim-signify'
+
+      " abolish.vim: easily search for, substitute, and abbreviate multiple
+      " variants of a word
+      Plug 'tpope/vim-abolish'
+
+      " :substitute preview
+      " Plug 'osyo-manga/vim-over'
+      " noremap <silent> : :OverCommandLine<CR>
+
+      " Vim plugin that provides additional text objects
+      Plug 'wellle/targets.vim'
+
+      " Toggles between relative and absolute line numbers automatically
+      Plug 'myusuf3/numbers.vim'
+
+      " A Filetype plugin for csv files
+      Plug 'chrisbra/csv.vim', {'for': 'csv'}
+
+      " Grammar checker for English, French, German (etc.) in Vim
+      Plug 'rhysd/vim-grammarous'
+
+      " Simplified clipboard functionality for Vim
+      Plug 'svermeulen/vim-easyclip'
+
+      "vim-searchindex: display number of search matches & index of a current match.
+      Plug 'google/vim-searchindex'
+
+      " Better whitespace stripping for Vim
+      Plug 'thirtythreeforty/lessspace.vim'
+
+      " Toggle the cursor shape in the terminal for Vim.
+      Plug 'jszakmeister/vim-togglecursor'
+
+      " A better JSON for Vim: distinct highlighting of keywords vs values,
+      " JSON-specific (non-JS) warnings, quote concealing. Pathogen-friendly.
+      Plug 'elzr/vim-json'
+
+      " css/less/sass/html color preview for vim
+      Plug 'gorodinskiy/vim-coloresque', {'for': ['css', 'less', 'sass', 'html']}
+
+      " Please Vim, stop with these swap file messages. Just switch to the
+      " correct window!
+      Plug 'gioele/vim-autoswap'
+
+      " Underlines the word under the cursor
+      Plug 'itchyny/vim-cursorword'
+
+      " rsi.vim: Readline style insertion
+      Plug 'tpope/vim-rsi'
+
+      " Swap windows without ruining your layout!
+      Plug 'wesQ3/vim-windowswap'
+
+      " Tame the quickfix window
+      Plug 'romainl/vim-qf'
+     " }
+
+    " Themes {
+    " base16 color schemes
+    Plug 'chriskempson/base16-vim'
+
+    " lean & mean status/tabline for vim that's light as air
+    Plug 'vim-airline/vim-airline'
+
+    " A collection of themes for vim-airline
+    Plug 'vim-airline/vim-airline-themes'
     " }
+
+    let g:spf13_bundle_groups=['php', 'javascript', 'html', 'xml', 'devops', 'drupal', 'completor', 'markdown', 'css']
 
     " Writing {
         if count(g:spf13_bundle_groups, 'writing')
-            Bundle 'reedes/vim-litecorrect'
-            Bundle 'reedes/vim-textobj-sentence'
-            Bundle 'reedes/vim-textobj-quote'
-            Bundle 'reedes/vim-wordy'
+          Plug 'reedes/vim-litecorrect'
+          Plug 'reedes/vim-textobj-sentence'
+          Plug 'reedes/vim-textobj-quote'
+          Plug 'reedes/vim-wordy'
         endif
     " }
 
     " General Programming {
-        if count(g:spf13_bundle_groups, 'programming')
-            " Pick one of the checksyntax, jslint, or syntastic
-            Bundle 'scrooloose/syntastic'
-            Bundle 'tpope/vim-fugitive'
-            Bundle 'mattn/webapi-vim'
-            Bundle 'mattn/gist-vim'
-            Bundle 'scrooloose/nerdcommenter'
-            Bundle 'tpope/vim-commentary'
-            Bundle 'godlygeek/tabular'
-            Bundle 'luochen1990/rainbow'
-            if executable('ctags')
-                Bundle 'majutsushi/tagbar'
-            endif
-        endif
+      " A solid language pack for Vim.
+      Plug 'sheerun/vim-polyglot'
+
+      " Pick one of the checksyntax, jslint, or syntastic
+      Plug 'w0rp/ale'
+
+      " Vim plugin for intensely orgasmic commenting
+      Plug 'scrooloose/nerdcommenter', { 'on': '<Plug>NERDCommenterToggle' }
+
+      " Vim script for text filtering and alignment.
+      Plug 'godlygeek/tabular', {'on': 'Tabularize'}
+
+      " Rainbow parentheses improved, shorter code, no level limit, smooth and
+      " fast, powerful configuration.
+      Plug 'luochen1990/rainbow'
+
+      " A vim plugin to perform diffs on blocks of code
+      Plug 'AndrewRadev/linediff.vim'
+
+      " Highlight the exact differences, based on characters and words
+      Plug 'rickhowe/diffchar.vim'
+
+      " Ctags {
+      if executable('ctags')
+          " Vim plugin that displays tags in a window, ordered by scope
+          " http://majutsushi.github.io/tagbar/
+          " Do not lazy loading tagbar, see vim-airline issue 1313.
+          Plug 'majutsushi/tagbar'
+
+          " A Vim plugin that manages your tag files
+          Plug 'ludovicchabant/vim-gutentags'
+      endif
+      "}
+
+      " Multi-language DBGP debugger client for Vim (PHP, Python, Perl, Ruby,
+      " etc.)
+      Plug 'joonty/vdebug', {'on': ['VdebugSetLineBreakpoint', 'VdebugCommandRun']}
+    " }
+
+    " Git {
+    " fugitive.vim: a Git wrapper so awesome, it should be illegal
+    Plug 'tpope/vim-fugitive'
+    Plug 'tpope/vim-rhubarb'
+
+    " A git commit browser
+    Plug 'junegunn/gv.vim', { 'on': ['GV', 'GV!'] }
+
+    " vimscript for gist
+    Plug 'mattn/gist-vim', { 'on': 'Gist' }
     " }
 
     " Snippets & AutoComplete {
         if count(g:spf13_bundle_groups, 'snipmate')
-            Bundle 'garbas/vim-snipmate'
-            Bundle 'honza/vim-snippets'
-            " Source support_function.vim to support vim-snippets.
-            if filereadable(expand("~/.vim/bundle/vim-snippets/snippets/support_functions.vim"))
-                source ~/.vim/bundle/vim-snippets/snippets/support_functions.vim
-            endif
+          Plug 'garbas/vim-snipmate'
+          Plug 'honza/vim-snippets'
+          " Source support_function.vim to support vim-snippets.
+          if filereadable(expand("~/.vim/bundle/vim-snippets/snippets/support_functions.vim"))
+            source ~/.vim/bundle/vim-snippets/snippets/support_functions.vim
+          endif
         elseif count(g:spf13_bundle_groups, 'youcompleteme')
-            Bundle 'Valloric/YouCompleteMe'
-            Bundle 'SirVer/ultisnips'
-            Bundle 'honza/vim-snippets'
+          Plug 'Valloric/YouCompleteMe'
+          Plug 'SirVer/ultisnips'
+          Plug 'honza/vim-snippets'
         elseif count(g:spf13_bundle_groups, 'neocomplcache')
-            Bundle 'Shougo/neocomplcache'
-            Bundle 'Shougo/neosnippet'
-            Bundle 'Shougo/neosnippet-snippets'
-            Bundle 'honza/vim-snippets'
+          Plug 'Shougo/neocomplcache'
+          Plug 'Shougo/neosnippet'
+          Plug 'Shougo/neosnippet-snippets'
+          Plug 'honza/vim-snippets'
         elseif count(g:spf13_bundle_groups, 'neocomplete')
-            Bundle 'Shougo/neocomplete.vim.git'
-            Bundle 'Shougo/neosnippet'
-            Bundle 'Shougo/neosnippet-snippets'
-            Bundle 'honza/vim-snippets'
+          Plug 'Shougo/neocomplete.vim.git'
+          Plug 'Shougo/neosnippet'
+          Plug 'Shougo/neosnippet-snippets'
+          Plug 'honza/vim-snippets'
+        elseif count(g:spf13_bundle_groups, 'completor')
+          Plug 'honza/vim-snippets'
+          Plug 'SirVer/ultisnips'
+          Plug 'maralla/completor.vim'
         endif
     " }
 
     " PHP {
-        if count(g:spf13_bundle_groups, 'php')
-            Bundle 'spf13/PIV'
-            Bundle 'arnaud-lb/vim-php-namespace'
-            Bundle 'beyondwords/vim-twig'
-        endif
+      " The official VIm indent script for PHP.
+      Plug '2072/PHP-Indenting-for-VIm', {'for': 'php'}
+      Plug 'arnaud-lb/vim-php-namespace', {'for': 'php'}
+      Plug 'lumiliet/vim-twig', {'for': 'twig'}
+
+      " Behat support
+      Plug 'veloce/vim-behat', {'for': 'cucumber'}
+
+      " Improved PHP omnicompletion
+      Plug 'shawncplus/phpcomplete.vim', {'for': 'php'}
     " }
 
     " Python {
-        if count(g:spf13_bundle_groups, 'python')
-            " Pick either python-mode or pyflakes & pydoc
-            Bundle 'klen/python-mode'
-            Bundle 'yssource/python.vim'
-            Bundle 'python_match.vim'
-            Bundle 'pythoncomplete'
-        endif
+      " Pick either python-mode or pyflakes & pydoc
+      Plug 'klen/python-mode', {'for': 'python'}
+      Plug 'yssource/python.vim', {'for': 'python'}
+      Plug 'python_match.vim', {'for': 'python'}
+      Plug 'pythoncomplete', {'for': 'python'}
     " }
 
     " Javascript {
-        if count(g:spf13_bundle_groups, 'javascript')
-            Bundle 'elzr/vim-json'
-            Bundle 'groenewege/vim-less'
-            Bundle 'pangloss/vim-javascript'
-            Bundle 'briancollins/vim-jst'
-            Bundle 'kchmck/vim-coffee-script'
-        endif
+    Plug 'pangloss/vim-javascript', {'for': 'javascript'}
+    Plug 'briancollins/vim-jst', {'for': 'jst'}
+    Plug 'kchmck/vim-coffee-script', {'for': 'coffee'}
     " }
 
     " Scala {
-        if count(g:spf13_bundle_groups, 'scala')
-            Bundle 'derekwyatt/vim-scala'
-            Bundle 'derekwyatt/vim-sbt'
-            Bundle 'xptemplate'
-        endif
+    Plug 'derekwyatt/vim-scala', {'for': 'scala'}
+    Plug 'derekwyatt/vim-sbt', {'for': 'sbt'}
+    "Plug 'drmingdrmer/xptemplate'
     " }
 
     " Haskell {
         if count(g:spf13_bundle_groups, 'haskell')
-            Bundle 'travitch/hasksyn'
-            Bundle 'dag/vim2hs'
-            Bundle 'Twinside/vim-haskellConceal'
-            Bundle 'Twinside/vim-haskellFold'
-            Bundle 'lukerandall/haskellmode-vim'
-            Bundle 'eagletmt/neco-ghc'
-            Bundle 'eagletmt/ghcmod-vim'
-            Bundle 'Shougo/vimproc.vim'
-            Bundle 'adinapoli/cumino'
-            Bundle 'bitc/vim-hdevtools'
+          Plug 'travitch/hasksyn'
+          Plug 'dag/vim2hs'
+          Plug 'Twinside/vim-haskellConceal'
+          Plug 'Twinside/vim-haskellFold'
+          Plug 'lukerandall/haskellmode-vim'
+          Plug 'eagletmt/neco-ghc'
+          Plug 'eagletmt/ghcmod-vim'
+          Plug 'Shougo/vimproc.vim'
+          Plug 'adinapoli/cumino'
+          Plug 'bitc/vim-hdevtools'
         endif
     " }
 
-    " HTML {
-        if count(g:spf13_bundle_groups, 'html')
-            Bundle 'amirh/HTML-AutoCloseTag'
-            Bundle 'hail2u/vim-css3-syntax'
-            Bundle 'gorodinskiy/vim-coloresque'
-            Bundle 'tpope/vim-haml'
-            Bundle 'mattn/emmet-vim'
-        endif
+    " HTML/CSS {
+    " Vim runtime files for Haml, Sass, and SCSS
+    Plug 'tpope/vim-haml', {'for': ['haml', 'sass', 'scss']}
+
+    " emmet for vim: http://emmet.io/ http://mattn.github.io/emmet-vim
+    Plug 'mattn/emmet-vim', {'for': ['html', 'css']}
+
+    Plug 'hail2u/vim-css3-syntax', {'for': 'css'}
+    Plug 'JulesWang/css.vim', {'for': 'css'}
+    Plug 'groenewege/vim-less', {'for': 'less'}
     " }
 
     " Ruby {
         if count(g:spf13_bundle_groups, 'ruby')
-            Bundle 'tpope/vim-rails'
-            let g:rubycomplete_buffer_loading = 1
-            "let g:rubycomplete_classes_in_global = 1
-            "let g:rubycomplete_rails = 1
-        endif
-    " }
+          Plug 'tpope/vim-rails'
+          let g:rubycomplete_buffer_loading = 1
+          "let g:rubycomplete_classes_in_global = 1
+          "let g:rubycomplete_rails = 1
 
-    " Puppet {
-        if count(g:spf13_bundle_groups, 'puppet')
-            Bundle 'rodjek/vim-puppet'
+          " Vim Cucumber runtime files.
+          "Plug 'tpope/vim-cucumber'
+          if isdirectory(expand("~/.vim/bundle/tabular/"))
+            " Align pipes when you are editing Cucumber tables.
+            Plug 'quentindecock/vim-cucumber-align-pipes'
+          end
         endif
     " }
 
     " Go Lang {
-        if count(g:spf13_bundle_groups, 'go')
-            "Bundle 'Blackrush/vim-gocode'
-            Bundle 'fatih/vim-go'
-        endif
+    Plug 'Blackrush/vim-gocode', {'for': 'go'}
+    Plug 'fatih/vim-go', {'for': 'go'}
     " }
 
     " Elixir {
-        if count(g:spf13_bundle_groups, 'elixir')
-            Bundle 'elixir-lang/vim-elixir'
-            Bundle 'carlosgaldino/elixir-snippets'
-            Bundle 'mattreduce/vim-mix'
-        endif
+    " Vim configuration files for Elixir http://elixir-lang.org/
+    Plug 'elixir-lang/vim-elixir', {'for': 'erlang'}
+
+    " Snipmate snippets for Elixir http://elixir-lang.org
+    Plug 'carlosgaldino/elixir-snippets', {'for': 'erlang'}
+
+    " Vim plugin for using Elixir's build tool, mix
+    " http://mattreduce.github.io/vim-mix/
+    Plug 'mattreduce/vim-mix', {'for': 'erlang'}
     " }
 
-    " Misc {
-        if count(g:spf13_bundle_groups, 'misc')
-            Bundle 'rust-lang/rust.vim'
-            Bundle 'tpope/vim-markdown'
-            Bundle 'spf13/vim-preview'
-            Bundle 'tpope/vim-cucumber'
-            Bundle 'cespare/vim-toml'
-            Bundle 'quentindecock/vim-cucumber-align-pipes'
-            Bundle 'saltstack/salt-vim'
-        endif
+    " Tmux {
+    " Simple tmux statusline generator with support for powerline symbols and
+    " statusline / airline / lightline integration
+    Plug 'edkolev/tmuxline.vim'
+    " Seamless navigation between tmux panes and vim splits
+    Plug 'christoomey/vim-tmux-navigator'
+    " vim plugin for tmux.conf
+    Plug 'tmux-plugins/vim-tmux', {'for': 'tmux'}
+    " Make terminal vim and tmux work better together.
+    Plug 'tmux-plugins/vim-tmux-focus-events'
     " }
 
-    endif
+    " DevOps {
+    " Vim plugins for chef (syntax highliting and autocomplete snipmate)
+    Plug 'vadv/vim-chef'
 
-" }
+    " Add additional support for Ansible in VIM
+    Plug 'chase/vim-ansible-yaml', {'for': 'ansible'}
 
-" Use fork bundles config if available {
-    if filereadable(expand("~/.vimrc.bundles.fork"))
-        source ~/.vimrc.bundles.fork
-    endif
-" }
+    " Puppet niceties for your Vim setup
+    Plug 'rodjek/vim-puppet', {'for': 'puppet'}
+    " }
 
-" Use local bundles config if available {
-    if filereadable(expand("~/.vimrc.bundles.local"))
-        source ~/.vimrc.bundles.local
+    " Drupal  {
+    if count(g:spf13_bundle_groups, 'drupal')
+        " Drupal vim plugin
+        Plug 'git://drupalcode.org/project/vimrc.git', {'rtp': 'bundle/vim-plugin-for-drupal/'}
     endif
-" }
+    " }
+
+    " XML {
+    " A vim text object for XML/HTML attributes.
+    " requires vim-textobj-user.
+    Plug 'whatyouhide/vim-textobj-xmlattr', {'for': ['xml', 'html']}
+
+    " A filetype plugin for VIM to help edit XML files
+    " http://www.vim.org/scripts/script.php…
+    Plug 'sukima/xmledit', {'for': 'xml'}
+    "}
+
+    " Markdown {
+    " Vim Markdown runtime files
+    Plug 'tpope/vim-markdown', {'for': 'md'}
+
+    " A light Vim plugin for previewing markdown files in a browser - without
+    " having to leave Vim. Requires system package 'python-grep' and 'xdotool'
+    Plug 'JamshedVesuna/vim-markdown-preview', {'for': 'md'}
+    " }
+
+    " Rust {
+    " Vim configuration for Rust.
+    Plug 'rust-lang/rust.vim', {'for': 'rust'}
+    " }
+
+    " TOML {
+    " Vim syntax for TOML
+    Plug 'cespare/vim-toml', {'for': 'toml'}
+    " }
+
+    " Salt {
+    " Vim files for editing Salt files
+    Plug 'saltstack/salt-vim', {'for': 'salt'}
+    " }
+
+    " Archlinux {
+    Plug 'Firef0x/PKGBUILD.vim'
+    " }
+
+    " Cmake {
+    Plug 'nickhutchinson/vim-cmake-syntax'
+    " }
+
+    call plug#end()
+    " }

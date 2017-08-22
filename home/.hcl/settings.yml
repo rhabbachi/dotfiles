@@ -12,3 +12,8 @@ task.usda-deploy: 9016491 1750326
 task.usda-pm: 9016491 877509
 task.product-deployments: 12730115 7151142
 task.product-dis: 12730115 894638
+task.osseb-ms: 9398816 5112488
+task.osseb-ca: 9398816 6813533
+task.osseb-nd: 9398816 5112620
+task.osseb-va: 9398816 7319368
+task.product-devops: 12730115 7151141

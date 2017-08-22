@@ -57,7 +57,7 @@
           set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
         endif
     " }
-    
+
     " Arrow Key Fix {
         " https://github.com/spf13/spf13-vim/issues/780
         if &term[:4] == "xterm" || &term[:5] == 'screen' || &term[:3] == 'rxvt'
@@ -177,12 +177,17 @@
 
 " Vim UI {
 
-    if !exists('g:override_spf13_bundles') && filereadable(expand("~/.vim/bundle/vim-colors-solarized/colors/solarized.vim"))
+    if isdirectory(expand('~/.vim/plugged/solarized/'))
         let g:solarized_termcolors=256
         let g:solarized_termtrans=1
-        let g:solarized_contrast="normal"
-        let g:solarized_visibility="normal"
+        let g:solarized_contrast='normal'
+        let g:solarized_visibility='normal'
         color solarized             " Load a colorscheme
+    elseif isdirectory(expand('~/.vim/plugged/base16-vim/'))
+      let g:base16colorspace=256  " Access colors present in 256 colorspace
+      " This is managed in a test above.
+      "set t_Co=256
+      colorscheme base16-ocean
     endif
 
     set tabpagemax=15               " Only show 15 tabs
@@ -459,7 +464,7 @@
 " Plugins {
 
     " GoLang {
-        if count(g:spf13_bundle_groups, 'go')
+        if isdirectory(expand("~/.vim/plugged/vim-go/"))
             let g:go_highlight_functions = 1
             let g:go_highlight_methods = 1
             let g:go_highlight_structs = 1
@@ -479,7 +484,6 @@
             au FileType go nmap <leader>co <Plug>(go-coverage)
         endif
         " }
-
 
     " TextObj Sentence {
         if count(g:spf13_bundle_groups, 'writing')
@@ -504,17 +508,17 @@
     " }
 
     " PIV {
-        if isdirectory(expand("~/.vim/bundle/PIV"))
+        if isdirectory(expand("~/.vim/plugged/PIV"))
             let g:DisableAutoPHPFolding = 0
             let g:PIVAutoClose = 0
         endif
     " }
 
     " Misc {
-        if isdirectory(expand("~/.vim/bundle/nerdtree"))
+        if isdirectory(expand("~/.vim/plugged/nerdtree"))
             let g:NERDShutUp=1
         endif
-        if isdirectory(expand("~/.vim/bundle/matchit.zip"))
+        if isdirectory(expand("~/.vim/plugged/matchit.zip"))
             let b:match_ignorecase = 1
         endif
     " }
@@ -573,7 +577,7 @@
     " }
 
     " NerdTree {
-        if isdirectory(expand("~/.vim/bundle/nerdtree"))
+        if isdirectory(expand("~/.vim/plugged/nerdtree"))
             map <C-e> <plug>NERDTreeTabsToggle<CR>
             map <leader>e :NERDTreeFind<CR>
             nmap <leader>nt :NERDTreeFind<CR>
@@ -586,11 +590,33 @@
             let NERDTreeShowHidden=1
             let NERDTreeKeepTreeInNewTab=1
             let g:nerdtree_tabs_open_on_gui_startup=0
+
+            let g:NERDTreeWinSize=50
         endif
     " }
 
+    " VimMultipleCursurs {
+        if isdirectory(expand("~/.vim/plugged/vim-multiple-cursors"))
+            " https://github.com/terryma/vim-multiple-cursors
+            " Prevent conflict between neocomplete and vim-multiple-cursors
+            " Called once right before you start selecting multiple cursors
+            function! Multiple_cursors_before()
+                if exists(':NeoCompleteLock')==2
+                    exe 'NeoCompleteLock'
+                endif
+            endfunction
+
+            " Called once only when the multiple selection is canceled (default <Esc>)
+            function! Multiple_cursors_after()
+                if exists(':NeoCompleteUnlock')==2
+                    exe 'NeoCompleteUnlock'
+                endif
+            endfunction
+        endif
+    "}
+
     " Tabularize {
-        if isdirectory(expand("~/.vim/bundle/tabular"))
+        if isdirectory(expand('~/.vim/plugged/tabular'))
             nmap <Leader>a& :Tabularize /&<CR>
             vmap <Leader>a& :Tabularize /&<CR>
             nmap <Leader>a= :Tabularize /^[^=]*\zs=<CR>
@@ -612,7 +638,7 @@
 
     " Session List {
         set sessionoptions=blank,buffers,curdir,folds,tabpages,winsize
-        if isdirectory(expand("~/.vim/bundle/sessionman.vim/"))
+        if isdirectory(expand('~/.vim/plugged/sessionman.vim/'))
             nmap <leader>sl :SessionList<CR>
             nmap <leader>ss :SessionSave<CR>
             nmap <leader>sc :SessionClose<CR>
@@ -630,7 +656,7 @@
             let g:pymode = 0
         endif
 
-        if isdirectory(expand("~/.vim/bundle/python-mode"))
+        if isdirectory(expand('~/.vim/plugged/python-mode'))
             let g:pymode_lint_checkers = ['pyflakes']
             let g:pymode_trim_whitespaces = 0
             let g:pymode_options = 0
@@ -639,7 +665,7 @@
     " }
 
     " ctrlp {
-        if isdirectory(expand("~/.vim/bundle/ctrlp.vim/"))
+        if isdirectory(expand('~/.vim/plugged/ctrlp.vim/'))
             let g:ctrlp_working_path_mode = 'ra'
             nnoremap <silent> <D-t> :CtrlP<CR>
             nnoremap <silent> <D-r> :CtrlPMRU<CR>
@@ -670,7 +696,7 @@
                 \ 'fallback': s:ctrlp_fallback
             \ }
 
-            if isdirectory(expand("~/.vim/bundle/ctrlp-funky/"))
+            if isdirectory(expand("~/.vim/plugged/ctrlp-funky/"))
                 " CtrlP extensions
                 let g:ctrlp_extensions = ['funky']
 
@@ -681,19 +707,43 @@
     "}
 
     " TagBar {
-        if isdirectory(expand("~/.vim/bundle/tagbar/"))
+        if isdirectory(expand('~/.vim/plugged/tagbar/'))
             nnoremap <silent> <leader>tt :TagbarToggle<CR>
+
+            " If you set this option the cursor will move to the Tagbar window
+            " when it is opened.
+            let g:tagbar_autofocus = 1
+
+            " If this option is set the tags are sorted according to their
+            " name. If it is unset they are sorted according to their order in
+            " the source file.
+            let g:tagbar_sort = 0
+
+            " If this option is set a case-insensitive comparison is used when
+            " the tags are sorted according to their name. If it is unset a
+            " case-sensitive comparison is used.
+            let g:tagbar_case_insensitive = 1
+
+            " If you set this option the Tagbar window will automatically
+            " close when you jump to a tag.
+            let g:tagbar_autoclose = 1
+
+            " Width of the Tagbar window in characters.
+            let g:tagbar_width = 50
+
+            " Width of the Tagbar window when zoomed.
+            let g:tagbar_zoomwidth = 1
         endif
     "}
 
     " Rainbow {
-        if isdirectory(expand("~/.vim/bundle/rainbow/"))
+        if isdirectory(expand('~/.vim/plugged/rainbow/'))
             let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
         endif
     "}
 
     " Fugitive {
-        if isdirectory(expand("~/.vim/bundle/vim-fugitive/"))
+        if isdirectory(expand('~/.vim/plugged/vim-fugitive/'))
             nnoremap <silent> <leader>gs :Gstatus<CR>
             nnoremap <silent> <leader>gd :Gdiff<CR>
             nnoremap <silent> <leader>gc :Gcommit<CR>
@@ -986,7 +1036,7 @@
                     \ count(g:spf13_bundle_groups, 'neocomplete')
 
             " Use honza's snippets.
-            let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
+            let g:neosnippet#snippets_directory='~/.vim/plugged/vim-snippets/snippets'
 
             " Enable neosnippet snipmate compatibility mode
             let g:neosnippet#enable_snipmate_compatibility = 1
@@ -1017,7 +1067,7 @@
     endif
 
     " UndoTree {
-        if isdirectory(expand("~/.vim/bundle/undotree/"))
+        if isdirectory(expand("~/.vim/plugged/undotree/"))
             nnoremap <Leader>u :UndotreeToggle<CR>
             " If undotree is opened, it is likely one wants to interact with it.
             let g:undotree_SetFocusWhenToggle=1
@@ -1025,7 +1075,7 @@
     " }
 
     " indent_guides {
-        if isdirectory(expand("~/.vim/bundle/vim-indent-guides/"))
+        if isdirectory(expand("~/.vim/plugged/vim-indent-guides/"))
             let g:indent_guides_start_level = 2
             let g:indent_guides_guide_size = 1
             let g:indent_guides_enable_on_vim_startup = 1
@@ -1040,30 +1090,106 @@
     " }
 
     " vim-airline {
-        " Set configuration options for the statusline plugin vim-airline.
-        " Use the powerline theme and optionally enable powerline symbols.
-        " To use the symbols , , , , , , and .in the statusline
-        " segments add the following to your .vimrc.before.local file:
-        "   let g:airline_powerline_fonts=1
-        " If the previous symbols do not render for you then install a
-        " powerline enabled font.
+    " Set configuration options for the statusline plugin vim-airline.
+    " Use the powerline theme and optionally enable powerline symbols.
+    " To use the symbols , , , , , , and .in the statusline
+    " segments add the following to your .vimrc.before.local file:
+    "   let g:airline_powerline_fonts=1
+    " If the previous symbols do not render for you then install a
+    " powerline enabled font.
 
-        " See `:echo g:airline_theme_map` for some more choices
-        " Default in terminal vim is 'dark'
-        if isdirectory(expand("~/.vim/bundle/vim-airline-themes/"))
-            if !exists('g:airline_theme')
-                let g:airline_theme = 'solarized'
-            endif
-            if !exists('g:airline_powerline_fonts')
-                " Use the default set of separators with a few customizations
-                let g:airline_left_sep='›'  " Slightly fancier than '>'
-                let g:airline_right_sep='‹' " Slightly fancier than '<'
-            endif
+    " See `:echo g:airline_theme_map` for some more choices
+    " Default in terminal vim is 'dark'
+    if isdirectory(expand('~/.vim/plugged/vim-airline-themes/'))
+        if !exists('g:airline_theme')
+            let g:airline_theme = 'solarized'
         endif
+    endif
     " }
 
+    " vdegub {
+    if isdirectory(expand('~/.vim/plugged/vdebug/'))
+        if !exists('g:vdebug_options')
+            let g:vdebug_options = {}
+        endif
+    endif
+    "}
 
+    " ale {
+    if isdirectory(expand('~/.vim/plugged/ale/'))
+        let g:ale_php_phpcs_standard='Drupal'
+        " Run the lint only on file save.
+        let g:ale_lint_on_save = 1
+        let g:ale_lint_on_text_changed = 0
+        " Run the linter on file open.
+        let g:ale_lint_on_enter = 1
+    endif
+    "}
 
+    " vim_markdown_preview {
+    if isdirectory(expand('~/.vim/plugged/vim-markdown-preview/'))
+        let g:vim_markdown_preview_github=1
+    endif
+    "}
+
+    " netrw {
+    let g:netrw_liststyle=3
+    "}
+
+    " vim-expand-region {
+    if isdirectory(expand('~/.vim/plugged/vim-expand-region'))
+        vmap v <Plug>(expand_region_expand)
+        vmap <C-v> <Plug>(expand_region_shrink)
+    endif
+    "}
+
+    " vim-autoswap {
+    if isdirectory(expand('~/.vim/plugged/vim-autoswap'))
+        let g:autoswap_detect_tmux=1
+    endif
+    "}
+
+    " vim-gutentags {
+    if isdirectory(expand('~/.vim/plugged/vim-gutentags/'))
+        let g:gutentags_cache_dir = '~/.vimtags'
+    endif
+    "}
+
+    " vim-easyclip {
+    if isdirectory(expand('~/.vim/plugged/vim-easyclip/'))
+        let g:EasyClipUseSubstituteDefaults = 1
+    endif
+    "}
+
+    " vim-easymotion {
+    if isdirectory(expand('~/.vim/plugged/vim-easymotion/'))
+        " This setting makes EasyMotion work similarly to Vim's smartcase option for
+        " global searches.
+        let g:EasyMotion_smartcase = 1
+    endif
+    "}
+
+    " vim-nerdcommenter {
+    if isdirectory(expand('~/.vim/plugged/nerdcommenter/'))
+        " Add spaces after comment delimiters by default
+        let g:NERDSpaceDelims = 1
+
+        nmap <Leader>c<space> <Plug>NERDCommenterToggle
+        omap <Leader>c<space> <Plug>NERDCommenterToggle
+        vmap <Leader>c<space> <Plug>NERDCommenterToggle
+    endif
+    "}
+
+    " completor.vim {
+    if isdirectory(expand('~/.vim/plugged/completor.vim/'))
+        " completor php trigger.
+        let g:completor_php_omni_trigger = '[^. \t]->\h\w*\|\h\w*::'
+
+        "Use Tab to trigger completion (disable auto trigger).
+        let g:completor_auto_trigger = 0
+        inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<C-x>\<C-u>\<C-p>"
+    endif
+    "}
 " }
 
 " GUI Settings {
@@ -1082,7 +1208,7 @@
             endif
         endif
     else
-        if &term == 'xterm' || &term == 'screen'
+        if &term == 'xterm' || &term == 'screen' || &term == 'tmux'
             set t_Co=256            " Enable 256 colors to stop the CSApprox warning and make xterm vim shine
         endif
         "set term=builtin_ansi       " Make arrow and other keys work
@@ -1186,18 +1312,6 @@
     " e.g. Grep current file for <search_term>: Shell grep -Hn <search_term> %
     " }
 
-    function! s:IsSpf13Fork()
-        let s:is_fork = 0
-        let s:fork_files = ["~/.vimrc.fork", "~/.vimrc.before.fork", "~/.vimrc.bundles.fork"]
-        for fork_file in s:fork_files
-            if filereadable(expand(fork_file, ":p"))
-                let s:is_fork = 1
-                break
-            endif
-        endfor
-        return s:is_fork
-    endfunction
-
     function! s:ExpandFilenameAndExecute(command, file)
         execute a:command . " " . expand(a:file, ":p")
     endfunction
@@ -1206,34 +1320,28 @@
         call <SID>ExpandFilenameAndExecute("tabedit", "~/.vimrc")
         call <SID>ExpandFilenameAndExecute("vsplit", "~/.vimrc.before")
         call <SID>ExpandFilenameAndExecute("vsplit", "~/.vimrc.bundles")
-     
+
         execute bufwinnr(".vimrc") . "wincmd w"
         call <SID>ExpandFilenameAndExecute("split", "~/.vimrc.local")
         wincmd l
         call <SID>ExpandFilenameAndExecute("split", "~/.vimrc.before.local")
         wincmd l
         call <SID>ExpandFilenameAndExecute("split", "~/.vimrc.bundles.local")
-     
-        if <SID>IsSpf13Fork()
-            execute bufwinnr(".vimrc") . "wincmd w"
-            call <SID>ExpandFilenameAndExecute("split", "~/.vimrc.fork")
-            wincmd l
-            call <SID>ExpandFilenameAndExecute("split", "~/.vimrc.before.fork")
-            wincmd l
-            call <SID>ExpandFilenameAndExecute("split", "~/.vimrc.bundles.fork")
-        endif
-     
+
         execute bufwinnr(".vimrc.local") . "wincmd w"
     endfunction
-     
+
     execute "noremap " . s:spf13_edit_config_mapping " :call <SID>EditSpf13Config()<CR>"
     execute "noremap " . s:spf13_apply_config_mapping . " :source ~/.vimrc<CR>"
-" }
 
-" Use fork vimrc if available {
-    if filereadable(expand("~/.vimrc.fork"))
-        source ~/.vimrc.fork
-    endif
+    " Apply macro on all lines. {
+    xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
+
+    function! ExecuteMacroOverVisualRange()
+        echo "@".getcmdline()
+        execute ":'<,'>normal @".nr2char(getchar())
+    endfunction
+    " }
 " }
 
 " Use local vimrc if available {

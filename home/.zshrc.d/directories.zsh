@@ -27,8 +27,7 @@ zle -N dots-then-accept-line
 bindkey '^I' dots-then-expand-or-complete
 bindkey '^M' dots-then-accept-line
 
-alias md='mkdir -p'
-alias rd=rmdir
+alias md='mkdir -pv'
 alias d='dirs -v | head -10'
 
 # Push and pop directories on directory stack

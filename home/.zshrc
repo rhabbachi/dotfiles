@@ -9,9 +9,9 @@ export _JAVA_FONTS="/usr/share/fonts/TTF"
 # Disable OH-MY-ZSH updates
 export DISABLE_AUTO_UPDATE="true"
 
-# Misc
-#export LC_ALL=en_US.utf-8
-#export LANG="$LC_ALL"
+# Source local defaults if missing.
+[[ -z "$LANG" ]] && { echo "Sourcing Locale defaults"; LANG= source /etc/profile.d/locale.sh; }
+
 export EDITOR="vim"
 export VISUAL=$EDITOR
 
@@ -30,43 +30,41 @@ zstyle ":zplug:tag" defer 2
 
 source ~/.zplug/init.zsh
 
+# Load OMZ libs.
 zplug "robbyrussell/oh-my-zsh", \
   use:"lib/{clipboard,compfix,completion,functions,git,grep,history,key-bindings,misc,spectrum,termsupport,theme-and-appearance}\.zsh", \
   defer:0
 setopt HIST_FIND_NO_DUPS
 
+# Clipboard integration (based off omz/lib/clipboard).
+## Strip color codes and output to stdout before coping to the clipboard.
 alias clipcopy='sed "s/\x1B\[\([0-9]\{1,2\}\(;[0-9]\{1,2\}\)\?\)\?[mGK]//g" | tee /dev/tty | clipcopy'
+zplug "plugins/copyfile", from:oh-my-zsh
+## copy the active line from the command line buffer.
+zplug "plugins/copybuffer", from:oh-my-zsh
+## Copies the pathname of the current directory to clipboard.
+zplug "plugins/copydir", from:oh-my-zsh
 
-#Additional completion definitions for Zsh.
+# Some useful commands for setting permissions.
+zplug "plugins/perms", from:oh-my-zsh
+
+# Additional completion definitions for Zsh.
 zplug "zsh-users/zsh-completions", depth:1, defer:0
 
 # Bundles from the default repo (robbyrussell's oh-my-zsh).
 #zplug "plugins/vi-mode", from:oh-my-zsh
 
-# Core
-
-zplug "plugins/vundle", from:oh-my-zsh
-
-function a2dir () {
-find . \
-\( -type f -exec sudo chown rhabbachi:http {}; sudo chmod 664 {} \; \) , \
-\( -type d -exec sudo chown rhabbachi:http {}; sudo chmod 775 {} \; \)
-}
-
-function a2link() {
-# TODO check nade for underscores and uppercases.
-local site_name="$1"
-if [ -e "$site_name" ]; then
-  echo "Missing site name"
-  return
-fi
-ln -sf `pwd` $HOME/public_html/$site_name
-}
+# Alias to reload zshrc.
+zplug "plugins/zsh_reload", from:oh-my-zsh
 
 # command-not-found Needs pkgfile installed
 zplug "plugins/command-not-found", from:oh-my-zsh
+
+# More useful nicities.
 zplug "plugins/colored-man-pages", from:oh-my-zsh
 zplug "plugins/encode64", from:oh-my-zsh
+
+# Rsync useful aliases.
 zplug "plugins/rsync", from:oh-my-zsh, if:"which rsync"
 
 # Jumpapp
@@ -78,20 +76,23 @@ zplug "plugins/gitfast", from:oh-my-zsh, if:"which git"
 zplug "plugins/git-extras", from:oh-my-zsh, if:"which git"
 zplug "plugins/gitignore", from:oh-my-zsh, if:"which git"
 zplug "Seinh/git-prune", if:"which git"
-
-# HUB
-command -v hub >/dev/null 2>&1 && eval "$(hub alias -s)"
-
+## Bettec show git alias.
 alias gsm='git show -s --format=%B'
+## HUB: Load hub aliases if installed.
+zplug "plugins/github", from:oh-my-zsh, if:"which hub"
+## using the vim plugin 'GV'!
+## from: https://github.com/wookayin/dotfiles/blob/master/zsh/zsh.d/alias.zsh
+function _vim_gv {
+    vim +"GV $1" +"autocmd BufWipeout <buffer> qall"
+}
+alias gv='_vim_gv'
+alias gva='gv --all'
 
 # Backup Home
 zplug "rhabbachi/fd287c8537964e1b993b", \
   from:gist, as:command, \
   hook-build:"chmod u+x backup-home.attic", \
   use:"backup-home.attic"
-
-## Node.js
-zplug "plugins/npm", from:oh-my-zsh
 
 ## Ruby
 zplug "plugins/gem", from:oh-my-zsh
@@ -100,36 +101,23 @@ zplug "plugins/gem", from:oh-my-zsh
 zplug "plugins/composer", from:oh-my-zsh
 
 # Syntax highlighting bundle.
-zplug "zsh-users/zsh-syntax-highlighting"
-
-# Fish-like autosuggestions for zsh
-#zplug "zsh-users/zsh-autosuggestions"
+zplug "zsh-users/zsh-syntax-highlighting", defer:3
 
 zplug "plugins/history", from:oh-my-zsh
 
 # ZSH port of Fish shell's history search feature.
 zplug "plugins/history-substring-search", from:oh-my-zsh
 
-# Desktop notification on command compleation.
-zplug "plugins/bgnotify", from:oh-my-zsh
-bgnotify_threshold=10 ## set your own notification threshold
-function bgnotify_formatted {
-
-[ $1 -eq 0 ] && title="$(tmux display-message -p '#S') -- Completed after $3 sec" \
-  || title="$(tmux display-message -p '#S') -- Failed after $3 sec"
-[ $1 -eq 0 ] && icon="process-completed-symbolic" \
-  || icon="process-error-symbolic"
-
-notify-send "$title"  "$2" -i "$icon";
-}
+# NTFY
+## We need to check if we have X running.
+if command -v ntfy >/dev/null 2>&1 && xset q &>/dev/null && [ "$XDG_CURRENT_DESKTOP" = "GNOME" ]; then
+  [[ ! -z "$TMUX" ]] && export AUTO_NTFY_DONE_OPTS=(-t $(tmux display-message -p '#H:#S:#I'))
+  eval "$(ntfy shell-integration)"
+  ntfy send "ntfy shell-integration enabled for new tty: $(tmux display-message -p '#S:#I')."
+fi
 
 # Pass password manager.
-zplug "plugins/pass", from:oh-my-zsh
-
-# A utility to run commands within docker containers
-zplug "ahoy-cli/ahoy", \
-  from:gh-r, \
-  as:command
+zplug "plugins/pass", from:oh-my-zsh, if:"which pass"
 
 # Load systemd plugin if using systemd.
 zplug "plugins/systemd", from:oh-my-zsh, if:"pidof systemd"
@@ -149,9 +137,6 @@ case "$ID" in
   arch*)
     zplug "plugins/archlinux", from:oh-my-zsh
     command -v pacaur >/dev/null 2>&1 && alias pacman="pacaur"
-    # https://wiki.archlinux.org/index.php/Pacman_tips
-    # '[r]emove [o]rphans' - recursively remove ALL orphaned packages
-    alias pacman-remove-orphans="/usr/bin/pacman -Qtdq > /dev/null && sudo /usr/bin/pacman -Rns \$(/usr/bin/pacman -Qtdq | sed -e ':a;N;\$!ba;s/\n/ /g')"
     export GIT_CONTRIB="/usr/share/git"
     ;;
 esac
@@ -161,13 +146,6 @@ zplug "plugins/mosh", from:oh-my-zsh, if:"which mosh"
 
 # NMAP
 zplug "plugins/nmap", from:oh-my-zsh, if:"which nmap"
-
-# JSON
-zplug "plugins/jsontools", from:oh-my-zsh
-
-# TMUX plugin
-zplug "plugins/tmux", from:oh-my-zsh, if:"which tmux"
-[[ "$XDG_CURRENT_DESKTOP" == "GNOME" ]] && export ZSH_TMUX_AUTOQUIT=true
 
 # Homeshick
 zplug "andsens/homeshick", use:"homeshick.sh", defer:0
@@ -182,11 +160,10 @@ if ! bashcompinit >/dev/null 2>&1; then
   bashcompinit -i
 fi
 
-# NVM
-## Set NVM_DIR if it isn't already defined
-[[ -z "$NVM_DIR" ]] && export NVM_DIR="$HOME/.nvm"
-## Load nvm if it exists
-[[ -f "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
+# Node.js
+zplug "plugins/npm", from:oh-my-zsh
+## NVM
+zplug "plugins/nvm", from:oh-my-zsh
 ## place this after nvm initialization!
 autoload -U add-zsh-hook
 load-nvmrc() {
@@ -229,35 +206,56 @@ zplug "atweiden/fzf-extras", \
   on:"junegunn/fzf"
 
 # Simple delightful note taking, with none of the lock-in
+export NOTES_DIRECTORY="$HOME/Notes"
 zplug "pimterry/notes", \
   as:command, \
   use:"notes"
-export NOTES_DIRECTORY="$HOME/Notes"
+
+# Tools for adding grid/tiling functionality to any window manager.
+zplug "jayk/window_grid", \
+  as:command, \
+  use:"window_grid"
+
+# Zsh Navigation Tools
+zplug "plugins/zsh-navigation-tools", from:oh-my-zsh
+
+# Globalias plugin: Expands all glob expressions, subcommands and aliases
+# (including global).
+zplug "plugins/globalias", from:oh-my-zsh
 
 # Better prompt
 export DEFAULT_USER="$USER"
-export POWERLEVEL9K_MODE='awesome-fontconfig'
-zplug "bhilburn/powerlevel9k", as:theme, defer:3, at:next
+export POWERLEVEL9K_MODE='awesome-mapped-fontconfig'
+export ATF_BASE="/usr/share/fonts/awesome-terminal-fonts"
+source "$ATF_BASE/fontawesome-regular.sh"
+# source "$POWERLEVEL9K_FONTAWESOME_PATH/devicons-regular.sh" # no named codepoints
+source "$ATF_BASE/octicons-regular.sh"
+
+zplug "pfrybar/powerlevel9k", at:"awesome-font-mapping", as:theme, defer:3
 ## OS_ICON
 export POWERLEVEL9K_OS_ICON_BACKGROUND="white"
 export POWERLEVEL9K_OS_ICON_FOREGROUND="black"
-## STATUS
+## Last command return code.
 export POWERLEVEL9K_STATUS_OK_BACKGROUND="green"
 export POWERLEVEL9K_STATUS_OK_FOREGROUND="black"
 export POWERLEVEL9K_STATUS_ERROR_BACKGROUND="red"
 export POWERLEVEL9K_STATUS_ERROR_FOREGROUND="black"
-## Misc
+## Use two lines for the prompt.
 export POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 export POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=""
-export POWERLEVEL9K_MULTILINE_SECOND_PROMPT_PREFIX="\uf04e "
-## PROMPT
-export POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir virtualenv nvm vcs vi_mode root_indicator)
-export POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status background_jobs docker_machine rbenv aws ip time os_icon)
+export POWERLEVEL9K_MULTILINE_SECOND_PROMPT_PREFIX="\uf054\uf054\uf054 "
+## COMMAND_EXECUTION_TIME.
+export POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=15
+export POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND="black"
+export POWERLEVEL9K_COMMAND_EXECUTION_TIME_BACKGROUND="white"
+## DIR
+export POWERLEVEL9K_SHORTEN_DIR_LENGTH=6
+## PROMPT.
+export POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(root_indicator context dir_writable dir virtualenv nvm vcs vi_mode)
+export POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time background_jobs docker_machine rbenv aws ip ssh os_icon)
 
 # Base16 Shell
-zplug "chriskempson/base16-shell", defer:3
-eval "$($ZPLUG_REPOS/chriskempson/base16-shell/profile_helper.sh)"
-base16_ocean
+zplug "danielrs/base16-shell", hook-load:"base16_ocean"
 
 # Direnv: environment switcher for the shell.
 eval "$(direnv hook zsh)"
@@ -268,8 +266,8 @@ alias tmux='direnv exec / tmux'
 zplug "$HOME/.zshrc.d", from:local
 
 # Open file with the right application
-function open () {
-  setsid xdg-open $1
+function open() {
+  gio open $1 &>/dev/null
 }
 
 # fe [FUZZY PATTERN] - Open the selected file with the default editor
@@ -296,29 +294,12 @@ function load-ahoydocker() {
 }
 command -v docker-machine >/dev/null 2>&1 && load-ahoydocker
 
-function tmux-project() {
-  name=${1-$(basename $(pwd))}
-
-  if [[ $(tmux ls -F '#S') =~ "$name" ]]; then
-    if [ -n "$TMUX" ]; then
-      tmux attach -t "$name"
-    else
-      tmux switch-client -t "$name"
-    fi
-  else
-    tmux new -ds "$name" && tmux switch-client -t "$name"
-  fi
-}
-
-function currentworkspace() {
-  echo $(wmctrl -d | gawk '{if ($2 == "*") print tolower($10)"_"($11)}')
-}
-
 # Open command in vim quickfix
 function vimag () {
   vim -q <(ag $@) +cw
 }
 
+zplug "plugins/systemadmin", from:oh-my-zsh, defer:0
 # save all to init script and source Then, source plugins and add commands to
 # $PATH.
 if ! zplug check --verbose; then
@@ -329,6 +310,8 @@ if ! zplug check --verbose; then
 fi
 
 zplug load
+
+alias harohome-borg-backup='BORG_RSH="ssh -i /home/rhabbachi/.ssh/localhost -p 2022" borg create -ps --exclude-caches --exclude-from ~/.attic/ignorelist borg@nextcloud.rhabbachi.net:/backups/banshee.borg::$(date +%Y%m%d-%H%M%S) /home/rhabbachi'
 
 ### PATHS ###
 # Android Studio
@@ -349,3 +332,10 @@ export PATH="$HOME/.rvm/bin:$PATH"
 
 # https://wiki.archlinux.org/index.php/Systemd/User#PATH
 systemctl --user import-environment PATH
+
+# tabtab source for serverless package
+# uninstall by removing these lines or running `tabtab uninstall serverless`
+[[ -f /home/rhabbachi/.nvm/versions/node/v6.11.0/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh ]] && . /home/rhabbachi/.nvm/versions/node/v6.11.0/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh
+# tabtab source for sls package
+# uninstall by removing these lines or running `tabtab uninstall sls`
+[[ -f /home/rhabbachi/.nvm/versions/node/v6.11.0/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh ]] && . /home/rhabbachi/.nvm/versions/node/v6.11.0/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh

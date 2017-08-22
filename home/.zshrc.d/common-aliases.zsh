@@ -50,14 +50,14 @@ alias cp='cp -iv'
 alias mv='mv -iv'
 
 alias top="htop"
+alias ping='ping -c 5'
 # Ping www.google.com 8 times
 alias pingo="ping www.google.com -c 8"
 alias date-time='date +%Y%m%d-%H%M%S'
-alias clr="clear"
+alias clr='clear;echo "Currently logged in on $(tty), as $USER in directory $PWD."'
 
 # Apache
 alias a2log="multitail -f /var/log/httpd/localhost.error.log"
-alias a2dir="find . | xargs -I PATH bash -c \"sudo chown rhabbachi:http 'PATH'; [[ -f 'PATH' ]] && sudo chmod 664 'PATH' || sudo chmod 775 'PATH'\""
 
 # Clear Vim tmp files
 alias vim-clear="trash ~/.vimswap ~/.vimviews/ ~/.vimbackup ~/.vimundo"
@@ -86,7 +86,7 @@ fi
 command -v tree >/dev/null 2>&1 && alias trees='tree -L 3 | less'
 
 # Diff
-alias diff='colordiff'
+command -v colordiff >/dev/null 2>&1 && alias diff='colordiff'
 
 # Cat with syntaxe highlight.
 command -v src-hilite-lesspipe.sh >/dev/null 2>&1 && alias dog="src-hilite-lesspipe.sh"
