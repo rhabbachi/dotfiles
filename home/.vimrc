@@ -187,7 +187,7 @@
       let g:base16colorspace=256  " Access colors present in 256 colorspace
       " This is managed in a test above.
       "set t_Co=256
-      colorscheme base16-ocean
+      colorscheme base16-oceanicnext
     endif
 
     set tabpagemax=15               " Only show 15 tabs

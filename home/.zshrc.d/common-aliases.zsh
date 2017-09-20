@@ -3,15 +3,15 @@
 #
 
 # ls, the common ones I use a lot shortened for rapid fire usage
-alias l='ls -lFh --group-directories-first'     #size,show type,human readable
-alias la='ls -lAFh'   #long list,show almost all,show type,human readable
-alias ll='ls -l'      #long list
-alias ldot='ls -ld .*'
-alias lS='ls -1FSsh'
-alias lart='ls -1Fcart'
-alias lrt='ls -1Fcrt'
-# List directory contents
-alias lsa='ls -lah'
+if command -v exa >/dev/null 2>&1; then
+  alias ll='exa -lFb --group-directories-first --git'     #size,show type,human readable
+  alias la='exa -laFb --group-directories-first --git'   #long list,show almost all,show type,human readable
+  alias ldot='exa -ld .* --group-directories-first --git'
+else
+  alias ll='ls -lFh --group-directories-first'     #size,show type,human readable
+  alias la='ls -lAFh'   #long list,show almost all,show type,human readable
+  alias ldot='ls -ld .*'
+fi
 
 alias zshrc='$EDITOR ~/.zshrc' # Quick access to the ~/.zshrc file
 
@@ -85,8 +85,8 @@ fi
 # Tree
 command -v tree >/dev/null 2>&1 && alias trees='tree -L 3 | less'
 
-# Diff
-command -v colordiff >/dev/null 2>&1 && alias diff='colordiff'
+# Diff: enable colors.
+command -v diff >/dev/null 2>&1 && alias diff="diff --color=auto"
 
 # Cat with syntaxe highlight.
 command -v src-hilite-lesspipe.sh >/dev/null 2>&1 && alias dog="src-hilite-lesspipe.sh"

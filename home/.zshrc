@@ -111,9 +111,9 @@ zplug "plugins/history-substring-search", from:oh-my-zsh
 # NTFY
 ## We need to check if we have X running.
 if command -v ntfy >/dev/null 2>&1 && xset q &>/dev/null && [ "$XDG_CURRENT_DESKTOP" = "GNOME" ]; then
-  [[ ! -z "$TMUX" ]] && export AUTO_NTFY_DONE_OPTS=(-t $(tmux display-message -p '#H:#S:#I'))
+  [[ ! -z "$TMUX" ]] && export AUTO_NTFY_DONE_OPTS=(-o "transient" "true" -t $(tmux display-message -p '#H:#S:#I'))
   eval "$(ntfy shell-integration)"
-  ntfy send "ntfy shell-integration enabled for new tty: $(tmux display-message -p '#S:#I')."
+  ntfy -t "Ntfy Shell Integration" send "ntfy shell-integration enabled for new tty: $(tmux display-message -p '#S:#I')."
 fi
 
 # Pass password manager.
@@ -231,7 +231,7 @@ source "$ATF_BASE/fontawesome-regular.sh"
 # source "$POWERLEVEL9K_FONTAWESOME_PATH/devicons-regular.sh" # no named codepoints
 source "$ATF_BASE/octicons-regular.sh"
 
-zplug "pfrybar/powerlevel9k", at:"awesome-font-mapping", as:theme, defer:3
+zplug "bhilburn/powerlevel9k", at:"next", as:theme, defer:3
 ## OS_ICON
 export POWERLEVEL9K_OS_ICON_BACKGROUND="white"
 export POWERLEVEL9K_OS_ICON_FOREGROUND="black"
@@ -243,7 +243,7 @@ export POWERLEVEL9K_STATUS_ERROR_FOREGROUND="black"
 ## Use two lines for the prompt.
 export POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 export POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=""
-export POWERLEVEL9K_MULTILINE_SECOND_PROMPT_PREFIX="\uf054\uf054\uf054 "
+export POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="\uf054\uf054\uf054 "
 ## COMMAND_EXECUTION_TIME.
 export POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=15
 export POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND="black"
@@ -255,7 +255,7 @@ export POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(root_indicator context dir_writable di
 export POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time background_jobs docker_machine rbenv aws ip ssh os_icon)
 
 # Base16 Shell
-zplug "danielrs/base16-shell", hook-load:"base16_ocean"
+zplug "danielrs/base16-shell", hook-load:"base16_oceanicnext"
 
 # Direnv: environment switcher for the shell.
 eval "$(direnv hook zsh)"
@@ -279,11 +279,11 @@ fag() {
   [ -n "$file" ] && ${EDITOR:-vim} "$file"
 }
 
-# Docker
+# Docker.
 zplug "plugins/docker", from:oh-my-zsh, if:"which docker", defer:0
 zplug "plugins/docker-compose", from:oh-my-zsh, if:"which docker-compose", defer:0
 
-## Ahoy Docker Nucivic env
+## Ahoy Docker Nucivic env.
 function ahoydocker() {
   [[ $(docker-machine status) == "Stopped" ]] && docker-machine start default
   load-ahoydocker
@@ -294,7 +294,7 @@ function load-ahoydocker() {
 }
 command -v docker-machine >/dev/null 2>&1 && load-ahoydocker
 
-# Open command in vim quickfix
+# Open command in vim quickfix.
 function vimag () {
   vim -q <(ag $@) +cw
 }
