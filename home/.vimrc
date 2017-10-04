@@ -1268,6 +1268,10 @@
         endfor
     endfunction
     call InitializeDirectories()
+
+    " Save the viminfo files in .viminfo/
+    " https://stackoverflow.com/questions/6286866/how-to-tell-vim-to-store-the-viminfo-file-somewhere-else
+    set viminfo+=n~/.vim/viminfo
     " }
 
     " Initialize NERDTree as needed {
