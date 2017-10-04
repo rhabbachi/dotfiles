@@ -38,7 +38,7 @@ setopt HIST_FIND_NO_DUPS
 
 # Clipboard integration (based off omz/lib/clipboard).
 ## Strip color codes and output to stdout before coping to the clipboard.
-alias clipcopy='sed "s/\x1B\[\([0-9]\{1,2\}\(;[0-9]\{1,2\}\)\?\)\?[mGK]//g" | tee /dev/tty | clipcopy'
+# alias clipcopy='sed "s/\x1B\[\([0-9]\{1,2\}\(;[0-9]\{1,2\}\)\?\)\?[mGK]//g" | tee /dev/tty | clipcopy'
 zplug "plugins/copyfile", from:oh-my-zsh
 ## copy the active line from the command line buffer.
 zplug "plugins/copybuffer", from:oh-my-zsh
@@ -162,28 +162,21 @@ fi
 
 # Node.js
 zplug "plugins/npm", from:oh-my-zsh
-## NVM
-zplug "plugins/nvm", from:oh-my-zsh
-## place this after nvm initialization!
-autoload -U add-zsh-hook
-load-nvmrc() {
-  if [[ -f .nvmrc && -r .nvmrc ]]; then
-    nvm use
-  elif [[ $(nvm version) != $(nvm version default)  ]]; then
-    echo "Reverting to nvm default version"
-    nvm use default
-  fi
-}
-command -v nvm >/dev/null 2>&1 && { add-zsh-hook chpwd load-nvmrc; load-nvmrc; }
 
 # Simple jira command line client in Go
 zplug "Netflix-Skunkworks/go-jira", \
   from:gh-r, \
   as:command, \
   rename-to:"jira"
+
 function jira-summary () {
   jira view $1 -t summary
 }
+
+# Simple jira command line client in Go
+zplug "estesp/manifest-tool", \
+  from:gh-r, \
+  as:command
 
 # FZF: A command-line fuzzy finder written in Go.
 ## Helper bash script.
@@ -255,7 +248,8 @@ export POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(root_indicator context dir_writable di
 export POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time background_jobs docker_machine rbenv aws ip ssh os_icon)
 
 # Base16 Shell
-zplug "danielrs/base16-shell", hook-load:"base16_oceanicnext"
+zplug "chriskempson/base16-shell", hook-load:"base16_onedark"
+zplug "nicodebo/base16-fzf", use:"build_scheme/base16-onedark.config", on:"junegunn/fzf"
 
 # Direnv: environment switcher for the shell.
 eval "$(direnv hook zsh)"
@@ -300,6 +294,9 @@ function vimag () {
 }
 
 zplug "plugins/systemadmin", from:oh-my-zsh, defer:0
+
+zplug "asdf-vm/asdf", use:"asdf.sh"
+
 # save all to init script and source Then, source plugins and add commands to
 # $PATH.
 if ! zplug check --verbose; then
@@ -320,22 +317,5 @@ export PATH="$HOME/Programs/android-studio/bin/:$PATH"
 export PATH="$HOME/Programs/Android/Sdk/tools:$PATH"
 export PATH="$HOME/Programs/Android/Sdk/platform-tools:$PATH"
 
-# Go lang
-export GOPATH="$HOME/.go/"
-export PATH="$HOME/.go/bin/:$PATH"
-
-# RVM
-## Add RVM to PATH for scripting
-export PATH="$HOME/.rvm/bin:$PATH"
-## Load RVM into a shell session *as a function*
-[[ -f "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
-
 # https://wiki.archlinux.org/index.php/Systemd/User#PATH
 systemctl --user import-environment PATH
-
-# tabtab source for serverless package
-# uninstall by removing these lines or running `tabtab uninstall serverless`
-[[ -f /home/rhabbachi/.nvm/versions/node/v6.11.0/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh ]] && . /home/rhabbachi/.nvm/versions/node/v6.11.0/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh
-# tabtab source for sls package
-# uninstall by removing these lines or running `tabtab uninstall sls`
-[[ -f /home/rhabbachi/.nvm/versions/node/v6.11.0/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh ]] && . /home/rhabbachi/.nvm/versions/node/v6.11.0/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh

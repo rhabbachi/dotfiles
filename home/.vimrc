@@ -176,18 +176,21 @@
 " }
 
 " Vim UI {
+    if isdirectory(expand('~/.vim/plugged/nord-vim/'))
+      colorscheme nord
+      let g:airline_theme = 'nord'
 
-    if isdirectory(expand('~/.vim/plugged/solarized/'))
+    elseif isdirectory(expand('~/.vim/plugged/base16-vim/')) && filereadable(expand("~/.vimrc_background"))
+        let base16colorspace=256
+        source ~/.vimrc_background
+        let g:airline_theme = 'base16'
+
+    elseif isdirectory(expand('~/.vim/plugged/solarized/'))
         let g:solarized_termcolors=256
         let g:solarized_termtrans=1
         let g:solarized_contrast='normal'
         let g:solarized_visibility='normal'
         color solarized             " Load a colorscheme
-    elseif isdirectory(expand('~/.vim/plugged/base16-vim/'))
-      let g:base16colorspace=256  " Access colors present in 256 colorspace
-      " This is managed in a test above.
-      "set t_Co=256
-      colorscheme base16-oceanicnext
     endif
 
     set tabpagemax=15               " Only show 15 tabs
@@ -1188,6 +1191,12 @@
         "Use Tab to trigger completion (disable auto trigger).
         let g:completor_auto_trigger = 0
         inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<C-x>\<C-u>\<C-p>"
+    endif
+    "}
+    " vim-easymotion {
+    if isdirectory(expand('~/.vim/plugged/auto-pairs/'))
+        " Disable auto-pair toggle shortcut.
+        let g:AutoPairsShortcutToggle = ''
     endif
     "}
 " }

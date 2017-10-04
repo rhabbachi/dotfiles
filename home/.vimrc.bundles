@@ -405,7 +405,6 @@
     " Tmux {
     " Simple tmux statusline generator with support for powerline symbols and
     " statusline / airline / lightline integration
-    Plug 'edkolev/tmuxline.vim'
     " Seamless navigation between tmux panes and vim splits
     Plug 'christoomey/vim-tmux-navigator'
     " vim plugin for tmux.conf
