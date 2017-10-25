@@ -80,6 +80,20 @@ if command -v ag >/dev/null 2>&1; then
   alias fjs="ag --js -l"
   alias acss="ag --saas --css --less"
   alias fcss="ag --saas --css --less -l"
+
+  # fe [FUZZY PATTERN] - Open the selected file with the default editor
+  #   - Bypass fuzzy finder if there's only one match (--select-1)
+  #   - Exit if there's no match (--exit-0)
+  fag() {
+    local file
+    file=$(\ag -l $1 | \fzf --exit-0)
+    [ -n "$file" ] && ${EDITOR:-vim} "$file"
+  }
+
+  # Open command in vim quickfix.
+  function vimag () {
+    vim -q <(ag $@) +cw
+  }
 fi
 
 # Tree

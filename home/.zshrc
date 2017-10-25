@@ -266,33 +266,9 @@ function open() {
   gio open $1 &>/dev/null
 }
 
-# fe [FUZZY PATTERN] - Open the selected file with the default editor
-#   - Bypass fuzzy finder if there's only one match (--select-1)
-#   - Exit if there's no match (--exit-0)
-fag() {
-  local file
-  file=$(\ag -l $1 | \fzf --exit-0)
-  [ -n "$file" ] && ${EDITOR:-vim} "$file"
-}
-
 # Docker.
 zplug "plugins/docker", from:oh-my-zsh, if:"which docker", defer:0
 zplug "plugins/docker-compose", from:oh-my-zsh, if:"which docker-compose", defer:0
-
-## Ahoy Docker Nucivic env.
-function ahoydocker() {
-  [[ $(docker-machine status) == "Stopped" ]] && docker-machine start default
-  load-ahoydocker
-}
-
-function load-ahoydocker() {
-  [[ $(docker-machine status) == "Running" ]] && { eval "$(docker-machine env default)"; export VIRTUAL_HOST="default.docker"; export AHOY_CMD_PROXY="DOCKER"; }
-}
-
-# Open command in vim quickfix.
-function vimag () {
-  vim -q <(ag $@) +cw
-}
 
 zplug "plugins/systemadmin", from:oh-my-zsh
 
@@ -323,8 +299,6 @@ if ! zplug check --verbose; then
 fi
 
 zplug load
-
-alias harohome-borg-backup='BORG_RSH="ssh -i /home/rhabbachi/.ssh/localhost -p 2022" borg create -ps --exclude-caches --exclude-from ~/.attic/ignorelist borg@nextcloud.rhabbachi.net:/backups/banshee.borg::$(date +%Y%m%d-%H%M%S) /home/rhabbachi'
 
 ### PATHS ###
 # Android Studio
