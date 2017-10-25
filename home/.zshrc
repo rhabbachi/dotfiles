@@ -45,6 +45,8 @@ zplug "plugins/copybuffer", from:oh-my-zsh
 ## Copies the pathname of the current directory to clipboard.
 zplug "plugins/copydir", from:oh-my-zsh
 
+zplug "plugins/safe-paste", from:oh-my-zsh
+
 # Some useful commands for setting permissions.
 zplug "plugins/perms", from:oh-my-zsh
 
@@ -111,7 +113,7 @@ zplug "plugins/history-substring-search", from:oh-my-zsh
 # NTFY
 ## We need to check if we have X running.
 if command -v ntfy >/dev/null 2>&1 && xset q &>/dev/null && [ "$XDG_CURRENT_DESKTOP" = "GNOME" ]; then
-  [[ ! -z "$TMUX" ]] && export AUTO_NTFY_DONE_OPTS=(-o "transient" "true" -t $(tmux display-message -p '#H:#S:#I'))
+  [[ ! -z "$TMUX" ]] && export AUTO_NTFY_DONE_OPTS=( -t $(tmux display-message -p '#H:#S:#I'))
   eval "$(ntfy shell-integration)"
   ntfy -t "Ntfy Shell Integration" send "ntfy shell-integration enabled for new tty: $(tmux display-message -p '#S:#I')."
 fi
@@ -137,6 +139,7 @@ case "$ID" in
   arch*)
     zplug "plugins/archlinux", from:oh-my-zsh
     command -v pacaur >/dev/null 2>&1 && alias pacman="pacaur"
+    alias pawsu="pacaur -Syuwr --noconfirm && pacaur -Sua --noconfirm"
     export GIT_CONTRIB="/usr/share/git"
     ;;
 esac
@@ -220,9 +223,8 @@ zplug "plugins/globalias", from:oh-my-zsh
 export DEFAULT_USER="$USER"
 export POWERLEVEL9K_MODE='awesome-mapped-fontconfig'
 export ATF_BASE="/usr/share/fonts/awesome-terminal-fonts"
-source "$ATF_BASE/fontawesome-regular.sh"
-# source "$POWERLEVEL9K_FONTAWESOME_PATH/devicons-regular.sh" # no named codepoints
-source "$ATF_BASE/octicons-regular.sh"
+source $ATF_BASE"/fontawesome-regular.sh"
+source $ATF_BASE"/octicons-regular.sh"
 
 zplug "bhilburn/powerlevel9k", at:"next", as:theme, defer:3
 ## OS_ICON
@@ -286,17 +288,31 @@ function ahoydocker() {
 function load-ahoydocker() {
   [[ $(docker-machine status) == "Running" ]] && { eval "$(docker-machine env default)"; export VIRTUAL_HOST="default.docker"; export AHOY_CMD_PROXY="DOCKER"; }
 }
-command -v docker-machine >/dev/null 2>&1 && load-ahoydocker
 
 # Open command in vim quickfix.
 function vimag () {
   vim -q <(ag $@) +cw
 }
 
-zplug "plugins/systemadmin", from:oh-my-zsh, defer:0
+zplug "plugins/systemadmin", from:oh-my-zsh
 
-zplug "asdf-vm/asdf", use:"asdf.sh"
+# xVM
+## NVM
+export NVM_DIR="$ZPLUG_REPOS/creationix/nvm"
+zplug "creationix/nvm", use:"nvm.sh", at:"v0.33.4"
+zplug "plugins/nvm", from:oh-my-zsh, on:"creationix/nvm"
 
+## RBENV
+zplug "rbenv/rbenv", as:command, use:"bin/rbenv"
+eval "$(rbenv init -)"
+zplug "rbenv/ruby-build", as:command, use:"bin/*"
+zplug "plugins/rbenv", from:oh-my-zsh, on:"rbenv/rbenv"
+
+## GVM
+zplug "moovweb/gvm", as:command, use:"bin/*", hook-load:"export GVM_ROOT=$ZPLUG_REPOS/moovweb/gvm"
+
+# TaskWarror
+alias taskbkmk="task add project:readitlater"
 # save all to init script and source Then, source plugins and add commands to
 # $PATH.
 if ! zplug check --verbose; then
@@ -319,3 +335,10 @@ export PATH="$HOME/Programs/Android/Sdk/platform-tools:$PATH"
 
 # https://wiki.archlinux.org/index.php/Systemd/User#PATH
 systemctl --user import-environment PATH
+
+# tabtab source for serverless package
+# uninstall by removing these lines or running `tabtab uninstall serverless`
+[[ -f /home/rhabbachi/.zplug/repos/creationix/nvm/versions/node/v8.6.0/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh ]] && . /home/rhabbachi/.zplug/repos/creationix/nvm/versions/node/v8.6.0/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh
+# tabtab source for sls package
+# uninstall by removing these lines or running `tabtab uninstall sls`
+[[ -f /home/rhabbachi/.zplug/repos/creationix/nvm/versions/node/v8.6.0/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh ]] && . /home/rhabbachi/.zplug/repos/creationix/nvm/versions/node/v8.6.0/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh
