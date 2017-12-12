@@ -28,6 +28,7 @@ bindkey '^I' dots-then-expand-or-complete
 bindkey '^M' dots-then-accept-line
 
 alias md='mkdir -pv'
+alias rd='rm -rv'
 alias d='dirs -v | head -10'
 
 # Push and pop directories on directory stack

@@ -7,11 +7,17 @@ if command -v exa >/dev/null 2>&1; then
   alias ll='exa -lFb --group-directories-first --git'     #size,show type,human readable
   alias la='exa -laFb --group-directories-first --git'   #long list,show almost all,show type,human readable
   alias ldot='exa -ld .* --group-directories-first --git'
+elif command -v k >/dev/null 2>&1; then
+  alias ll='k -h'     #size,show type,human readable
+  alias la='k -Ah'   #long list,show almost all,show type,human readable
+  alias ldot='exa -Ah .*'
 else
   alias ll='ls -lFh --group-directories-first'     #size,show type,human readable
   alias la='ls -lAFh'   #long list,show almost all,show type,human readable
   alias ldot='ls -ld .*'
 fi
+
+alias l=ll
 
 alias zshrc='$EDITOR ~/.zshrc' # Quick access to the ~/.zshrc file
 
@@ -46,7 +52,7 @@ alias unexport='unset'
 
 alias whereami=display_info
 
-alias cp='cp -iv'
+alias cp='cp -ivr'
 alias mv='mv -iv'
 
 alias top="htop"

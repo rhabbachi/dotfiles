@@ -1,6 +1,22 @@
 # http://unix.stackexchange.com/questions/72086/ctrl-s-hang-terminal-emulator
 stty -ixon
 
+PROFILE_STARTUP=false
+if [[ "$PROFILE_STARTUP" == true ]]; then
+    zmodload zsh/zprof # Output load-time statistics
+    # http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
+    PS4=$'%D{%M%S%.} %N:%i> '
+    exec 3>&2 2>"${XDG_CACHE_HOME:-$HOME/tmp}/zsh_statup.$$"
+    setopt xtrace prompt_subst
+fi
+
+# Persistent rehash
+# Typically, compinit will not automatically find new executables in the $PATH.
+# For example, after you install a new package, the files in /usr/bin would not
+# be immediately or automatically included in the completion. This 'rehash' can
+# be set to happen automatically.
+zstyle ':completion:*' rehash true
+
 # For Java application
 # https://wiki.archlinux.org/index.php/java#Better_font_rendering
 export _JAVA_OPTIONS="-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel"
@@ -10,7 +26,10 @@ export _JAVA_FONTS="/usr/share/fonts/TTF"
 export DISABLE_AUTO_UPDATE="true"
 
 # Source local defaults if missing.
-[[ -z "$LANG" ]] && { echo "Sourcing Locale defaults"; LANG= source /etc/profile.d/locale.sh; }
+[[ -z "$LANG" ]] && {
+  echo "Sourcing Locale defaults"
+  LANG= source /etc/profile.d/locale.sh
+}
 
 export EDITOR="vim"
 export VISUAL=$EDITOR
@@ -45,16 +64,12 @@ zplug "plugins/copybuffer", from:oh-my-zsh
 ## Copies the pathname of the current directory to clipboard.
 zplug "plugins/copydir", from:oh-my-zsh
 
+# Support extra escape sequences when pasting to a terminal.
+# https://cirw.in/blog/bracketed-paste
 zplug "plugins/safe-paste", from:oh-my-zsh
 
 # Some useful commands for setting permissions.
 zplug "plugins/perms", from:oh-my-zsh
-
-# Additional completion definitions for Zsh.
-zplug "zsh-users/zsh-completions", depth:1, defer:0
-
-# Bundles from the default repo (robbyrussell's oh-my-zsh).
-#zplug "plugins/vi-mode", from:oh-my-zsh
 
 # Alias to reload zshrc.
 zplug "plugins/zsh_reload", from:oh-my-zsh
@@ -78,51 +93,44 @@ zplug "plugins/gitfast", from:oh-my-zsh, if:"which git"
 zplug "plugins/git-extras", from:oh-my-zsh, if:"which git"
 zplug "plugins/gitignore", from:oh-my-zsh, if:"which git"
 zplug "Seinh/git-prune", if:"which git"
-## Bettec show git alias.
+
+## Better git show alias.
 alias gsm='git show -s --format=%B'
+
 ## HUB: Load hub aliases if installed.
 zplug "plugins/github", from:oh-my-zsh, if:"which hub"
+
 ## using the vim plugin 'GV'!
 ## from: https://github.com/wookayin/dotfiles/blob/master/zsh/zsh.d/alias.zsh
-function _vim_gv {
-    vim +"GV $1" +"autocmd BufWipeout <buffer> qall"
+function _vim_gv() {
+  vim +"GV $1" +"autocmd BufWipeout <buffer> qall"
 }
 alias gv='_vim_gv'
 alias gva='gv --all'
-
-# Backup Home
-zplug "rhabbachi/fd287c8537964e1b993b", \
-  from:gist, as:command, \
-  hook-build:"chmod u+x backup-home.attic", \
-  use:"backup-home.attic"
-
-## Ruby
-zplug "plugins/gem", from:oh-my-zsh
 
 # PHP
 zplug "plugins/composer", from:oh-my-zsh
 
 # Syntax highlighting bundle.
-zplug "zsh-users/zsh-syntax-highlighting", defer:3
+zplug "zsh-users/zsh-syntax-highlighting"
 
-zplug "plugins/history", from:oh-my-zsh
+# Additional completion definitions for Zsh.
+zplug "zsh-users/zsh-completions", depth:1, defer:0
 
-# ZSH port of Fish shell's history search feature.
-zplug "plugins/history-substring-search", from:oh-my-zsh
+# Simple plugin that auto-closes, deletes and skips over matching delimiters in
+# zsh intelligently.
+zplug "hlissner/zsh-autopair"
 
 # NTFY
 ## We need to check if we have X running.
 if command -v ntfy >/dev/null 2>&1 && xset q &>/dev/null && [ "$XDG_CURRENT_DESKTOP" = "GNOME" ]; then
-  [[ ! -z "$TMUX" ]] && export AUTO_NTFY_DONE_OPTS=( -t $(tmux display-message -p '#H:#S:#I'))
+  [[ ! -z "$TMUX" ]] && export AUTO_NTFY_DONE_OPTS=(-t $(tmux display-message -p '#H:#S:#I'))
   eval "$(ntfy shell-integration)"
   ntfy -t "Ntfy Shell Integration" send "ntfy shell-integration enabled for new tty: $(tmux display-message -p '#S:#I')."
 fi
 
 # Pass password manager.
 zplug "plugins/pass", from:oh-my-zsh, if:"which pass"
-
-# Load systemd plugin if using systemd.
-zplug "plugins/systemd", from:oh-my-zsh, if:"pidof systemd"
 
 # Distro specific code. I have an archlinux laptop and an ubuntu server and I
 # want to load different plugins and vars for each platform.
@@ -138,8 +146,8 @@ case "$ID" in
     ;;
   arch*)
     zplug "plugins/archlinux", from:oh-my-zsh
-    command -v pacaur >/dev/null 2>&1 && alias pacman="pacaur"
-    alias pawsu="pacaur -Syuwr --noconfirm && pacaur -Sua --noconfirm"
+    command -v pacaur >/dev/null 2>&1 && alias pacman="PKGDEST=\"/home/rhabbachi/.local/cache/pacman/pkg/\" pacaur"
+    alias pawsu="pacaur -Sy --noconfirm && pacaur -Suwr --noconfirm && PKGDEST=\"/home/rhabbachi/.local/cache/pacman/pkg/\" pacaur -Suwa --noconfirm"
     export GIT_CONTRIB="/usr/share/git"
     ;;
 esac
@@ -155,42 +163,31 @@ zplug "andsens/homeshick", use:"homeshick.sh", defer:0
 ## Load the completions
 zplug "andsens/homeshick", use:"completions", defer:0
 
-# Drush compleation
-export DRUSH_INI="$HOME/.drush/drush.ini"
-# Compleation
-if ! bashcompinit >/dev/null 2>&1; then
-  autoload -U bashcompinit
-  bashcompinit -i
-fi
-
 # Node.js
 zplug "plugins/npm", from:oh-my-zsh
 
-# Simple jira command line client in Go
-zplug "Netflix-Skunkworks/go-jira", \
-  from:gh-r, \
-  as:command, \
-  rename-to:"jira"
-
-function jira-summary () {
-  jira view $1 -t summary
-}
-
-# Simple jira command line client in Go
+# Manifest tool for manifest list object creation/query.
 zplug "estesp/manifest-tool", \
   from:gh-r, \
   as:command
 
 # FZF: A command-line fuzzy finder written in Go.
+zplug "junegunn/fzf-bin", \
+  as:command, \
+  from:gh-r, \
+  rename-to:"fzf"
+
 ## Helper bash script.
 zplug "junegunn/fzf", \
-    as:command, \
-    use:"bin/fzf-tmux", \
-    rename-to:"fzf-tmux", \
-    at:$(fzf --version), \
-    if:"command -v fzf >/dev/null 2>&1"
+  as:command, \
+  use:"bin/fzf-tmux", \
+  rename-to:"fzf-tmux", \
+  at:$(fzf --version), \
+  on:"junegunn/fzf-bin"
+
 ## If we are inside a Tmux session open fzf in a pane.
 [[ ! -z "$TMUX" ]] && export FZF_TMUX=1
+
 ## Load shell files
 zplug "$ZPLUG_REPOS/junegunn/fzf/shell", \
   from:local, \
@@ -201,32 +198,35 @@ zplug "atweiden/fzf-extras", \
   use:"fzf-extras.zsh", \
   on:"junegunn/fzf"
 
+# A next-generation cd command with an interactive filter.
+zplug "b4b4r07/enhancd", use:init.sh
+
 # Simple delightful note taking, with none of the lock-in
 export NOTES_DIRECTORY="$HOME/Notes"
 zplug "pimterry/notes", \
   as:command, \
   use:"notes"
 
-# Tools for adding grid/tiling functionality to any window manager.
-zplug "jayk/window_grid", \
-  as:command, \
-  use:"window_grid"
-
-# Zsh Navigation Tools
-zplug "plugins/zsh-navigation-tools", from:oh-my-zsh
-
 # Globalias plugin: Expands all glob expressions, subcommands and aliases
 # (including global).
 zplug "plugins/globalias", from:oh-my-zsh
 
+# An oh-my-zsh plugin to help remembering those aliases you defined once
+zplug "djui/alias-tips"
+
 # Better prompt
 export DEFAULT_USER="$USER"
-export POWERLEVEL9K_MODE='awesome-mapped-fontconfig'
+
+if [ "$TERM" = "linux" ]; then
+  export POWERLEVEL9K_MODE='flat'
+else
+  export POWERLEVEL9K_MODE='awesome-fontconfig'
+fi
+
 export ATF_BASE="/usr/share/fonts/awesome-terminal-fonts"
 source $ATF_BASE"/fontawesome-regular.sh"
 source $ATF_BASE"/octicons-regular.sh"
 
-zplug "bhilburn/powerlevel9k", at:"next", as:theme, defer:3
 ## OS_ICON
 export POWERLEVEL9K_OS_ICON_BACKGROUND="white"
 export POWERLEVEL9K_OS_ICON_FOREGROUND="black"
@@ -247,24 +247,17 @@ export POWERLEVEL9K_COMMAND_EXECUTION_TIME_BACKGROUND="white"
 export POWERLEVEL9K_SHORTEN_DIR_LENGTH=6
 ## PROMPT.
 export POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(root_indicator context dir_writable dir virtualenv nvm vcs vi_mode)
-export POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time background_jobs docker_machine rbenv aws ip ssh os_icon)
+export POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time background_jobs docker_machine rbenv aws)
 
-# Base16 Shell
-zplug "chriskempson/base16-shell", hook-load:"base16_onedark"
-zplug "nicodebo/base16-fzf", use:"build_scheme/base16-onedark.config", on:"junegunn/fzf"
+zplug "bhilburn/powerlevel9k", at:"next", as:theme, defer:2
 
 # Direnv: environment switcher for the shell.
 eval "$(direnv hook zsh)"
 ## https://github.com/direnv/direnv/wiki/Tmux
 alias tmux='direnv exec / tmux'
 
-# Custom local files.
-zplug "$HOME/.zshrc.d", from:local
-
 # Open file with the right application
-function open() {
-  gio open $1 &>/dev/null
-}
+alias o="open_command"
 
 # Docker.
 zplug "plugins/docker", from:oh-my-zsh, if:"which docker", defer:0
@@ -274,6 +267,7 @@ zplug "plugins/systemadmin", from:oh-my-zsh
 
 # xVM
 ## NVM
+# Disable due to poor performance.
 export NVM_DIR="$ZPLUG_REPOS/creationix/nvm"
 zplug "creationix/nvm", use:"nvm.sh", at:"v0.33.4"
 zplug "plugins/nvm", from:oh-my-zsh, on:"creationix/nvm"
@@ -289,16 +283,38 @@ zplug "moovweb/gvm", as:command, use:"bin/*", hook-load:"export GVM_ROOT=$ZPLUG_
 
 # TaskWarror
 alias taskbkmk="task add project:readitlater"
-# save all to init script and source Then, source plugins and add commands to
+
+# k is the new l, yo.
+zplug "supercrabtree/k"
+
+# Base16 Shell.
+zplug "chriskempson/base16-shell", hook-load:"base16_onedark"
+zplug "nicodebo/base16-fzf", use:"build_scheme/base16-onedark.config", \
+  on:"junegunn/fzf"
+
+# Custom local files.
+zplug "$HOME/.zshrc.d", from:local
+
+# Save all to init script and source Then, source plugins and add commands to
 # $PATH.
 if ! zplug check --verbose; then
   printf "Install? [y/N]: "
   if read -q; then
-    echo; zplug install
+    echo
+    zplug install
   fi
 fi
 
 zplug load
+
+# Drush
+## Drush compleation
+export DRUSH_INI="$HOME/.drush/drush.ini"
+# Compleation
+if ! bashcompinit >/dev/null 2>&1; then
+  autoload -U bashcompinit
+  bashcompinit -i
+fi
 
 ### PATHS ###
 # Android Studio
@@ -316,3 +332,9 @@ systemctl --user import-environment PATH
 # tabtab source for sls package
 # uninstall by removing these lines or running `tabtab uninstall sls`
 [[ -f /home/rhabbachi/.zplug/repos/creationix/nvm/versions/node/v8.6.0/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh ]] && . /home/rhabbachi/.zplug/repos/creationix/nvm/versions/node/v8.6.0/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh
+
+if [[ "$PROFILE_STARTUP" == true ]]; then
+    zprof
+    unsetopt xtrace
+    exec 2>&3 3>&-
+fi
