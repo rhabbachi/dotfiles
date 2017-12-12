@@ -23,446 +23,457 @@
 
 " Environment {
 
-    " Basics {
-        set nocompatible        " Must be first line
-        set background=dark     " Assume a dark background
-    " }
+" Basics {
+set nocompatible        " Must be first line
+set background=dark     " Assume a dark background
+" }
 
-    " Windows Compatible {
-        " On Windows, also use '.vim' instead of 'vimfiles'; this makes synchronization
-        " across (heterogeneous) systems easier.
-        if has('win32') || has('win64')
-          set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
+" Windows Compatible {
+" On Windows, also use '.vim' instead of 'vimfiles'; this makes synchronization
+" across (heterogeneous) systems easier.
+if has('win32') || has('win64')
+    set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
 
-          " Be nice and check for multi_byte even if the config requires
-          " multi_byte support most of the time
-          if has("multi_byte")
-            " Windows cmd.exe still uses cp850. If Windows ever moved to
-            " Powershell as the primary terminal, this would be utf-8
-            set termencoding=cp850
-            " Let Vim use utf-8 internally, because many scripts require this
-            set encoding=utf-8
-            setglobal fileencoding=utf-8
-            " Windows has traditionally used cp1252, so it's probably wise to
-            " fallback into cp1252 instead of eg. iso-8859-15.
-            " Newer Windows files might contain utf-8 or utf-16 LE so we might
-            " want to try them first.
-            set fileencodings=ucs-bom,utf-8,utf-16le,cp1252,iso-8859-15
-          endif
-        endif
-    " }
+    " Be nice and check for multi_byte even if the config requires
+    " multi_byte support most of the time
+    if has("multi_byte")
+        " Windows cmd.exe still uses cp850. If Windows ever moved to
+        " Powershell as the primary terminal, this would be utf-8
+        set termencoding=cp850
+        " Let Vim use utf-8 internally, because many scripts require this
+        set encoding=utf-8
+        setglobal fileencoding=utf-8
+        " Windows has traditionally used cp1252, so it's probably wise to
+        " fallback into cp1252 instead of eg. iso-8859-15.
+        " Newer Windows files might contain utf-8 or utf-16 LE so we might
+        " want to try them first.
+        set fileencodings=ucs-bom,utf-8,utf-16le,cp1252,iso-8859-15
+    endif
+endif
+" }
 
 " }
 
 " Plugins {
-    " Make sure the plug.vim is available.
-    if empty(glob('~/.vim/autoload/plug.vim'))
-      silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-      autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+" Make sure the plug.vim is available.
+if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+                \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+call plug#begin('~/.vim/plugged')
+
+" System {
+" vim: interpret a file by function and cache file automatically.
+Plug 'MarcWeber/vim-addon-mw-utils'
+
+" Some utility functions for VIM http://www.vim.org/scripts/script.php…
+Plug 'tomtom/tlib_vim'
+
+" vim interface to Web API.
+Plug 'mattn/webapi-vim'
+
+" Vim plugin: Create your own text objects
+" http://www.vim.org/scripts/script.php…
+" Dependency for most of the plugins providing textobj.
+Plug 'kana/vim-textobj-user'
+
+" tpope/vim-eunuch [
+" Vim sugar for the UNIX shell commands that need it the most.
+Plug 'tpope/vim-eunuch'
+"" Override the default SudoWride mapping.
+cmap w!! SudoWrite
+" ]
+" }
+
+" General {
+" Handles bracketed-paste-mode in vim (aka. automatic `:set paste`)
+Plug 'ConradIrwin/vim-bracketed-paste'
+
+" Make Vim handle line and column numbers in file names with a minimum of
+" fuss.
+Plug 'kopischke/vim-fetch'
+
+"sleuth.vim: Heuristically set buffer options
+"http://www.vim.org/scripts/script.php
+Plug 'tpope/vim-sleuth'
+
+" surround.vim: quoting/parenthesizing made simple.
+Plug 'tpope/vim-surround'
+
+" repeat.vim: enable repeating supported plugin maps with "."
+" http://www.vim.org/scripts/script.php…
+Plug 'tpope/vim-repeat'
+
+" Weapon to fight against conflicts in Vim.
+Plug 'rhysd/conflict-marker.vim'
+
+" Vim text object plugin to select conflicts.
+" requires vim-textobj-user..
+Plug 'rhysd/vim-textobj-conflict'
+
+" Vim plugin, insert or delete brackets, parens, quotes in pair
+" http://www.vim.org/scripts/script.php?script_id=3599
+Plug 'jiangmiao/auto-pairs'
+
+" Vim plugin which asks for the right file to open
+Plug 'EinfachToll/DidYouMean'
+
+" Vim plugin that allows you to visually select increasingly larger regions
+" of text using the same key combination.
+Plug 'terryma/vim-expand-region'
+
+" True Sublime Text style multiple selections for Vim
+" Plug 'terryma/vim-multiple-cursors'
+
+Plug 'vim-scripts/sessionman.vim'
+
+" Continuously updated session files
+Plug 'tpope/vim-obsession'
+
+" Load the version of matchit.vim that ships with Vim.
+runtime! macros/matchit.vim
+
+" Minimalist path navigator designed to work with Vim's built-in mechanisms
+" and complementary plugins.
+Plug 'justinmk/vim-dirvish'
+
+" EasyMotion {
+" Vim motions on speed!.
+Plug 'easymotion/vim-easymotion'
+" Select, yank, paste, delete, or other operation of lines.
+Plug 'haya14busa/vim-easyoperator-line'
+" Select, yank, paste, delete, or other operation of phrase.
+Plug 'haya14busa/vim-easyoperator-phrase'
+" }
+
+Plug 'mbbill/undotree'
+
+" A Vim plugin for visually displaying indent levels in code
+"Plug 'nathanaelkane/vim-indent-guides'
+"let g:indent_guides_enable_on_vim_startup = 0
+
+if !exists('g:spf13_no_views')
+    Plug 'vim-scripts/restore_view.vim'
+endif
+
+" Show a diff using Vim its sign column.
+Plug 'mhinz/vim-signify'
+
+" abolish.vim: easily search for, substitute, and abbreviate multiple
+" variants of a word
+Plug 'tpope/vim-abolish'
+
+" :substitute preview
+" Plug 'osyo-manga/vim-over'
+" noremap <silent> : :OverCommandLine<CR>
+
+" Vim plugin that provides additional text objects.
+Plug 'wellle/targets.vim'
+
+" Toggles between relative and absolute line numbers automatically
+Plug 'myusuf3/numbers.vim'
+
+" A Filetype plugin for csv files
+Plug 'chrisbra/csv.vim', {'for': 'csv'}
+
+" Grammar checker for English, French, German (etc.) in Vim
+Plug 'rhysd/vim-grammarous'
+
+" Simplified clipboard functionality for Vim
+Plug 'svermeulen/vim-easyclip'
+
+"vim-searchindex: display number of search matches & index of a current match.
+Plug 'google/vim-searchindex'
+
+" Better whitespace stripping for Vim
+Plug 'thirtythreeforty/lessspace.vim'
+
+" Toggle the cursor shape in the terminal for Vim.
+Plug 'jszakmeister/vim-togglecursor'
+
+" A better JSON for Vim: distinct highlighting of keywords vs values,
+" JSON-specific (non-JS) warnings, quote concealing. Pathogen-friendly.
+Plug 'elzr/vim-json'
+
+" css/less/sass/html color preview for vim
+Plug 'gorodinskiy/vim-coloresque', {'for': ['css', 'less', 'sass', 'html']}
+
+" Please Vim, stop with these swap file messages. Just switch to the
+" correct window!
+Plug 'gioele/vim-autoswap'
+
+" Underlines the word under the cursor
+Plug 'itchyny/vim-cursorword'
+
+" rsi.vim: Readline style insertion
+Plug 'tpope/vim-rsi'
+
+" Swap windows without ruining your layout!
+Plug 'wesQ3/vim-windowswap'
+
+" Tame the quickfix window
+Plug 'romainl/vim-qf'
+" }
+
+" Themes {
+" Base16 color schemes
+Plug 'chriskempson/base16-vim'
+
+" lean & mean status/tabline for vim that's light as air
+Plug 'vim-airline/vim-airline'
+
+" A collection of themes for vim-airline
+Plug 'vim-airline/vim-airline-themes'
+" }
+
+let g:spf13_bundle_groups=['php', 'javascript', 'html', 'xml', 'devops', 'drupal', 'completor', 'markdown', 'css']
+
+" Writing {
+if count(g:spf13_bundle_groups, 'writing')
+    Plug 'reedes/vim-litecorrect'
+    Plug 'reedes/vim-textobj-sentence'
+    Plug 'reedes/vim-textobj-quote'
+    Plug 'reedes/vim-wordy'
+endif
+" }
+
+" General Programming {
+" A solid language pack for Vim.
+Plug 'sheerun/vim-polyglot'
+
+" Pick one of the checksyntax, jslint, or syntastic
+Plug 'w0rp/ale'
+
+" Vim plugin for intensely orgasmic commenting
+Plug 'scrooloose/nerdcommenter', { 'on': '<Plug>NERDCommenterToggle' }
+
+" Vim script for text filtering and alignment.
+Plug 'godlygeek/tabular', {'on': 'Tabularize'}
+
+" Rainbow parentheses improved, shorter code, no level limit, smooth and
+" fast, powerful configuration.
+Plug 'luochen1990/rainbow'
+
+" A vim plugin to perform diffs on blocks of code
+Plug 'AndrewRadev/linediff.vim'
+
+" Highlight the exact differences, based on characters and words
+Plug 'rickhowe/diffchar.vim'
+
+" Ctags {
+if executable('ctags')
+    " Vim plugin that displays tags in a window, ordered by scope
+    " http://majutsushi.github.io/tagbar/
+    " Do not lazy loading tagbar, see vim-airline issue 1313.
+    Plug 'majutsushi/tagbar'
+
+    " A Vim plugin that manages your tag files
+    Plug 'ludovicchabant/vim-gutentags'
+endif
+"}
+
+" Multi-language DBGP debugger client for Vim (PHP, Python, Perl, Ruby,
+" etc.)
+Plug 'joonty/vdebug', {'on': ['VdebugSetLineBreakpoint', 'VdebugCommandRun']}
+" }
+
+" Git {
+" fugitive.vim: a Git wrapper so awesome, it should be illegal
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
+
+" A git commit browser
+Plug 'junegunn/gv.vim', { 'on': ['GV', 'GV!'] }
+
+" vimscript for gist
+Plug 'mattn/gist-vim', { 'on': 'Gist' }
+" }
+
+" Snippets & AutoComplete {
+if count(g:spf13_bundle_groups, 'snipmate')
+    Plug 'garbas/vim-snipmate'
+    Plug 'honza/vim-snippets'
+    " Source support_function.vim to support vim-snippets.
+    if filereadable(expand("~/.vim/bundle/vim-snippets/snippets/support_functions.vim"))
+        source ~/.vim/bundle/vim-snippets/snippets/support_functions.vim
     endif
-
-    call plug#begin('~/.vim/plugged')
-
-    " System {
-    " vim: interpret a file by function and cache file automatically
-    Plug 'MarcWeber/vim-addon-mw-utils'
-
-    " Some utility functions for VIM http://www.vim.org/scripts/script.php…
-    Plug 'tomtom/tlib_vim'
-
-    " vim interface to Web API
-    Plug 'mattn/webapi-vim'
-
-    " Vim plugin: Create your own text objects
-    " http://www.vim.org/scripts/script.php…
-    " Dependency for most of the plugins providing textobj.
-    Plug 'kana/vim-textobj-user'
-
-    " Vim sugar for the UNIX shell commands that need it the most.
-    Plug 'tpope/vim-eunuch'
-    " }
-
-    " General {
-      " NERDTree: A tree explorer plugin for vim. {
-          "Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
-          "Plug 'jistr/vim-nerdtree-tabs'
-      " }
-
-      "sleuth.vim: Heuristically set buffer options
-      "http://www.vim.org/scripts/script.php
-      Plug 'tpope/vim-sleuth'
-
-      Plug 'tpope/vim-surround'
-
-      " repeat.vim: enable repeating supported plugin maps with "."
-      " http://www.vim.org/scripts/script.php…
-      Plug 'tpope/vim-repeat'
-
-      " Weapon to fight against conflicts in Vim.
-      Plug 'rhysd/conflict-marker.vim'
-
-      " Vim plugin, insert or delete brackets, parens, quotes in pair
-      " http://www.vim.org/scripts/script.php?script_id=3599
-      Plug 'jiangmiao/auto-pairs'
-
-      " Vim plugin which asks for the right file to open
-      Plug 'EinfachToll/DidYouMean'
-
-      " Vim plugin that allows you to visually select increasingly larger regions
-      " of text using the same key combination.
-      Plug 'terryma/vim-expand-region'
-
-      " True Sublime Text style multiple selections for Vim
-      " Plug 'terryma/vim-multiple-cursors'
-
-      Plug 'vim-scripts/sessionman.vim'
-
-      " Continuously updated session files
-      Plug 'tpope/vim-obsession'
-
-      " Load the version of matchit.vim that ships with Vim.
-      runtime! macros/matchit.vim
-
-      " Minimalist path navigator designed to work with Vim's built-in mechanisms
-      " and complementary plugins.
-      Plug 'justinmk/vim-dirvish'
-
-      " EasyMotion {
-          " Vim motions on speed!.
-          Plug 'easymotion/vim-easymotion'
-          " Select, yank, paste, delete, or other operation of lines.
-          Plug 'haya14busa/vim-easyoperator-line'
-          " Select, yank, paste, delete, or other operation of phrase.
-          Plug 'haya14busa/vim-easyoperator-phrase'
-      " }
-
-      Plug 'mbbill/undotree'
-
-      " A Vim plugin for visually displaying indent levels in code
-      "Plug 'nathanaelkane/vim-indent-guides'
-      "let g:indent_guides_enable_on_vim_startup = 0
-
-      if !exists('g:spf13_no_views')
-        Plug 'vim-scripts/restore_view.vim'
-      endif
-
-      " Show a diff using Vim its sign column.
-      Plug 'mhinz/vim-signify'
-
-      " abolish.vim: easily search for, substitute, and abbreviate multiple
-      " variants of a word
-      Plug 'tpope/vim-abolish'
-
-      " :substitute preview
-      " Plug 'osyo-manga/vim-over'
-      " noremap <silent> : :OverCommandLine<CR>
-
-      " Vim plugin that provides additional text objects
-      Plug 'wellle/targets.vim'
-
-      " Toggles between relative and absolute line numbers automatically
-      Plug 'myusuf3/numbers.vim'
-
-      " A Filetype plugin for csv files
-      Plug 'chrisbra/csv.vim', {'for': 'csv'}
-
-      " Grammar checker for English, French, German (etc.) in Vim
-      Plug 'rhysd/vim-grammarous'
-
-      " Simplified clipboard functionality for Vim
-      Plug 'svermeulen/vim-easyclip'
-
-      "vim-searchindex: display number of search matches & index of a current match.
-      Plug 'google/vim-searchindex'
-
-      " Better whitespace stripping for Vim
-      Plug 'thirtythreeforty/lessspace.vim'
-
-      " Toggle the cursor shape in the terminal for Vim.
-      Plug 'jszakmeister/vim-togglecursor'
-
-      " A better JSON for Vim: distinct highlighting of keywords vs values,
-      " JSON-specific (non-JS) warnings, quote concealing. Pathogen-friendly.
-      Plug 'elzr/vim-json'
-
-      " css/less/sass/html color preview for vim
-      Plug 'gorodinskiy/vim-coloresque', {'for': ['css', 'less', 'sass', 'html']}
-
-      " Please Vim, stop with these swap file messages. Just switch to the
-      " correct window!
-      Plug 'gioele/vim-autoswap'
-
-      " Underlines the word under the cursor
-      Plug 'itchyny/vim-cursorword'
-
-      " rsi.vim: Readline style insertion
-      Plug 'tpope/vim-rsi'
-
-      " Swap windows without ruining your layout!
-      Plug 'wesQ3/vim-windowswap'
-
-      " Tame the quickfix window
-      Plug 'romainl/vim-qf'
-     " }
-
-    " Themes {
-    " base16 color schemes
-    Plug 'chriskempson/base16-vim'
-
-    " lean & mean status/tabline for vim that's light as air
-    Plug 'vim-airline/vim-airline'
-
-    " A collection of themes for vim-airline
-    Plug 'vim-airline/vim-airline-themes'
-    " }
-
-    let g:spf13_bundle_groups=['php', 'javascript', 'html', 'xml', 'devops', 'drupal', 'completor', 'markdown', 'css']
-
-    " Writing {
-        if count(g:spf13_bundle_groups, 'writing')
-          Plug 'reedes/vim-litecorrect'
-          Plug 'reedes/vim-textobj-sentence'
-          Plug 'reedes/vim-textobj-quote'
-          Plug 'reedes/vim-wordy'
-        endif
-    " }
-
-    " General Programming {
-      " A solid language pack for Vim.
-      Plug 'sheerun/vim-polyglot'
-
-      " Pick one of the checksyntax, jslint, or syntastic
-      Plug 'w0rp/ale'
-
-      " Vim plugin for intensely orgasmic commenting
-      Plug 'scrooloose/nerdcommenter', { 'on': '<Plug>NERDCommenterToggle' }
-
-      " Vim script for text filtering and alignment.
-      Plug 'godlygeek/tabular', {'on': 'Tabularize'}
-
-      " Rainbow parentheses improved, shorter code, no level limit, smooth and
-      " fast, powerful configuration.
-      Plug 'luochen1990/rainbow'
-
-      " A vim plugin to perform diffs on blocks of code
-      Plug 'AndrewRadev/linediff.vim'
-
-      " Highlight the exact differences, based on characters and words
-      Plug 'rickhowe/diffchar.vim'
-
-      " Ctags {
-      if executable('ctags')
-          " Vim plugin that displays tags in a window, ordered by scope
-          " http://majutsushi.github.io/tagbar/
-          " Do not lazy loading tagbar, see vim-airline issue 1313.
-          Plug 'majutsushi/tagbar'
-
-          " A Vim plugin that manages your tag files
-          Plug 'ludovicchabant/vim-gutentags'
-      endif
-      "}
-
-      " Multi-language DBGP debugger client for Vim (PHP, Python, Perl, Ruby,
-      " etc.)
-      Plug 'joonty/vdebug', {'on': ['VdebugSetLineBreakpoint', 'VdebugCommandRun']}
-    " }
-
-    " Git {
-    " fugitive.vim: a Git wrapper so awesome, it should be illegal
-    Plug 'tpope/vim-fugitive'
-    Plug 'tpope/vim-rhubarb'
-
-    " A git commit browser
-    Plug 'junegunn/gv.vim', { 'on': ['GV', 'GV!'] }
-
-    " vimscript for gist
-    Plug 'mattn/gist-vim', { 'on': 'Gist' }
-    " }
-
-    " Snippets & AutoComplete {
-        if count(g:spf13_bundle_groups, 'snipmate')
-          Plug 'garbas/vim-snipmate'
-          Plug 'honza/vim-snippets'
-          " Source support_function.vim to support vim-snippets.
-          if filereadable(expand("~/.vim/bundle/vim-snippets/snippets/support_functions.vim"))
-            source ~/.vim/bundle/vim-snippets/snippets/support_functions.vim
-          endif
-        elseif count(g:spf13_bundle_groups, 'youcompleteme')
-          Plug 'Valloric/YouCompleteMe'
-          Plug 'SirVer/ultisnips'
-          Plug 'honza/vim-snippets'
-        elseif count(g:spf13_bundle_groups, 'neocomplcache')
-          Plug 'Shougo/neocomplcache'
-          Plug 'Shougo/neosnippet'
-          Plug 'Shougo/neosnippet-snippets'
-          Plug 'honza/vim-snippets'
-        elseif count(g:spf13_bundle_groups, 'neocomplete')
-          Plug 'Shougo/neocomplete.vim.git'
-          Plug 'Shougo/neosnippet'
-          Plug 'Shougo/neosnippet-snippets'
-          Plug 'honza/vim-snippets'
-        elseif count(g:spf13_bundle_groups, 'completor')
-          Plug 'honza/vim-snippets'
-          Plug 'SirVer/ultisnips'
-          Plug 'maralla/completor.vim'
-        endif
-    " }
-
-    " PHP {
-      " The official VIm indent script for PHP.
-      Plug '2072/PHP-Indenting-for-VIm', {'for': 'php'}
-      Plug 'arnaud-lb/vim-php-namespace', {'for': 'php'}
-      Plug 'lumiliet/vim-twig', {'for': 'twig'}
-
-      " Behat support
-      Plug 'veloce/vim-behat', {'for': 'cucumber'}
-
-      " Improved PHP omnicompletion
-      Plug 'shawncplus/phpcomplete.vim', {'for': 'php'}
-    " }
-
-    " Python {
-      " Pick either python-mode or pyflakes & pydoc
-      Plug 'klen/python-mode', {'for': 'python'}
-      Plug 'yssource/python.vim', {'for': 'python'}
-      Plug 'python_match.vim', {'for': 'python'}
-      Plug 'pythoncomplete', {'for': 'python'}
-    " }
-
-    " Javascript {
-    Plug 'pangloss/vim-javascript', {'for': 'javascript'}
-    Plug 'briancollins/vim-jst', {'for': 'jst'}
-    Plug 'kchmck/vim-coffee-script', {'for': 'coffee'}
-    " }
-
-    " Scala {
-    Plug 'derekwyatt/vim-scala', {'for': 'scala'}
-    Plug 'derekwyatt/vim-sbt', {'for': 'sbt'}
-    "Plug 'drmingdrmer/xptemplate'
-    " }
-
-    " Haskell {
-        if count(g:spf13_bundle_groups, 'haskell')
-          Plug 'travitch/hasksyn'
-          Plug 'dag/vim2hs'
-          Plug 'Twinside/vim-haskellConceal'
-          Plug 'Twinside/vim-haskellFold'
-          Plug 'lukerandall/haskellmode-vim'
-          Plug 'eagletmt/neco-ghc'
-          Plug 'eagletmt/ghcmod-vim'
-          Plug 'Shougo/vimproc.vim'
-          Plug 'adinapoli/cumino'
-          Plug 'bitc/vim-hdevtools'
-        endif
-    " }
-
-    " HTML/CSS {
-    " Vim runtime files for Haml, Sass, and SCSS
-    Plug 'tpope/vim-haml', {'for': ['haml', 'sass', 'scss']}
-
-    " emmet for vim: http://emmet.io/ http://mattn.github.io/emmet-vim
-    Plug 'mattn/emmet-vim', {'for': ['html', 'css']}
-
-    Plug 'hail2u/vim-css3-syntax', {'for': 'css'}
-    Plug 'JulesWang/css.vim', {'for': 'css'}
-    Plug 'groenewege/vim-less', {'for': 'less'}
-    " }
-
-    " Ruby {
-        if count(g:spf13_bundle_groups, 'ruby')
-          Plug 'tpope/vim-rails'
-          let g:rubycomplete_buffer_loading = 1
-          "let g:rubycomplete_classes_in_global = 1
-          "let g:rubycomplete_rails = 1
-
-          " Vim Cucumber runtime files.
-          "Plug 'tpope/vim-cucumber'
-          if isdirectory(expand("~/.vim/bundle/tabular/"))
-            " Align pipes when you are editing Cucumber tables.
-            Plug 'quentindecock/vim-cucumber-align-pipes'
-          end
-        endif
-    " }
-
-    " Go Lang {
-    Plug 'Blackrush/vim-gocode', {'for': 'go'}
-    Plug 'fatih/vim-go', {'for': 'go'}
-    " }
-
-    " Elixir {
-    " Vim configuration files for Elixir http://elixir-lang.org/
-    Plug 'elixir-lang/vim-elixir', {'for': 'erlang'}
-
-    " Snipmate snippets for Elixir http://elixir-lang.org
-    Plug 'carlosgaldino/elixir-snippets', {'for': 'erlang'}
-
-    " Vim plugin for using Elixir's build tool, mix
-    " http://mattreduce.github.io/vim-mix/
-    Plug 'mattreduce/vim-mix', {'for': 'erlang'}
-    " }
-
-    " Tmux {
-    " Simple tmux statusline generator with support for powerline symbols and
-    " statusline / airline / lightline integration
-    " Seamless navigation between tmux panes and vim splits
-    Plug 'christoomey/vim-tmux-navigator'
-    " vim plugin for tmux.conf
-    Plug 'tmux-plugins/vim-tmux', {'for': 'tmux'}
-    " Make terminal vim and tmux work better together.
-    Plug 'tmux-plugins/vim-tmux-focus-events'
-    " }
-
-    " DevOps {
-    " Vim plugins for chef (syntax highliting and autocomplete snipmate)
-    Plug 'vadv/vim-chef'
-
-    " Add additional support for Ansible in VIM
-    Plug 'chase/vim-ansible-yaml', {'for': 'ansible'}
-
-    " Puppet niceties for your Vim setup
-    Plug 'rodjek/vim-puppet', {'for': 'puppet'}
-    " }
-
-    " Drupal  {
-    if count(g:spf13_bundle_groups, 'drupal')
-        " Drupal vim plugin
-        Plug 'git://drupalcode.org/project/vimrc.git', {'rtp': 'bundle/vim-plugin-for-drupal/'}
-    endif
-    " }
-
-    " XML {
-    " A vim text object for XML/HTML attributes.
-    " requires vim-textobj-user.
-    Plug 'whatyouhide/vim-textobj-xmlattr', {'for': ['xml', 'html']}
-
-    " A filetype plugin for VIM to help edit XML files
-    " http://www.vim.org/scripts/script.php…
-    Plug 'sukima/xmledit', {'for': 'xml'}
-    "}
-
-    " Rust {
-    " Vim configuration for Rust.
-    Plug 'rust-lang/rust.vim', {'for': 'rust'}
-    " }
-
-    " TOML {
-    " Vim syntax for TOML
-    Plug 'cespare/vim-toml', {'for': 'toml'}
-    " }
-
-    " Salt {
-    " Vim files for editing Salt files
-    Plug 'saltstack/salt-vim', {'for': 'salt'}
-    " }
-
-    " Archlinux {
-    Plug 'Firef0x/PKGBUILD.vim'
-    " }
-
-    " Cmake {
-    Plug 'nickhutchinson/vim-cmake-syntax'
-    " }
-
-    call plug#end()
-    " }
+elseif count(g:spf13_bundle_groups, 'youcompleteme')
+    Plug 'Valloric/YouCompleteMe'
+    Plug 'SirVer/ultisnips'
+    Plug 'honza/vim-snippets'
+elseif count(g:spf13_bundle_groups, 'neocomplcache')
+    Plug 'Shougo/neocomplcache'
+    Plug 'Shougo/neosnippet'
+    Plug 'Shougo/neosnippet-snippets'
+    Plug 'honza/vim-snippets'
+elseif count(g:spf13_bundle_groups, 'neocomplete')
+    Plug 'Shougo/neocomplete.vim.git'
+    Plug 'Shougo/neosnippet'
+    Plug 'Shougo/neosnippet-snippets'
+    Plug 'honza/vim-snippets'
+elseif count(g:spf13_bundle_groups, 'completor')
+    Plug 'honza/vim-snippets'
+    Plug 'SirVer/ultisnips'
+    Plug 'maralla/completor.vim'
+endif
+" }
+
+" PHP {
+" The official VIm indent script for PHP.
+Plug '2072/PHP-Indenting-for-VIm', {'for': 'php'}
+Plug 'arnaud-lb/vim-php-namespace', {'for': 'php'}
+Plug 'lumiliet/vim-twig', {'for': 'twig'}
+
+" Behat support
+Plug 'veloce/vim-behat', {'for': 'cucumber'}
+
+" Improved PHP omnicompletion
+Plug 'shawncplus/phpcomplete.vim', {'for': 'php'}
+" }
+
+" Python {
+" Pick either python-mode or pyflakes & pydoc
+Plug 'klen/python-mode', {'for': 'python'}
+Plug 'yssource/python.vim', {'for': 'python'}
+Plug 'python_match.vim', {'for': 'python'}
+Plug 'pythoncomplete', {'for': 'python'}
+" }
+
+" Javascript {
+Plug 'pangloss/vim-javascript', {'for': 'javascript'}
+Plug 'briancollins/vim-jst', {'for': 'jst'}
+Plug 'kchmck/vim-coffee-script', {'for': 'coffee'}
+" }
+
+" Scala {
+Plug 'derekwyatt/vim-scala', {'for': 'scala'}
+Plug 'derekwyatt/vim-sbt', {'for': 'sbt'}
+"Plug 'drmingdrmer/xptemplate'
+" }
+
+" Haskell {
+if count(g:spf13_bundle_groups, 'haskell')
+    Plug 'travitch/hasksyn'
+    Plug 'dag/vim2hs'
+    Plug 'Twinside/vim-haskellConceal'
+    Plug 'Twinside/vim-haskellFold'
+    Plug 'lukerandall/haskellmode-vim'
+    Plug 'eagletmt/neco-ghc'
+    Plug 'eagletmt/ghcmod-vim'
+    Plug 'Shougo/vimproc.vim'
+    Plug 'adinapoli/cumino'
+    Plug 'bitc/vim-hdevtools'
+endif
+" }
+
+" HTML/CSS {
+" Vim runtime files for Haml, Sass, and SCSS
+Plug 'tpope/vim-haml', {'for': ['haml', 'sass', 'scss']}
+
+" emmet for vim: http://emmet.io/ http://mattn.github.io/emmet-vim
+Plug 'mattn/emmet-vim', {'for': ['html', 'css']}
+
+Plug 'hail2u/vim-css3-syntax', {'for': 'css'}
+Plug 'JulesWang/css.vim', {'for': 'css'}
+Plug 'groenewege/vim-less', {'for': 'less'}
+" }
+
+" Ruby {
+if count(g:spf13_bundle_groups, 'ruby')
+    Plug 'tpope/vim-rails'
+    let g:rubycomplete_buffer_loading = 1
+    "let g:rubycomplete_classes_in_global = 1
+    "let g:rubycomplete_rails = 1
+
+    " Vim Cucumber runtime files.
+    "Plug 'tpope/vim-cucumber'
+    if isdirectory(expand("~/.vim/bundle/tabular/"))
+        " Align pipes when you are editing Cucumber tables.
+        Plug 'quentindecock/vim-cucumber-align-pipes'
+    end
+endif
+" }
+
+" Go Lang {
+Plug 'Blackrush/vim-gocode', {'for': 'go'}
+Plug 'fatih/vim-go', {'for': 'go'}
+" }
+
+" Elixir {
+" Vim configuration files for Elixir http://elixir-lang.org/
+Plug 'elixir-lang/vim-elixir', {'for': 'erlang'}
+
+" Snipmate snippets for Elixir http://elixir-lang.org
+Plug 'carlosgaldino/elixir-snippets', {'for': 'erlang'}
+
+" Vim plugin for using Elixir's build tool, mix
+" http://mattreduce.github.io/vim-mix/
+Plug 'mattreduce/vim-mix', {'for': 'erlang'}
+" }
+
+" Tmux {
+" Simple tmux statusline generator with support for powerline symbols and
+" statusline / airline / lightline integration
+" Seamless navigation between tmux panes and vim splits
+Plug 'christoomey/vim-tmux-navigator'
+" vim plugin for tmux.conf
+Plug 'tmux-plugins/vim-tmux', {'for': 'tmux'}
+" Make terminal vim and tmux work better together.
+Plug 'tmux-plugins/vim-tmux-focus-events'
+" }
+
+" DevOps {
+" Vim plugins for chef (syntax highliting and autocomplete snipmate)
+Plug 'vadv/vim-chef'
+
+" Add additional support for Ansible in VIM
+Plug 'chase/vim-ansible-yaml', {'for': 'ansible'}
+
+" Puppet niceties for your Vim setup
+Plug 'rodjek/vim-puppet', {'for': 'puppet'}
+" }
+
+" Drupal  {
+if count(g:spf13_bundle_groups, 'drupal')
+    " Drupal vim plugin
+    Plug 'git://drupalcode.org/project/vimrc.git', {'rtp': 'bundle/vim-plugin-for-drupal/'}
+endif
+" }
+
+" XML {
+" A vim text object for XML/HTML attributes.
+" requires vim-textobj-user.
+Plug 'whatyouhide/vim-textobj-xmlattr', {'for': ['xml', 'html']}
+
+" A filetype plugin for VIM to help edit XML files
+" http://www.vim.org/scripts/script.php…
+Plug 'sukima/xmledit', {'for': 'xml'}
+"}
+
+" Rust {
+" Vim configuration for Rust.
+Plug 'rust-lang/rust.vim', {'for': 'rust'}
+" }
+
+" TOML {
+" Vim syntax for TOML
+Plug 'cespare/vim-toml', {'for': 'toml'}
+" }
+
+" Salt {
+" Vim files for editing Salt files
+Plug 'saltstack/salt-vim', {'for': 'salt'}
+" }
+
+" Archlinux {
+Plug 'Firef0x/PKGBUILD.vim'
+" }
+
+" Cmake {
+Plug 'nickhutchinson/vim-cmake-syntax'
+" }
+
+call plug#end()
+" }

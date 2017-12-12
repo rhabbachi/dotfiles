@@ -78,6 +78,3 @@ endif " has autocmd
 vnoremap <silent> y y`]
 vnoremap <silent> p p`]
 nnoremap <silent> p p`]
-
-"W!  save file as root
-cmap W! SudoWrite
