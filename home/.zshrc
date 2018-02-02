@@ -247,7 +247,7 @@ export POWERLEVEL9K_COMMAND_EXECUTION_TIME_BACKGROUND="white"
 export POWERLEVEL9K_SHORTEN_DIR_LENGTH=6
 ## PROMPT.
 export POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(root_indicator context dir_writable dir virtualenv nvm vcs vi_mode)
-export POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time background_jobs docker_machine rbenv aws)
+export POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time background_jobs docker_machine rbenv aws pyenv)
 
 zplug "bhilburn/powerlevel9k", at:"next", as:theme, defer:2
 

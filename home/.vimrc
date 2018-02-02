@@ -1120,7 +1120,7 @@
 
     " ale {
     if isdirectory(expand('~/.vim/plugged/ale/'))
-        let g:ale_php_phpcs_standard='Drupal'
+        " let g:ale_php_phpcs_standard='Drupal'
         " Run the lint only on file save.
         let g:ale_lint_on_save = 1
         let g:ale_lint_on_text_changed = 0
