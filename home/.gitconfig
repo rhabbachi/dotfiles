@@ -11,12 +11,15 @@
 	autoupdate = true
 [alias]
 	webui = !~/.git-webui/release/libexec/git-core/git-webui
+  patch = !git --no-pager diff --no-color
 [credential]
-	helper = /usr/lib/git-core/git-credential-gnome-keyring
+	; helper = /usr/lib/git-core/git-credential-libsecret
 [core]
 	trustctime = false
 	fileMode = false
 	excludesfile = ~/.config/git/gitignore
+	askpass = /usr/bin/ksshaskpass
+	; pager = diff-so-fancy | less --tabs=4 -RFX --pattern '^(Date|added|deleted|modified): '
 [filter "lfs"]
 	clean = git-lfs clean %f
 	smudge = git-lfs smudge --skip %f
@@ -29,11 +32,19 @@
 	template = ~/.config/git/commit.template
 [github]
 	user = rhabbachi
-[pager]
-	log = "$GIT_CONTRIB"/diff-highlight/diff-highlight | less
-	show = "$GIT_CONTRIB"/diff-highlight/diff-highlight | less
-	diff = "$GIT_CONTRIB"/diff-highlight/diff-highlight | less
-[interactive]
-	diffFilter = "$GIT_CONTRIB"/diff-highlight/diff-highlight
 [url "https://aur.archlinux.org/"]
   insteadOf = aur://
+[color]
+	ui = true
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
+[color "diff"]
+	meta = yellow
+	frag = magenta bold
+	commit = yellow bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse

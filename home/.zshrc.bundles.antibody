@@ -1,0 +1,126 @@
+# OMZ
+robbyrussell/oh-my-zsh
+
+# OMZ libs.
+robbyrussell/oh-my-zsh path:lib/clipboard.zsh
+robbyrussell/oh-my-zsh path:lib/compfix.zsh
+robbyrussell/oh-my-zsh path:lib/completion.zsh
+robbyrussell/oh-my-zsh path:lib/functions.zsh
+robbyrussell/oh-my-zsh path:lib/git.zsh
+robbyrussell/oh-my-zsh path:lib/grep.zsh
+robbyrussell/oh-my-zsh path:lib/history.zsh
+robbyrussell/oh-my-zsh path:lib/key-bindings.zsh
+robbyrussell/oh-my-zsh path:lib/misc.zsh
+robbyrussell/oh-my-zsh path:lib/spectrum.zsh
+robbyrussell/oh-my-zsh path:lib/termsupport.zsh
+robbyrussell/oh-my-zsh path:lib/theme-and-appearance.zsh
+
+# Clipboard integration (based off omz/lib/clipboard).
+## Strip color codes and output to stdout before coping to the clipboard.
+# alias clipcopy='sed "s/\x1B\[\([0-9]\{1,2\}\(;[0-9]\{1,2\}\)\?\)\?[mGK]//g" | tee /dev/tty | clipcopy'
+robbyrussell/oh-my-zsh path:plugins/copyfile
+## copy the active line from the command line buffer.
+robbyrussell/oh-my-zsh path:plugins/copybuffer
+## Copies the pathname of the current directory to clipboard.
+robbyrussell/oh-my-zsh path:plugins/copydir
+
+# Support extra escape sequences when pasting to a terminal.
+# https://cirw.in/blog/bracketed-paste
+robbyrussell/oh-my-zsh path:plugins/safe-paste
+
+# command-not-found Needs pkgfile installed
+robbyrussell/oh-my-zsh path:plugins/command-not-found
+
+# More useful nicities.
+robbyrussell/oh-my-zsh path:plugins/colored-man-pages
+
+# Rsync useful aliases.
+robbyrussell/oh-my-zsh path:plugins/rsync
+
+# Jumpapp
+mkropat/jumpapp kind:path
+
+# Git
+robbyrussell/oh-my-zsh path:plugins/git
+robbyrussell/oh-my-zsh path:plugins/gitfast
+robbyrussell/oh-my-zsh path:plugins/git-extras
+robbyrussell/oh-my-zsh path:plugins/gitignore
+Seinh/git-prune
+
+## HUB: Load hub aliases if installed.
+robbyrussell/oh-my-zsh path:plugins/github
+
+## Diff so fancy
+zdharma/zsh-diff-so-fancy
+
+# PHP
+robbyrussell/oh-my-zsh path:plugins/composer
+
+# Syntax highlighting bundle.
+zsh-users/zsh-syntax-highlighting
+
+# Additional completion definitions for Zsh.
+zsh-users/zsh-completions
+
+# Simple plugin that auto-closes, deletes and skips over matching delimiters in
+# zsh intelligently.
+hlissner/zsh-autopair
+
+# Pass password manager.
+robbyrussell/oh-my-zsh path:plugins/pass
+
+# MOSH
+robbyrussell/oh-my-zsh path:plugins/mosh
+
+# NMAP
+robbyrussell/oh-my-zsh path:plugins/nmap
+
+# Homeshick
+andsens/homeshick kind:zsh
+## Load the completions
+andsens/homeshick path:completions  kind:fpath
+
+# Node.js
+robbyrussell/oh-my-zsh path:plugins/npm
+
+# FZF: A command-line fuzzy finder written in Go.
+junegunn/fzf path:shell kind:zsh
+
+## Extras
+atweiden/fzf-extras kind:zsh
+
+# A next-generation cd command with an interactive filter.
+b4b4r07/enhancd kind:zsh
+
+# Globalias plugin: Expands all glob expressions, subcommands and aliases
+# (including global).
+robbyrussell/oh-my-zsh path:plugins/globalias
+
+# An oh-my-zsh plugin to help remembering those aliases you defined once.
+djui/alias-tips
+
+# BULLETTRAIN_PROMPT
+caiogondim/bullet-train.zsh kind:zsh
+
+# Docker.
+robbyrussell/oh-my-zsh path:plugins/docker
+robbyrussell/oh-my-zsh path:plugins/docker-compose
+
+robbyrussell/oh-my-zsh path:plugins/systemadmin
+
+## NVM
+lukechilds/zsh-nvm
+robbyrussell/oh-my-zsh path:plugins/nvm
+
+## GVM
+moovweb/gvm path:bin/ kind:path
+
+# k is the new l, yo.
+supercrabtree/k
+
+# Base16 Shell.
+chriskempson/base16-shell
+nicodebo/base16-fzf
+
+## Helper bash script.
+GetDKAN/dkan-tools path:bin/ kind:path

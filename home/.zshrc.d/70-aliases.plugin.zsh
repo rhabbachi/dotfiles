@@ -109,7 +109,7 @@ command -v tree >/dev/null 2>&1 && alias trees='tree -L 3 | less'
 command -v diff >/dev/null 2>&1 && alias diff="diff --color=auto"
 
 # Cat with syntaxe highlight.
-command -v src-hilite-lesspipe.sh >/dev/null 2>&1 && alias dog="src-hilite-lesspipe.sh"
+command -v bat >/dev/null 2>&1 && alias cat="bat"
 
 # zsh is able to auto-do some kungfoo
 # depends on the SUFFIX :)

@@ -1,5 +1,5 @@
 " Gvim
-set guifont=Ubuntu\ Mono\ 9.
+set guifont=Noto\ Sans\ Mono\ 10.
 set guioptions-=m " Remove menubar
 set guioptions-=r  "remove right-hand scroll
 set guioptions-=L  "remove left-hand scroll bar

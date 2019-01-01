@@ -176,16 +176,16 @@
 " }
 
 " Vim UI {
-    if isdirectory(expand('~/.vim/plugged/nord-vim/'))
+    if has_key(g:plugs, 'nord-vim')
       colorscheme nord
       let g:airline_theme = 'nord'
 
-    elseif isdirectory(expand('~/.vim/plugged/base16-vim/')) && filereadable(expand("~/.vimrc_background"))
-        let base16colorspace=256
+    elseif has_key(g:plugs, 'base16-vim')
+        let base16colorspace=256  " Access colors present in 256 colorspace
         source ~/.vimrc_background
         let g:airline_theme = 'base16'
 
-    elseif isdirectory(expand('~/.vim/plugged/solarized/'))
+    elseif has_key(g:plugs, 'solarized')
         let g:solarized_termcolors=256
         let g:solarized_termtrans=1
         let g:solarized_contrast='normal'
@@ -262,17 +262,26 @@
     " .vimrc.before.local file:
     "   let g:spf13_keep_trailing_whitespace = 1
     autocmd FileType c,cpp,java,go,php,javascript,puppet,python,rust,twig,xml,yml,perl,sql autocmd BufWritePre <buffer> if !exists('g:spf13_keep_trailing_whitespace') | call StripTrailingWhitespace() | endif
-    "autocmd FileType go autocmd BufWritePre <buffer> Fmt
-    autocmd BufNewFile,BufRead *.html.twig set filetype=html.twig
-    autocmd FileType haskell,puppet,ruby,yml setlocal expandtab shiftwidth=2 softtabstop=2
-    " preceding line best in a plugin but here for now.
 
-    autocmd BufNewFile,BufRead *.coffee set filetype=coffee
+augroup filetypedetect
+  " Drupal files should be identified as PHP files.
+  au! BufRead,BufNewFile *.module setfiletype php
+  au! BufRead,BufNewFile *.install setfiletype php
+  au! BufRead,BufNewFile *.test setfiletype php
+  au! BufRead,BufNewFile *.inc setfiletype php
+  au! BufRead,BufNewFile *.profile setfiletype php
+  au! BufRead,BufNewFile *.view setfiletype php
+  au! BufRead,BufNewFile *.theme setfiletype php
+  au! BufNewFile,BufRead *.html.twig setfiletype=html.twig
+
+  " markdown syntax highlighting
+  au! BufRead,BufNewFile *.md set filetype=markdown
+augroup END
 
     " Workaround vim-commentary for Haskell
-    autocmd FileType haskell setlocal commentstring=--\ %s
+    " autocmd FileType haskell setlocal commentstring=--\ %s
     " Workaround broken colour highlighting in Haskell
-    autocmd FileType haskell,rust setlocal nospell
+    " autocmd FileType haskell,rust setlocal nospell
 
 " }
 
@@ -465,30 +474,13 @@
 " }
 
 " Plugins {
-
-    " GoLang {
-        if isdirectory(expand("~/.vim/plugged/vim-go/"))
-            let g:go_highlight_functions = 1
-            let g:go_highlight_methods = 1
-            let g:go_highlight_structs = 1
-            let g:go_highlight_operators = 1
-            let g:go_highlight_build_constraints = 1
-            let g:go_fmt_command = "goimports"
-            let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
-            let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
-            au FileType go nmap <Leader>s <Plug>(go-implements)
-            au FileType go nmap <Leader>i <Plug>(go-info)
-            au FileType go nmap <Leader>e <Plug>(go-rename)
-            au FileType go nmap <leader>r <Plug>(go-run)
-            au FileType go nmap <leader>b <Plug>(go-build)
-            au FileType go nmap <leader>t <Plug>(go-test)
-            au FileType go nmap <Leader>gd <Plug>(go-doc)
-            au FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
-            au FileType go nmap <leader>co <Plug>(go-coverage)
+    " tpope/vim-eunuch {
+        if has_key(g:plugs, 'vim-eunuch')
+            " Override the default SudoWride mapping.
+            cmap w!! SudoWrite
         endif
-        " }
-
-    " TextObj Sentence {
+    " }
+    "TextObj Sentence {
         if count(g:spf13_bundle_groups, 'writing')
             augroup textobj_sentence
               autocmd!
@@ -511,19 +503,10 @@
     " }
 
     " PIV {
-        if isdirectory(expand("~/.vim/plugged/PIV"))
-            let g:DisableAutoPHPFolding = 0
-            let g:PIVAutoClose = 0
-        endif
-    " }
-
-    " Misc {
-        if isdirectory(expand("~/.vim/plugged/nerdtree"))
-            let g:NERDShutUp=1
-        endif
-        if isdirectory(expand("~/.vim/plugged/matchit.zip"))
-            let b:match_ignorecase = 1
-        endif
+    if has_key(g:plugs, 'PIV')
+        let g:DisableAutoPHPFolding = 0
+        let g:PIVAutoClose = 0
+    endif
     " }
 
     " OmniComplete {
@@ -558,13 +541,66 @@
     " }
 
     " Ctags {
-        set tags=./tags;/,~/.vimtags
+    set tags=./tags;/,~/.vimtags
 
-        " Make tags placed in .git/tags file available in all levels of a repository
-        let gitroot = substitute(system('git rev-parse --show-toplevel'), '[\n\r]', '', 'g')
-        if gitroot != ''
-            let &tags = &tags . ',' . gitroot . '/.git/tags'
-        endif
+    " Make tags placed in .git/tags file available in all levels of a repository
+    let gitroot = substitute(system('git rev-parse --show-toplevel'), '[\n\r]', '', 'g')
+    if gitroot != ''
+        let &tags = &tags . ',' . gitroot . '/.git/tags'
+    endif
+
+    if has_key(g:plugs, 'tagbar')
+        nnoremap <silent> <leader>tt :TagbarToggle<CR>
+
+        " If you set this option the cursor will move to the Tagbar window
+        " when it is opened.
+        let g:tagbar_autofocus = 1
+
+        " If this option is set the tags are sorted according to their
+        " name. If it is unset they are sorted according to their order in
+        " the source file.
+        let g:tagbar_sort = 0
+
+        " If this option is set a case-insensitive comparison is used when
+        " the tags are sorted according to their name. If it is unset a
+        " case-sensitive comparison is used.
+        let g:tagbar_case_insensitive = 1
+
+        " If you set this option the Tagbar window will automatically
+        " close when you jump to a tag.
+        let g:tagbar_autoclose = 1
+
+        " Width of the Tagbar window in characters.
+        let g:tagbar_width = 50
+
+        " Width of the Tagbar window when zoomed.
+        let g:tagbar_zoomwidth = 1
+    endif
+
+    if has_key(g:plugs, 'vim-gutentags')
+        let g:gutentags_cache_dir = '~/.vimtags'
+    endif
+    " }
+    " vim-go {
+    if has_key(g:plugs, 'vim-go')
+        let g:go_highlight_functions = 1
+        let g:go_highlight_methods = 1
+        let g:go_highlight_structs = 1
+        let g:go_highlight_operators = 1
+        let g:go_highlight_build_constraints = 1
+        let g:go_fmt_command = "goimports"
+        let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+        let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+        au FileType go nmap <Leader>s <Plug>(go-implements)
+        au FileType go nmap <Leader>i <Plug>(go-info)
+        au FileType go nmap <Leader>e <Plug>(go-rename)
+        au FileType go nmap <leader>r <Plug>(go-run)
+        au FileType go nmap <leader>b <Plug>(go-build)
+        au FileType go nmap <leader>t <Plug>(go-test)
+        au FileType go nmap <Leader>gd <Plug>(go-doc)
+        au FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
+        au FileType go nmap <leader>co <Plug>(go-coverage)
+    endif
     " }
 
     " AutoCloseTag {
@@ -648,11 +684,6 @@
         endif
     " }
 
-    " JSON {
-        nmap <leader>jt <Esc>:%!python -m json.tool<CR><Esc>:set filetype=json<CR>
-        let g:vim_json_syntax_conceal = 0
-    " }
-
     " PyMode {
         " Disable if python support not present
         if !has('python') && !has('python3')
@@ -706,36 +737,6 @@
                 "funky
                 nnoremap <Leader>fu :CtrlPFunky<Cr>
             endif
-        endif
-    "}
-
-    " TagBar {
-        if isdirectory(expand('~/.vim/plugged/tagbar/'))
-            nnoremap <silent> <leader>tt :TagbarToggle<CR>
-
-            " If you set this option the cursor will move to the Tagbar window
-            " when it is opened.
-            let g:tagbar_autofocus = 1
-
-            " If this option is set the tags are sorted according to their
-            " name. If it is unset they are sorted according to their order in
-            " the source file.
-            let g:tagbar_sort = 0
-
-            " If this option is set a case-insensitive comparison is used when
-            " the tags are sorted according to their name. If it is unset a
-            " case-sensitive comparison is used.
-            let g:tagbar_case_insensitive = 1
-
-            " If you set this option the Tagbar window will automatically
-            " close when you jump to a tag.
-            let g:tagbar_autoclose = 1
-
-            " Width of the Tagbar window in characters.
-            let g:tagbar_width = 50
-
-            " Width of the Tagbar window when zoomed.
-            let g:tagbar_zoomwidth = 1
         endif
     "}
 
@@ -1120,18 +1121,15 @@
 
     " ale {
     if isdirectory(expand('~/.vim/plugged/ale/'))
+        let g:ale_linters = {
+        \   'javascript': ['eslint'],
+        \}
         " let g:ale_php_phpcs_standard='Drupal'
         " Run the lint only on file save.
         let g:ale_lint_on_save = 1
         let g:ale_lint_on_text_changed = 0
         " Run the linter on file open.
         let g:ale_lint_on_enter = 1
-    endif
-    "}
-
-    " vim_markdown_preview {
-    if isdirectory(expand('~/.vim/plugged/vim-markdown-preview/'))
-        let g:vim_markdown_preview_github=1
     endif
     "}
 
@@ -1149,12 +1147,6 @@
     " vim-autoswap {
     if isdirectory(expand('~/.vim/plugged/vim-autoswap'))
         let g:autoswap_detect_tmux=1
-    endif
-    "}
-
-    " vim-gutentags {
-    if isdirectory(expand('~/.vim/plugged/vim-gutentags/'))
-        let g:gutentags_cache_dir = '~/.vimtags'
     endif
     "}
 
@@ -1330,9 +1322,9 @@
     endfunction
 
     function! s:EditSpf13Config()
-        call <SID>ExpandFilenameAndExecute("tabedit", "~/.vimrc")
-        call <SID>ExpandFilenameAndExecute("vsplit", "~/.vimrc.before")
-        call <SID>ExpandFilenameAndExecute("vsplit", "~/.vimrc.bundles")
+        call <SID>ExpandFilenameAndExecute('tabedit', "~/.vimrc")
+        call <SID>ExpandFilenameAndExecute('vsplit', "~/.vimrc.before")
+        call <SID>ExpandFilenameAndExecute('vsplit', "~/.vimrc.bundles")
 
         execute bufwinnr(".vimrc") . "wincmd w"
         call <SID>ExpandFilenameAndExecute("split", "~/.vimrc.local")
@@ -1358,9 +1350,86 @@
 " }
 
 " Use local vimrc if available {
-    if filereadable(expand("~/.vimrc.local"))
-        source ~/.vimrc.local
+" For Ctrl-C Ctrl-V
+"source $VIMRUNTIME/mswin.vim
+"behave mswin
+
+" Word wrap without line breaks
+set wrap
+set linebreak
+set nolist
+
+set smartindent " Indent on new line.
+
+highlight clear CursorLineNr    " Remove highlight color from current line number
+
+set columns=80
+
+"spellcheck languages switcher
+let g:myLang = 0
+let g:myLangList = [ "nospell", "en_us", "fr" ]
+function! MySpellLang()
+    "loop through languages
+    let g:myLang = g:myLang + 1
+    if g:myLang >= len(g:myLangList) | let g:myLang = 0 | endif
+    if g:myLang == 0 | set nospell | endif
+    if g:myLang == 1 | setlocal spell spelllang=fr | endif
+    if g:myLang == 2 | setlocal spell spelllang=en_us | endif
+    echo "language:" g:myLangList[g:myLang]
+endf
+
+map <F7> :call MySpellLang()<CR>
+imap <F7> <C-o>:call MySpellLang()<CR>
+set nospell " Default to no spell
+
+" Mouse
+set mouse= "disable the mouse
+
+" Disable folding
+set nofoldenable
+
+" http://vim.wikia.com/wiki/Fix_syntax_highlighting
+noremap <F12> <Esc>:syntax sync fromstart<CR>
+inoremap <F12> <C-o>:syntax sync fromstart<CR>
+
+" http://stackoverflow.com/questions/1269689/to-disable-entering-ex-mode-in-vim
+nnoremap Q <Nop>
+
+" http://vim.wikia.com/wiki/Search_for_visually_selected_text
+vnoremap // y/<C-R>"<CR>
+
+" http://vim.wikia.com/wiki/Search_and_replace_in_a_visual_selection#Searching_with_.2F_and_.3F
+vnoremap <M-/> <Esc>/\%V
+
+function! CheckFileType()
+    if exists("b:countCheck") == 0
+        let b:countCheck = 0
     endif
+    let b:countCheck += 1
+    if &filetype == "" && b:countCheck > 40 && b:countCheck < 200
+        filetype detect
+    elseif b:countCheck >= 200 || &filetype != ""
+        autocmd! newFiletypeDetection
+    endif
+endfunction
+
+augroup newFiletypeDetection
+    autocmd CursorMovedI * call CheckFileType()
+augroup END
+
+" http://superuser.com/questions/286985/reload-vimrc-in-vim-without-restart
+if has ('autocmd') " Remain compatible with earlier versions
+    augroup vimrc     " Source vim configuration upon save
+        autocmd! BufWritePost $MYVIMRC source % | echom "Reloaded " . $MYVIMRC | redraw
+        autocmd! BufWritePost $MYGVIMRC if has('gui_running') | so % | echom "Reloaded " . $MYGVIMRC | endif | redraw
+    augroup END
+endif " has autocmd
+
+" http://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/
+" Automatically jump to end of text you pasted
+vnoremap <silent> y y`]
+vnoremap <silent> p p`]
+nnoremap <silent> p p`]
 " }
 
 " Use local gvimrc if available and gui is running {

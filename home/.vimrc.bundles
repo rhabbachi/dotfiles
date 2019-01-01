@@ -79,12 +79,8 @@ Plug 'mattn/webapi-vim'
 " Dependency for most of the plugins providing textobj.
 Plug 'kana/vim-textobj-user'
 
-" tpope/vim-eunuch [
 " Vim sugar for the UNIX shell commands that need it the most.
 Plug 'tpope/vim-eunuch'
-"" Override the default SudoWride mapping.
-cmap w!! SudoWrite
-" ]
 " }
 
 " General {
@@ -133,7 +129,9 @@ Plug 'vim-scripts/sessionman.vim'
 Plug 'tpope/vim-obsession'
 
 " Load the version of matchit.vim that ships with Vim.
-runtime! macros/matchit.vim
+runtime! macros/matchit.vim "{
+let b:match_ignorecase = 1
+"}
 
 " Minimalist path navigator designed to work with Vim's built-in mechanisms
 " and complementary plugins.
@@ -182,6 +180,7 @@ Plug 'chrisbra/csv.vim', {'for': 'csv'}
 Plug 'rhysd/vim-grammarous'
 
 " Simplified clipboard functionality for Vim
+" Requires repeat.vim
 Plug 'svermeulen/vim-easyclip'
 
 "vim-searchindex: display number of search matches & index of a current match.
@@ -195,7 +194,9 @@ Plug 'jszakmeister/vim-togglecursor'
 
 " A better JSON for Vim: distinct highlighting of keywords vs values,
 " JSON-specific (non-JS) warnings, quote concealing. Pathogen-friendly.
-Plug 'elzr/vim-json'
+Plug 'elzr/vim-json' "{
+let g:vim_json_syntax_conceal = 0
+"}
 
 " css/less/sass/html color preview for vim
 Plug 'gorodinskiy/vim-coloresque', {'for': ['css', 'less', 'sass', 'html']}
@@ -228,7 +229,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 " }
 
-let g:spf13_bundle_groups=['php', 'javascript', 'html', 'xml', 'devops', 'drupal', 'completor', 'markdown', 'css']
+let g:spf13_bundle_groups=['php', 'javascript', 'html', 'xml', 'devops', 'completor', 'markdown', 'css']
 
 " Writing {
 if count(g:spf13_bundle_groups, 'writing')
@@ -267,10 +268,12 @@ if executable('ctags')
     " Vim plugin that displays tags in a window, ordered by scope
     " http://majutsushi.github.io/tagbar/
     " Do not lazy loading tagbar, see vim-airline issue 1313.
-    Plug 'majutsushi/tagbar'
+    Plug 'majutsushi/tagbar' "{
+    "}
 
     " A Vim plugin that manages your tag files
-    Plug 'ludovicchabant/vim-gutentags'
+    Plug 'ludovicchabant/vim-gutentags' " {
+    " }
 endif
 "}
 
@@ -389,7 +392,7 @@ if count(g:spf13_bundle_groups, 'ruby')
 
     " Vim Cucumber runtime files.
     "Plug 'tpope/vim-cucumber'
-    if isdirectory(expand("~/.vim/bundle/tabular/"))
+    if has_key(g:plugs, 'tabular')
         " Align pipes when you are editing Cucumber tables.
         Plug 'quentindecock/vim-cucumber-align-pipes'
     end
@@ -397,8 +400,8 @@ endif
 " }
 
 " Go Lang {
-Plug 'Blackrush/vim-gocode', {'for': 'go'}
-Plug 'fatih/vim-go', {'for': 'go'}
+Plug 'Blackrush/vim-gocode'
+Plug 'fatih/vim-go'
 " }
 
 " Elixir {
@@ -433,13 +436,6 @@ Plug 'chase/vim-ansible-yaml', {'for': 'ansible'}
 
 " Puppet niceties for your Vim setup
 Plug 'rodjek/vim-puppet', {'for': 'puppet'}
-" }
-
-" Drupal  {
-if count(g:spf13_bundle_groups, 'drupal')
-    " Drupal vim plugin
-    Plug 'git://drupalcode.org/project/vimrc.git', {'rtp': 'bundle/vim-plugin-for-drupal/'}
-endif
 " }
 
 " XML {
