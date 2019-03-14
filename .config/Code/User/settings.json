@@ -1,0 +1,17 @@
+{
+  // Use system clipboard for unnamed register.
+  "vim.useSystemClipboard": true,
+
+  // Controls the font family.
+  "editor.fontFamily": "'Noto Mono', Droid Sans Mono', 'monospace', 'Droid Sans Fallback'",
+    
+  // Controls the font size in pixels.
+  "editor.fontSize": 14,
+  "window.zoomLevel": 0,
+  "window.titleBarStyle": "native",
+  "vim.visualstar": true,
+  "vim.leader": "<space>",
+  "editor.lineNumbers": "relative",
+  "editor.minimap.renderCharacters": false,
+  "editor.minimap.maxColumn": 60
+}
