@@ -41,10 +41,7 @@ robbyrussell/oh-my-zsh path:plugins/rsync
 mkropat/jumpapp kind:path
 
 # Git
-robbyrussell/oh-my-zsh path:plugins/git
-robbyrussell/oh-my-zsh path:plugins/gitfast
 robbyrussell/oh-my-zsh path:plugins/git-extras
-robbyrussell/oh-my-zsh path:plugins/gitignore
 Seinh/git-prune
 
 ## HUB: Load hub aliases if installed.

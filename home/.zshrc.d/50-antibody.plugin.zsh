@@ -27,14 +27,8 @@ fpath+=( /home/rhabbachi/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SL
 source /home/rhabbachi/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-robbyrussell-SLASH-oh-my-zsh/plugins/rsync/rsync.plugin.zsh
 fpath+=( /home/rhabbachi/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-robbyrussell-SLASH-oh-my-zsh/plugins/rsync )
 export PATH="/home/rhabbachi/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-mkropat-SLASH-jumpapp:$PATH"
-source /home/rhabbachi/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-robbyrussell-SLASH-oh-my-zsh/plugins/git/git.plugin.zsh
-fpath+=( /home/rhabbachi/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-robbyrussell-SLASH-oh-my-zsh/plugins/git )
-source /home/rhabbachi/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-robbyrussell-SLASH-oh-my-zsh/plugins/gitfast/gitfast.plugin.zsh
-fpath+=( /home/rhabbachi/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-robbyrussell-SLASH-oh-my-zsh/plugins/gitfast )
 source /home/rhabbachi/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-robbyrussell-SLASH-oh-my-zsh/plugins/git-extras/git-extras.plugin.zsh
 fpath+=( /home/rhabbachi/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-robbyrussell-SLASH-oh-my-zsh/plugins/git-extras )
-source /home/rhabbachi/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-robbyrussell-SLASH-oh-my-zsh/plugins/gitignore/gitignore.plugin.zsh
-fpath+=( /home/rhabbachi/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-robbyrussell-SLASH-oh-my-zsh/plugins/gitignore )
 source /home/rhabbachi/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-Seinh-SLASH-git-prune/git-prune.plugin.zsh
 fpath+=( /home/rhabbachi/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-Seinh-SLASH-git-prune )
 source /home/rhabbachi/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-robbyrussell-SLASH-oh-my-zsh/plugins/github/github.plugin.zsh

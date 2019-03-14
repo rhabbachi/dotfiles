@@ -120,9 +120,8 @@ Plug 'EinfachToll/DidYouMean'
 " of text using the same key combination.
 Plug 'terryma/vim-expand-region'
 
-" True Sublime Text style multiple selections for Vim
-" Plug 'terryma/vim-multiple-cursors'
-
+" True Sublime Text style multiple selections for Vim Plug
+" 'terryma/vim-multiple-cursors'
 Plug 'vim-scripts/sessionman.vim'
 
 " Continuously updated session files
