@@ -4,20 +4,20 @@ setopt pushd_ignore_dups
 setopt pushdminus
 
 function dots() {
-    local MATCH
-    if [[ $LBUFFER =~ '\.\.\.+' ]]; then
-        LBUFFER=$LBUFFER:fs%\.\.\.%../..%
-    fi
+  local MATCH
+  if [[ $LBUFFER =~ '\.\.\.+' ]]; then
+    LBUFFER=$LBUFFER:fs%\.\.\.%../..%
+  fi
 }
 
 function dots-then-expand-or-complete() {
-    zle dots
-    zle expand-or-complete
+  zle dots
+  zle expand-or-complete
 }
 
 function dots-then-accept-line() {
-    zle dots
-    zle accept-line
+  zle dots
+  zle accept-line
 }
 
 zle -N dots

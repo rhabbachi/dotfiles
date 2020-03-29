@@ -37,24 +37,18 @@ robbyrussell/oh-my-zsh path:plugins/colored-man-pages
 # Rsync useful aliases.
 robbyrussell/oh-my-zsh path:plugins/rsync
 
-# Jumpapp
-mkropat/jumpapp kind:path
-
 # Git
 robbyrussell/oh-my-zsh path:plugins/git-extras
 Seinh/git-prune
 
 ## HUB: Load hub aliases if installed.
-robbyrussell/oh-my-zsh path:plugins/github
+# robbyrussell/oh-my-zsh path:plugins/github
 
 ## Diff so fancy
 zdharma/zsh-diff-so-fancy
 
-# PHP
-robbyrussell/oh-my-zsh path:plugins/composer
-
 # Syntax highlighting bundle.
-zsh-users/zsh-syntax-highlighting
+zdharma/fast-syntax-highlighting
 
 # Additional completion definitions for Zsh.
 zsh-users/zsh-completions
@@ -71,11 +65,6 @@ robbyrussell/oh-my-zsh path:plugins/mosh
 
 # NMAP
 robbyrussell/oh-my-zsh path:plugins/nmap
-
-# Homeshick
-andsens/homeshick kind:zsh
-## Load the completions
-andsens/homeshick path:completions  kind:fpath
 
 # Node.js
 robbyrussell/oh-my-zsh path:plugins/npm
@@ -112,12 +101,12 @@ robbyrussell/oh-my-zsh path:plugins/nvm
 ## GVM
 moovweb/gvm path:bin/ kind:path
 
-# k is the new l, yo.
-supercrabtree/k
-
 # Base16 Shell.
 chriskempson/base16-shell
 nicodebo/base16-fzf
 
-## Helper bash script.
+## DKTL
 GetDKAN/dkan-tools path:bin/ kind:path
+
+## Helper bash script.
+rhabbachi/docksal path:bin/ kind:path

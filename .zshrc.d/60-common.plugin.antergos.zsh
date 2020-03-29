@@ -1,0 +1,1 @@
+60-common.plugin.arch.zsh
