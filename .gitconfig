@@ -1,50 +1,52 @@
 [user]
-	name = Riadh Habbachi
-	email = riadh.habbachi@gmail.com
+  name = Riadh Habbachi
+  email = riadh.habbachi@gmail.com
 [push]
-	default = simple
+	default = current
 [mergetool "fugitive"]
-	cmd = vim -f -c \"Gdiff\" \"$MERGED\"
+  cmd = vim -f -c \"Gdiff\" \"$MERGED\"
 [merge]
-	tool = fugitive
+  tool = fugitive
 [webui]
-	autoupdate = true
+  autoupdate = true
 [alias]
-	webui = !~/.git-webui/release/libexec/git-core/git-webui
+  webui = !~/.git-webui/release/libexec/git-core/git-webui
   patch = !git --no-pager diff --no-color
 [credential]
-	; helper = /usr/lib/git-core/git-credential-libsecret
+  ; helper = /usr/lib/git-core/git-credential-libsecret
 [core]
-	trustctime = false
-	fileMode = false
-	excludesfile = ~/.config/git/gitignore
-	askpass = /usr/bin/ksshaskpass
-	; pager = diff-so-fancy | less --tabs=4 -RFX --pattern '^(Date|added|deleted|modified): '
+  trustctime = false
+  fileMode = false
+  excludesfile = ~/.config/git/gitignore
+  askpass = /usr/bin/ksshaskpass
+  pager = diff-so-fancy | less --tabs=4 -RFX
+[pager]
+  diff = diff-so-fancy | less --tabs=4 -RFXS --pattern '^(Date|added|deleted|modified): '
 [filter "lfs"]
-	clean = git-lfs clean %f
-	smudge = git-lfs smudge --skip %f
-	required = true
+  clean = git-lfs clean %f
+  smudge = git-lfs smudge --skip %f
+  required = true
 [gui]
-	fontui = -family Ubuntu -size 9 -weight normal -slant roman -underline 0 -overstrike 0
-	fontdiff = -family \"Ubuntu Mono\" -size 9 -weight normal -slant roman -underline 0 -overstrike 0
-	tabsize = 2
+  fontui = -family Ubuntu -size 9 -weight normal -slant roman -underline 0 -overstrike 0
+  fontdiff = -family \"Ubuntu Mono\" -size 9 -weight normal -slant roman -underline 0 -overstrike 0
+  tabsize = 2
 [commit]
-	template = ~/.config/git/commit.template
+  template = ~/.config/git/commit.template
 [github]
-	user = rhabbachi
+  user = rhabbachi
 [url "https://aur.archlinux.org/"]
   insteadOf = aur://
 [color]
-	ui = true
+  ui = true
 [color "diff-highlight"]
-	oldNormal = red bold
-	oldHighlight = red bold 52
-	newNormal = green bold
-	newHighlight = green bold 22
+  oldNormal = red bold
+  oldHighlight = red bold 52
+  newNormal = green bold
+  newHighlight = green bold 22
 [color "diff"]
-	meta = yellow
-	frag = magenta bold
-	commit = yellow bold
-	old = red bold
-	new = green bold
-	whitespace = red reverse
+  meta = yellow
+  frag = magenta bold
+  commit = yellow bold
+  old = red bold
+  new = green bold
+  whitespace = red reverse
