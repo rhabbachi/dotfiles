@@ -21,8 +21,8 @@ vnoremap // y/<C-R>"<CR>
 " https://vim.fandom.com/wiki/Search_and_replace_in_a_visual_selection#Searching_with_.2F_and_.3F
 vnoremap <M-/> <Esc>/\%V
 
-" Toggle search highlighting
-nmap <silent> <leader>/ :nohlsearch<CR>
+" Toggle search highlighting.
+nmap <silent> <Leader><Leader>/ :nohlsearch<CR>
 
 " https://github.com/mhinz/neovim-remote
 " Use nvr as git editor.
@@ -34,6 +34,6 @@ autocmd FileType gitcommit,gitrebase,gitconfig set bufhidden=delete
 
 " How to delete (not cut) in Vim?
 " https://stackoverflow.com/a/11993928/2047692
-nnoremap <leader>d "_d
-xnoremap <leader>d "_d
-xnoremap <leader>p "_dP
+nnoremap <Leader>d "_d
+xnoremap <Leader>d "_d
+xnoremap <Leader>p "_dP

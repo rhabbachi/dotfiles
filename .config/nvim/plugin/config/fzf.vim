@@ -30,4 +30,9 @@ if has_key(g:plugs, 'fzf.vim')
           \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
   augroup END
 
+  if has_key(g:plugs, 'vim-agriculture')
+    nmap <Leader>/ <Plug>RgRawSearch
+    vmap <Leader>/ <Plug>RgRawVisualSelection
+    nmap <Leader>* <Plug>RgRawWordUnderCursor
+  endif
 endif

@@ -48,7 +48,7 @@ autocmd VimEnter *
   \| endif
 
 " netrw {
-let g:netrw_home=$XDG_CACHE_HOME.'/nvim'
+let g:netrw_home= expand('~/.cache/nvim/netrw')
 let g:netrw_liststyle=3
 let g:netrw_browse_split = 0
 "}
@@ -58,7 +58,11 @@ call plug#begin()
 " sensible.vim: Defaults everyone can agree on
 Plug 'tpope/vim-sensible'
 
-Plug 'chriskempson/base16-vim'
+Plug 'chriskempson/base16-vim' |
+" A light and configurable statusline/tabline plugin for Vim.
+Plug 'itchyny/lightline.vim' |
+" Lightline.vim colorschemes for all available base16 themes
+Plug 'mike-hearn/base16-vim-lightline'
 
 " A solid language pack for Vim.
 Plug 'sheerun/vim-polyglot'
@@ -87,9 +91,6 @@ Plug 'sgur/vim-editorconfig'
 
 " An alternative sudo.vim for Vim and Neovim, limited support sudo in Windows.
 Plug 'lambdalisue/suda.vim'
-
-" A light and configurable statusline/tabline plugin for Vim.
-Plug 'itchyny/lightline.vim'
 
 " Helpers for UNIX
 Plug 'tpope/vim-eunuch'
@@ -157,7 +158,9 @@ Plug 'prabirshrestha/asyncomplete-tags.vim'
 Plug 'machakann/asyncomplete-ezfilter.vim'
 
 " fzf heart vim
-Plug 'junegunn/fzf.vim'
+Plug 'junegunn/fzf.vim' |
+" Improve the project search experience when using tools like ag and rg.
+ Plug 'jesseleite/vim-agriculture'
 
 " On save, create directories if they don't exist
 Plug 'dockyard/vim-easydir'
