@@ -44,9 +44,6 @@ Seinh/git-prune
 ## HUB: Load hub aliases if installed.
 # robbyrussell/oh-my-zsh path:plugins/github
 
-## Diff so fancy
-zdharma/zsh-diff-so-fancy
-
 # Syntax highlighting bundle.
 zdharma/fast-syntax-highlighting
 
