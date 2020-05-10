@@ -218,16 +218,27 @@ fi
 zstyle -e ':completion:*:(ssh|scp|sftp|rsh|rsync):hosts' hosts 'reply=(${=${${(f)"$(cat {/etc/ssh_,~/.ssh/known_}hosts(|2)(N) /dev/null)"}%%[# ]*}//,/ })'
 
 # Misc helper functions.
-
-function convert2pdf() {
+function format2pdf() {
   local src=$1
-  local destination=$2
+  local dest=$2
 
-  i=150
-  convert $src -compress jpeg -quality 70 \
-    -density ${i}x${i} -units PixelsPerInch \
-    -resize $((i * 827 / 100))x$((i * 1169 / 100)) \
-    -repage $((i * 827 / 100))x$((i * 1169 / 100)) $destination
+    i=150
+    convert $src -compress jpeg -quality 70 \
+      -density ${i}x${i} -units PixelsPerInch \
+      -resize $((i * 827 / 100))x$((i * 1169 / 100)) \
+      -repage $((i * 827 / 100))x$((i * 1169 / 100)) $dest
+}
+
+function png2pdf() {
+  for source in $(find . -name "*.png"); do
+    format2pdf $source ${source/%png/pdf}
+  done
+}
+
+function jpeg2pdf() {
+  for source in $(find . -name "*.jpeg"); do
+    format2pdf $source ${source/%jpeg/pdf}
+  done
 }
 
 # PDF conversion using unoconv.
