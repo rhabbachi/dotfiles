@@ -34,6 +34,3 @@ ANTIBODY_HOME="$(antibody home)"
 for plugin in ~/.zshrc.d/*.plugin(|.$ID|.$XDG_CURRENT_DESKTOP).zsh; do
   source $plugin
 done
-
-# compinit
-

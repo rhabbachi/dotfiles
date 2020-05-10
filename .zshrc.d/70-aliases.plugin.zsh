@@ -113,7 +113,7 @@ alias vim-clear="trash ~/.vimswap ~/.vimviews/ ~/.vimbackup ~/.vimundo"
 command -v autossh >/dev/null 2>&1 && alias ssh='TERM="xterm-256color" autossh -M 0'
 
 # PV
-command -v pv >/dev/null 2>&1 && alias -g PV="| pv -trab |"
+command -v pv >/dev/null 2>&1 && alias -g PV="| pv -trab -w 80 |"
 
 # Facebook path picker
 command -v fpp >/dev/null 2>&1 && alias -g FPP="| fpp"
