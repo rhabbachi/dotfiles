@@ -93,7 +93,6 @@ robbyrussell/oh-my-zsh path:plugins/systemadmin
 
 ## NVM
 lukechilds/zsh-nvm
-robbyrussell/oh-my-zsh path:plugins/nvm
 
 ## GVM
 moovweb/gvm path:bin/ kind:path
