@@ -101,8 +101,5 @@ moovweb/gvm path:bin/ kind:path
 chriskempson/base16-shell
 nicodebo/base16-fzf
 
-## DKTL
-GetDKAN/dkan-tools path:bin/ kind:path
-
 ## Helper bash script.
-rhabbachi/docksal path:bin/ kind:path
+docksal/docksal path:bin/ kind:path
