@@ -1,1 +1,1 @@
-set guifont=JetBrains\ Mono:h9
+Guifont JetBrains Mono:h6
