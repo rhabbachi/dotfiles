@@ -110,7 +110,7 @@ alias a2log="multitail -f /var/log/httpd/localhost.error.log"
 alias vim-clear="trash ~/.vimswap ~/.vimviews/ ~/.vimbackup ~/.vimundo"
 
 # AUTOSSH
-command -v autossh >/dev/null 2>&1 && alias ssh='TERM="xterm-256color" autossh -M 0'
+command -v autossh >/dev/null 2>&1 && alias ssh='autossh -M 0'
 
 # PV
 command -v pv >/dev/null 2>&1 && alias -g PV="| pv -trab -w 80 |"
