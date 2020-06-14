@@ -11,11 +11,7 @@
 [merge]
   tool = fugitive
 
-[webui]
-  autoupdate = true
-
 [alias]
-  webui = !~/.git-webui/release/libexec/git-core/git-webui
   patch = !git --no-pager diff --no-color
 
 [credential]
@@ -66,5 +62,9 @@
   old = red bold
   new = green bold
   whitespace = red reverse
+
 [fetch]
 	prune = true
+
+[pull]
+	ff = only
