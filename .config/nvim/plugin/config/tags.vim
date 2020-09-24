@@ -101,7 +101,7 @@ if has_key(g:plugs, 'vista.vim')
 
     " Executive used when opening vista sidebar without specifying it.
     " See all the avaliable executives via `:echo g:vista#executives`.
-    " let g:vista_default_executive = 'ale'
+    let g:vista_default_executive = 'ale'
 
     " Ignore some kinds of tags or symbols.
     let g:vista_ignore_kinds = ['gitcommit', 'netrw', 'GV', 'git']

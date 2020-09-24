@@ -107,7 +107,10 @@ Plug 'myusuf3/numbers.vim'
  " A Git wrapper so awesome, it should be illegal
 Plug 'tpope/vim-fugitive' |
 " A git commit browser in Vim 
-Plug 'junegunn/gv.vim'
+Plug 'junegunn/gv.vim' |
+" rhubarb.vim: GitHub extension for fugitive.vim
+Plug 'tpope/vim-rhubarb'
+
 " A Vim plugin which shows a git diff in the gutter (sign column) and
 " stages/undoes hunks and partial hunks.
 Plug 'airblade/vim-gitgutter'
