@@ -10,6 +10,7 @@
 
 [merge]
   tool = fugitive
+	conflictstyle = diff3
 
 [alias]
   patch = !git --no-pager diff --no-color
@@ -68,3 +69,7 @@
 
 [pull]
 	ff = only
+[log]
+	follow = true
+[diff]
+	renames = copies
