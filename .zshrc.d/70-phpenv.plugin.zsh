@@ -33,10 +33,15 @@ compdef _composer composer.phar
 export PATH="$HOME/.phpenv/bin:$PATH"
 eval "$(phpenv init -)"
 
-alias drupalcs="phpcs --standard=Drupal --extensions='php,module,inc,install,test,profile,theme,css,info,txt,md'"
-alias drupalcsp="phpcs --standard=DrupalPractice --extensions='php,module,inc,install,test,profile,theme,css,info,txt,md'"
-alias drupalcbf="phpcbf --standard=Drupal --extensions='php,module,inc,install,test,profile,theme,css,info,txt,md'"
+alias ,drupalcs="phpcs --standard=Drupal --extensions='php,module,inc,install,test,profile,theme,css,info,txt,md'"
+alias ,drupalcsp="phpcs --standard=DrupalPractice --extensions='php,module,inc,install,test,profile,theme,css,info,txt,md'"
+alias ,drupalcbf="phpcbf --standard=Drupal --extensions='php,module,inc,install,test,profile,theme,css,info,txt,md'"
 
 # CGR
 export CGR_BASE_DIR="$(phpenv prefix)/composer/global"
 export CGR_BIN_DIR="$(phpenv prefix)/composer/vendor/bin"
+
+# Global felixfbecker/php-language-server
+# Installed grobalby via CGR
+alias ,parse-stubs="composer run-script '--working-dir=$(phpenv prefix)/composer/global/felixfbecker/language-server/vendor/felixfbecker/language-server' parse-stubs"
+export PHP_LANGSERVER_EXECUTABLE_GLOBAL="$(phpenv prefix)/composer/global/felixfbecker/language-server/vendor/felixfbecker/language-server/bin/php-language-server.php"
