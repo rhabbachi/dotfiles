@@ -97,9 +97,13 @@ alias cp='cp -ivr'
 alias mv='mv -iv'
 
 alias top="htop"
-alias ping='ping -c 5'
-# Ping www.google.com 8 times
-alias pingo="ping www.google.com -c 8"
+
+if command -v gping >/dev/null 2>&1; then
+  alias ,pingo="gping google.com"
+else
+  alias ,pingo="ping google.com -c 8"
+fi
+
 alias date-time='date +%Y%m%d-%H%M%S'
 alias clr='clear;echo "Currently logged in on $(tty), as $USER in directory $PWD."'
 
