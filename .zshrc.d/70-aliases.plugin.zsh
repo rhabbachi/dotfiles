@@ -62,13 +62,7 @@ alias o="open_command"
 # Tail
 alias t='tail -f'
 
-# LESS
-if command -v src-hilite-lesspipe.sh >/dev/null 2>&1; then
-  export LESSOPEN="| src-hilite-lesspipe.sh %s"
-  export LESS=' -R '
-fi
-
-# Command line head / tail shortcuts
+# Command line head / tail shortcuts.
 alias -g H='| head'
 alias -g T='| tail'
 alias -g G='| grep -i'
@@ -80,8 +74,17 @@ alias -g NE="2> /dev/null"
 alias -g NUL="> /dev/null 2>&1"
 alias -g P="2>&1| pygmentize -l pytb"
 
-alias dud='du -d 1 -h'
-alias duf='du -sh *'
+if command -v duf >/dev/null 2>&1; then
+  alias df='duf'
+fi
+
+if command -v dust >/dev/null 2>&1; then
+  alias dud='dust -d 1'
+else
+  alias dud='du -d 1 -h'
+  alias dush='du -sh *'
+fi
+
 alias fd='find . -type d -name'
 alias ff='find . -type f -name'
 
@@ -90,8 +93,6 @@ alias help='man'
 alias p='ps -f'
 alias sortnr='sort -n -r'
 alias unexport='unset'
-
-alias whereami=display_info
 
 alias cp='cp -ivr'
 alias mv='mv -iv'
@@ -104,8 +105,7 @@ else
   alias ,pingo="ping google.com -c 8"
 fi
 
-alias date-time='date +%Y%m%d-%H%M%S'
-alias clr='clear;echo "Currently logged in on $(tty), as $USER in directory $PWD."'
+alias ,date-time='date +%Y%m%d-%H%M%S'
 
 # Apache
 alias a2log="multitail -f /var/log/httpd/localhost.error.log"
@@ -174,6 +174,11 @@ if command -v rg >/dev/null 2>&1; then
   }
 fi
 
+# Man
+if command -v batman >/dev/null 2>&1; then
+  alias man="batman"
+fi
+
 # Tree
 command -v tree >/dev/null 2>&1 && alias trees='tree -L 3 | less'
 
@@ -222,39 +227,42 @@ fi
 zstyle -e ':completion:*:(ssh|scp|sftp|rsh|rsync):hosts' hosts 'reply=(${=${${(f)"$(cat {/etc/ssh_,~/.ssh/known_}hosts(|2)(N) /dev/null)"}%%[# ]*}//,/ })'
 
 # Misc helper functions.
-function format2pdf() {
-  local src=$1
-  local dest=$2
+
+if command -v convert >/dev/null 2>&1; then
+  function ,format2pdf() {
+    local src=$1
+    local dest=$2
 
     i=150
     convert $src -compress jpeg -quality 70 \
       -density ${i}x${i} -units PixelsPerInch \
       -resize $((i * 827 / 100))x$((i * 1169 / 100)) \
       -repage $((i * 827 / 100))x$((i * 1169 / 100)) $dest
-}
+  }
 
-function png2pdf() {
-  for source in $(find . -name "*.png"); do
-    format2pdf $source ${source/%png/pdf}
-  done
-}
+  function ,png2pdf() {
+    for source in $(find . -name "*.png"); do
+      ,format2pdf $source ${source/%png/pdf}
+    done
+  }
 
-function jpeg2pdf() {
-  for source in $(find . -name "*.jpeg"); do
-    format2pdf $source ${source/%jpeg/pdf}
-  done
-}
+  function ,jpeg2pdf() {
+    for source in $(find . -name "*.jpeg"); do
+      ,format2pdf $source ${source/%jpeg/pdf}
+    done
+  }
+fi
 
 # PDF conversion using unoconv.
 if command -v unoconv >/dev/null 2>&1; then
-  function unoconv2pdf() {
+  function ,unoconv2pdf() {
     local src=$1
     local destination=$2
 
     unoconv -f pdf -o $destination $src
   }
 
-  function pnm2pdf() {
+  function ,pnm2pdf() {
     for source in $(find . -name "*.pnm"); do
       unoconv -v -f pdf -o ${source/%pnm/pdf} $source &&
         trash $source
@@ -267,4 +275,16 @@ if [ ! -z "$TMUX" ]; then
   function peek() {
     tmux split-window -p 33 "$EDITOR" "$@"
   }
+fi
+
+# smartresize inputfile.png 300 outputdir/
+,smartresize() {
+  mogrify -path $3 -filter Triangle -define filter:support=2 -thumbnail $2 -unsharp 0.25x0.08+8.3+0.045 -dither None -posterize 136 -quality 82 -define jpeg:fancy-upsampling=off -define png:compression-filter=5 -define png:compression-level=9 -define png:compression-strategy=1 -define png:exclude-chunk=all -interlace none -colorspace sRGB $1
+}
+
+alias ,fwupdate="fwupdmgr refresh; fwupdmgr update"
+
+# Use Modern Make when available.
+if command -v mmake >/dev/null 2>&1; then
+  alias make=mmake
 fi

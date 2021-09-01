@@ -1,4 +1,3 @@
-
 ## History
 # Source https://leetschau.github.io/remove-duplicate-zsh-history.html
 

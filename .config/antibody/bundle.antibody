@@ -31,9 +31,6 @@ robbyrussell/oh-my-zsh path:plugins/safe-paste
 # command-not-found Needs pkgfile installed
 robbyrussell/oh-my-zsh path:plugins/command-not-found
 
-# More useful nicities.
-robbyrussell/oh-my-zsh path:plugins/colored-man-pages
-
 # Rsync useful aliases.
 robbyrussell/oh-my-zsh path:plugins/rsync
 
@@ -72,18 +69,12 @@ junegunn/fzf path:shell kind:zsh
 ## Extras
 atweiden/fzf-extras kind:zsh
 
-# A next-generation cd command with an interactive filter.
-b4b4r07/enhancd kind:zsh
-
 # Globalias plugin: Expands all glob expressions, subcommands and aliases
 # (including global).
 robbyrussell/oh-my-zsh path:plugins/globalias
 
 # An oh-my-zsh plugin to help remembering those aliases you defined once.
 djui/alias-tips
-
-# BULLETTRAIN_PROMPT
-caiogondim/bullet-train.zsh kind:zsh
 
 # Docker.
 robbyrussell/oh-my-zsh path:plugins/docker
@@ -94,12 +85,6 @@ robbyrussell/oh-my-zsh path:plugins/systemadmin
 ## NVM
 lukechilds/zsh-nvm
 
-## GVM
-moovweb/gvm path:bin/ kind:path
-
 # Base16 Shell.
 chriskempson/base16-shell
 nicodebo/base16-fzf
-
-## Helper bash script.
-docksal/docksal path:bin/ kind:path

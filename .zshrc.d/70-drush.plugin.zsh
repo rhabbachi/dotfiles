@@ -1,4 +1,4 @@
-function sql2zip() {
+function ,sql2zip() {
   command -v drush >/dev/null 2>&1 || {
     echo >&2 "I require drush but it's not installed.  Aborting."
     exit 1
@@ -40,7 +40,7 @@ function sql2zip() {
   drush $site_alias sqldump | pv -ptrb | atool -a $localfile
 }
 
-function zip2sql() {
+function ,zip2sql() {
   command -v drush >/dev/null 2>&1 || {
     echo >&2 "I require drush but it's not installed.  Aborting."
     exit 1
