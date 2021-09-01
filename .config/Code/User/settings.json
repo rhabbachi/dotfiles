@@ -1,111 +1,11 @@
 {
-  // Use system clipboard for unnamed register.
-  "vim.useSystemClipboard": true,
-  // Controls the font size in pixels.
-  "editor.fontSize": 11,
-  "window.zoomLevel": 0,
-  "window.titleBarStyle": "native",
-  "vim.visualstar": true,
-  "vim.leader": "<space>",
-  "vim.visualModeKeyBindingsNonRecursive": [
-    {
-      "before": [
-        ">"
-      ],
-      "commands": [
-        "editor.action.indentLines"
-      ]
+    "workbench.editorAssociations": {
+        "*.ipynb": "jupyter-notebook"
     },
-    {
-      "before": [
-        "<"
-      ],
-      "commands": [
-        "editor.action.outdentLines"
-      ]
-    },
-  ],
-  "vim.normalModeKeyBindingsNonRecursive": [
-    {
-      "before": [
-        "<leader>", "t", "t"
-      ],
-      "commands": [
-        "outline.focus",
-      ]
-    },
-    {
-      "before": [
-        "-"
-      ],
-      "commands": [
-        "workbench.view.explorer",
-      ]
-    },
-    {
-      "before": [
-        "<C-n>"
-      ],
-      "commands": [
-        ":nohl",
-      ]
-    },
-    {
-      "before": [
-        "<C-j>"
-      ],
-      "commands": [
-        "workbench.action.focusBelowGroup",
-      ]
-    },
-    {
-      "before": [
-        "<C-k>"
-      ],
-      "commands": [
-        "workbench.action.focusAboveGroup",
-      ]
-    },
-    {
-      "before": [
-        "<C-h>"
-      ],
-      "commands": [
-        "workbench.action.focusLeftGroup",
-      ]
-    },
-    {
-      "before": [
-        "<C-l>"
-      ],
-      "commands": [
-        "workbench.action.focusRightGroup",
-      ]
+    "terminal.integrated.defaultLocation": "editor",
+    "diffEditor.renderSideBySide": false,
+    "notebook.cellToolbarLocation": {
+        "default": "right",
+        "jupyter-notebook": "left"
     }
-  ],
-  "editor.lineNumbers": "relative",
-  "editor.minimap.renderCharacters": false,
-  "editor.minimap.maxColumn": 60,
-  "editor.wordWrap": "on",
-  "vim.neovimPath": "/usr/bin/nvim",
-  "vim.enableNeovim": true,
-  "explorer.confirmDelete": false,
-  "debug.console.fontSize": 9,
-  "markdown.preview.fontSize": 9,
-  "terminal.integrated.fontSize": 9,
-  "editor.fontFamily": "'Source Code Pro', 'monospace'",
-  "workbench.startupEditor": "none",
-  "workbench.sideBar.location": "left",
-  "vim.sneakUseIgnorecaseAndSmartcase": true,
-  "vim.sneak": true,
-  "vim.sneakReplacesF": true,
-  "gitlens.currentLine.enabled": false,
-  "gitlens.hovers.currentLine.over": "line",
-  "gitlens.codeLens.enabled": false,
-  "gitlens.statusBar.enabled": false,
-  "workbench.statusBar.visible": true,
-  "diffEditor.renderSideBySide": false,
-  "gitlens.hovers.currentLine.changes": false,
-  "editor.renderWhitespace": "none",
-  "editor.renderControlCharacters": false
 }
