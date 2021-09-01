@@ -24,9 +24,11 @@ if has_key(g:plugs, 'ale')
         \   'php': ['langserver'],
         \}
 
+  let common_fixers = ['remove_trailing_lines', 'trim_whitespace']
+
   let g:ale_fixers = {
-        \   '*': ['remove_trailing_lines', 'trim_whitespace'],
-        \   'elm': ['elm-format'],
-        \   'json': ['jq'],
+        \   '*': common_fixers,
+        \   'elm': ['elm-format'] + common_fixers,
+        \   'json': ['jq'] + common_fixers,
         \}
 endif

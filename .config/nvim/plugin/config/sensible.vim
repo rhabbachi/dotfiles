@@ -37,3 +37,8 @@ autocmd FileType gitcommit,gitrebase,gitconfig set bufhidden=delete
 nnoremap <Leader>d "_d
 xnoremap <Leader>d "_d
 xnoremap <Leader>p "_dP
+
+
+if has_key(g:plugs, 'minimap.vim')
+ let g:minimap_auto_start=1
+endif

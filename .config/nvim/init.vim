@@ -109,7 +109,9 @@ Plug 'tpope/vim-fugitive' |
 " A git commit browser in Vim 
 Plug 'junegunn/gv.vim' |
 " rhubarb.vim: GitHub extension for fugitive.vim
-Plug 'tpope/vim-rhubarb'
+Plug 'tpope/vim-rhubarb' |
+" Easy git merge conflict resolution in Vim
+Plug 'christoomey/vim-conflicted'
 
 " A Vim plugin which shows a git diff in the gutter (sign column) and
 " stages/undoes hunks and partial hunks.
@@ -167,4 +169,15 @@ Plug 'junegunn/fzf.vim' |
 
 " On save, create directories if they don't exist
 Plug 'dockyard/vim-easydir'
+
+" Multi-language DBGP debugger client for Vim (PHP, Python, Perl, Ruby, etc.)
+Plug 'vim-vdebug/vdebug'
+
+Plug 'rhysd/committia.vim'
+
+" Lightning fast left-right movement in Vim 
+Plug 'unblevable/quick-scope'
+
+" Vim plugin that shows keybindings in popup.
+Plug 'liuchengxu/vim-which-key'
 call plug#end()
