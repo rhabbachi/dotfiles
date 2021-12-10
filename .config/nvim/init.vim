@@ -52,26 +52,31 @@ let g:netrw_home= expand('~/.cache/nvim/netrw')
 let g:netrw_liststyle=3
 let g:netrw_browse_split = 0
 "}
-"
+
+function! Cond(cond, ...)
+  let opts = get(a:000, 0, {})
+  return a:cond ? opts : extend(opts, { 'on': [], 'for': [] })
+endfunction
+
 call plug#begin()
 
 " sensible.vim: Defaults everyone can agree on
 Plug 'tpope/vim-sensible'
 
-Plug 'chriskempson/base16-vim' |
+Plug 'chriskempson/base16-vim', Cond(!exists('g:vscode')) |
 " A light and configurable statusline/tabline plugin for Vim.
-Plug 'itchyny/lightline.vim' |
+Plug 'itchyny/lightline.vim', Cond(!exists('g:vscode')) |
 " Lightline.vim colorschemes for all available base16 themes
-Plug 'mike-hearn/base16-vim-lightline'
+Plug 'mike-hearn/base16-vim-lightline', Cond(!exists('g:vscode'))
 
 " A solid language pack for Vim.
-Plug 'sheerun/vim-polyglot'
+Plug 'sheerun/vim-polyglot', Cond(!exists('g:vscode'))
 
 " Tmux
 " Seamless navigation between tmux panes and vim splits.
-Plug 'christoomey/vim-tmux-navigator'
+Plug 'christoomey/vim-tmux-navigator', Cond(!exists('g:vscode'))
 " Make terminal vim and tmux work better together.
-Plug 'tmux-plugins/vim-tmux-focus-events'
+Plug 'tmux-plugins/vim-tmux-focus-events', Cond(!exists('g:vscode'))
 
 " sleuth.vim: Heuristically set buffer options
 Plug 'tpope/vim-sleuth'
@@ -87,7 +92,7 @@ Plug 'tpope/vim-repeat'
 
 " Yet another EditorConfig (http://editorconfig.org) plugin for vim written in
 " vimscript only
-Plug 'sgur/vim-editorconfig'
+Plug 'sgur/vim-editorconfig', Cond(!exists('g:vscode'))
 
 " An alternative sudo.vim for Vim and Neovim, limited support sudo in Windows.
 Plug 'lambdalisue/suda.vim'
@@ -96,16 +101,24 @@ Plug 'lambdalisue/suda.vim'
 Plug 'tpope/vim-eunuch'
 
 " vinegar.vim: Combine with netrw to create a delicious salad dressing
-Plug 'tpope/vim-vinegar'
+Plug 'tpope/vim-vinegar', Cond(!exists('g:vscode'))
 
-" commentary.vim: comment stuff out
-Plug 'tpope/vim-commentary'
+" https://github.com/asvetliakov/vscode-neovim#vim-commentary
+if exists('g:vscode')
+  xmap gc  <Plug>VSCodeCommentary
+  nmap gc  <Plug>VSCodeCommentary
+  omap gc  <Plug>VSCodeCommentary
+  nmap gcc <Plug>VSCodeCommentaryLine
+else
+  " commentary.vim: comment stuff out
+  Plug 'tpope/vim-commentary'
+endif
 
 " Toggles between relative and absolute line numbers automatically
-Plug 'myusuf3/numbers.vim'
+Plug 'myusuf3/numbers.vim', Cond(!exists('g:vscode'))
 
  " A Git wrapper so awesome, it should be illegal
-Plug 'tpope/vim-fugitive' |
+Plug 'tpope/vim-fugitive', Cond(!exists('g:vscode')) |
 " A git commit browser in Vim 
 Plug 'junegunn/gv.vim' |
 " rhubarb.vim: GitHub extension for fugitive.vim
@@ -115,18 +128,18 @@ Plug 'christoomey/vim-conflicted'
 
 " A Vim plugin which shows a git diff in the gutter (sign column) and
 " stages/undoes hunks and partial hunks.
-Plug 'airblade/vim-gitgutter'
+Plug 'airblade/vim-gitgutter', Cond(!exists('g:vscode'))
  
 " Make Vim handle line and column numbers in file names with a minimum of
 " fuss.
-Plug 'wsdjeg/vim-fetch'
+Plug 'wsdjeg/vim-fetch', Cond(!exists('g:vscode'))
 
 " Tags
-Plug 'ludovicchabant/vim-gutentags' |
-Plug 'liuchengxu/vista.vim'
+Plug 'ludovicchabant/vim-gutentags', Cond(!exists('g:vscode')) |
+Plug 'liuchengxu/vista.vim', Cond(!exists('g:vscode'))
 
 " Rainbow Parentheses
-Plug 'luochen1990/rainbow'
+Plug 'luochen1990/rainbow', Cond(!exists('g:vscode'))
 
 " Vim plugin, insert or delete brackets, parens, quotes in pair
 " http://www.vim.org/scripts/script.php?script_id=3599
@@ -139,31 +152,31 @@ Plug 'alvan/vim-closetag'
 Plug 'google/vim-searchindex'
 
 " Toggle the cursor shape in the terminal for Vim.
-Plug 'jszakmeister/vim-togglecursor'
+Plug 'jszakmeister/vim-togglecursor', Cond(!exists('g:vscode'))
 
 " abolish.vim: easily search for, substitute, and abbreviate multiple variants
 " of a word
 Plug 'tpope/vim-abolish'
 
 " Vim plugin which asks for the right file to open
-Plug 'EinfachToll/DidYouMean'
+Plug 'EinfachToll/DidYouMean', Cond(!exists('g:vscode'))
 
 " Plugin that adds a 'cut' operation separate from 'delete'
 " Plug 'svermeulen/vim-cutlass'
 
 " Check syntax in Vim asynchronously and fix files, with Language Server
 " Protocol (LSP) support 
-Plug 'dense-analysis/ale' |
+Plug 'dense-analysis/ale', Cond(!exists('g:vscode')) |
 " ALE indicator for the lightline vim plugin
- Plug 'maximbaz/lightline-ale'
+ Plug 'maximbaz/lightline-ale', Cond(!exists('g:vscode'))
 
 " Async autocompletion for Vim 8 and Neovim with |timers|.
-Plug 'prabirshrestha/asyncomplete.vim'
-Plug 'prabirshrestha/asyncomplete-tags.vim'
-Plug 'machakann/asyncomplete-ezfilter.vim'
+Plug 'prabirshrestha/asyncomplete.vim', Cond(!exists('g:vscode'))
+Plug 'prabirshrestha/asyncomplete-tags.vim', Cond(!exists('g:vscode'))
+Plug 'machakann/asyncomplete-ezfilter.vim', Cond(!exists('g:vscode'))
 
 " fzf heart vim
-Plug 'junegunn/fzf.vim' |
+Plug 'junegunn/fzf.vim', Cond(!exists('g:vscode')) |
 " Improve the project search experience when using tools like ag and rg.
  Plug 'jesseleite/vim-agriculture'
 
@@ -171,13 +184,14 @@ Plug 'junegunn/fzf.vim' |
 Plug 'dockyard/vim-easydir'
 
 " Multi-language DBGP debugger client for Vim (PHP, Python, Perl, Ruby, etc.)
-Plug 'vim-vdebug/vdebug'
+Plug 'vim-vdebug/vdebug', Cond(!exists('g:vscode'))
 
-Plug 'rhysd/committia.vim'
+" A Vim plugin for more pleasant editing on commit messages.
+Plug 'rhysd/committia.vim', Cond(!exists('g:vscode'))
 
 " Lightning fast left-right movement in Vim 
 Plug 'unblevable/quick-scope'
 
 " Vim plugin that shows keybindings in popup.
-Plug 'liuchengxu/vim-which-key'
+Plug 'liuchengxu/vim-which-key', Cond(!exists('g:vscode'))
 call plug#end()
