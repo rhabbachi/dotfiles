@@ -23,7 +23,7 @@
   fileMode = false
   excludesfile = ~/.config/git/gitignore
   askpass = /usr/bin/ksshaskpass
-  pager = delta --dark --theme="base16"
+  pager = delta --dark --syntax-theme="base16"
 
 [filter "lfs"]
   clean = git-lfs clean %f

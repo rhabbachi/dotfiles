@@ -3,11 +3,12 @@ if command -v pacaur >/dev/null 2>&1; then
   # alias pawsu="pacaur -Sy --noconfirm && pacaur -Suwr --noconfirm && PKGDEST=\"/home/rhabbachi/.local/cache/pacman/pkg/\" pacaur -Suwa --noconfirm"
 fi
 
-function ,yayrmorphans () {
-  orphned=$(yay -Qtdq)
+function ,yarmorph () {
+  orphaned=$(yay -Qtdq)
 
-  if [[ ! -z $orphned ]]; then
-    yay -Rs $orphned
+  if [[ ! -z $orphaned ]]; then
+    # Make sure to strip any new lines from the input.
+    yay -Rs $(printf "%s" $orphaned)
   fi
 }
 
@@ -20,7 +21,7 @@ if command -v yay >/dev/null 2>&1; then
     cmd_repo="yay -Syuw --repo --answerupgrade None --noconfirm"
   fi
 
-  alias ,yuaywr="$cmd_aur; $cmd_repo; sudo paccache -rvk2; ,yayrmorphans"
+  alias ,upgrade=",yarmorph; $cmd_aur; $cmd_repo; sudo paccache -rvk2"
 fi
 
 # GIT_CONTRIB is needed for git contrib scripts.

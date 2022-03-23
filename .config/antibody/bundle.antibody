@@ -32,27 +32,16 @@ robbyrussell/oh-my-zsh path:plugins/safe-paste
 robbyrussell/oh-my-zsh path:plugins/command-not-found
 
 # Rsync useful aliases.
+robbyrussell/oh-my-zsh path:plugins/cp
 robbyrussell/oh-my-zsh path:plugins/rsync
 
 # Git
 robbyrussell/oh-my-zsh path:plugins/git-extras
 Seinh/git-prune
 
-## HUB: Load hub aliases if installed.
-# robbyrussell/oh-my-zsh path:plugins/github
-
-# Syntax highlighting bundle.
-zdharma/fast-syntax-highlighting
-
-# Additional completion definitions for Zsh.
-zsh-users/zsh-completions
-
 # Simple plugin that auto-closes, deletes and skips over matching delimiters in
 # zsh intelligently.
 hlissner/zsh-autopair
-
-# Pass password manager.
-robbyrussell/oh-my-zsh path:plugins/pass
 
 # MOSH
 robbyrussell/oh-my-zsh path:plugins/mosh

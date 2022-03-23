@@ -1,1 +1,1 @@
-Guifont JetBrains Mono:h6
+set guifont=JetBrains\ Mono:h10

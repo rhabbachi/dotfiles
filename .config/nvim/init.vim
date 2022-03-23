@@ -74,9 +74,9 @@ Plug 'sheerun/vim-polyglot', Cond(!exists('g:vscode'))
 
 " Tmux
 " Seamless navigation between tmux panes and vim splits.
-Plug 'christoomey/vim-tmux-navigator', Cond(!exists('g:vscode'))
+Plug 'sunaku/tmux-navigate', Cond(!exists('g:vscode'))
 " Make terminal vim and tmux work better together.
-Plug 'tmux-plugins/vim-tmux-focus-events', Cond(!exists('g:vscode'))
+" Plug 'tmux-plugins/vim-tmux-focus-events', Cond(!exists('g:vscode'))
 
 " sleuth.vim: Heuristically set buffer options
 Plug 'tpope/vim-sleuth'

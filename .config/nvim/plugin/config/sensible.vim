@@ -38,7 +38,12 @@ nnoremap <Leader>d "_d
 xnoremap <Leader>d "_d
 xnoremap <Leader>p "_dP
 
-
 if has_key(g:plugs, 'minimap.vim')
  let g:minimap_auto_start=1
 endif
+
+tnoremap <leader><Esc> <C-\><C-n>
+
+" Preserving equal sized split view.
+" https://stackoverflow.com/questions/2519582/preserving-equal-sized-split-view
+autocmd VimResized * wincmd =

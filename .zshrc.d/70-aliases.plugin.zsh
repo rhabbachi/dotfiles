@@ -38,7 +38,7 @@ fi
 
 alias zshrc='$EDITOR ~/.zshrc'                # Quick access to the ~/.zshrc file
 alias tmuxrc='$EDITOR ~/.tmux.conf'           # Quick access to the ~/.tmux.conf file
-alias vimrc='$EDITOR ~/.config/nvim/init.vim' # Quick access to the ~/.vimrc file
+alias nvimrc='$EDITOR ~/.config/nvim/init.vim' # Quick access to the ~/.vimrc file
 
 # Grep
 alias grep='grep --color'
@@ -208,80 +208,21 @@ if is-at-least 4.2.0; then
   _media_fts=(ape avi flv m4a mkv mov mp3 mpeg mpg ogg ogm rm wav webm)
   for ft in $_media_fts; do alias -s $ft=mplayer; done
 
-  #read documents
-  alias -s pdf=acroread
-  alias -s ps=gv
-  alias -s dvi=xdvi
-  alias -s chm=xchm
-  alias -s djvu=djview
+  # alias extension documents.
+  if command -v open_command >/dev/null 2>&1; then
+    alias -s {pdf,ps,dvi,chm,djvu,cs,ts,html}=open_command
+  fi
 
-  #list whats inside packed file
-  alias -s zip="unzip -l"
-  alias -s rar="unrar l"
-  alias -s tar="tar tf"
-  alias -s tar.gz="echo "
-  alias -s ace="unace l"
+  # list whats inside packed file.
+  if command -v arc >/dev/null 2>&1; then
+    alias -s {zip,rar,tar,tar.gz,ace}="arc ls"
+  fi
 fi
 
 # Make zsh know about hosts already accessed by SSH
 zstyle -e ':completion:*:(ssh|scp|sftp|rsh|rsync):hosts' hosts 'reply=(${=${${(f)"$(cat {/etc/ssh_,~/.ssh/known_}hosts(|2)(N) /dev/null)"}%%[# ]*}//,/ })'
 
-# Misc helper functions.
-
-if command -v convert >/dev/null 2>&1; then
-  function ,format2pdf() {
-    local src=$1
-    local dest=$2
-
-    i=150
-    convert $src -compress jpeg -quality 70 \
-      -density ${i}x${i} -units PixelsPerInch \
-      -resize $((i * 827 / 100))x$((i * 1169 / 100)) \
-      -repage $((i * 827 / 100))x$((i * 1169 / 100)) $dest
-  }
-
-  function ,png2pdf() {
-    for source in $(find . -name "*.png"); do
-      ,format2pdf $source ${source/%png/pdf}
-    done
-  }
-
-  function ,jpeg2pdf() {
-    for source in $(find . -name "*.jpeg"); do
-      ,format2pdf $source ${source/%jpeg/pdf}
-    done
-  }
-fi
-
-# PDF conversion using unoconv.
-if command -v unoconv >/dev/null 2>&1; then
-  function ,unoconv2pdf() {
-    local src=$1
-    local destination=$2
-
-    unoconv -f pdf -o $destination $src
-  }
-
-  function ,pnm2pdf() {
-    for source in $(find . -name "*.pnm"); do
-      unoconv -v -f pdf -o ${source/%pnm/pdf} $source &&
-        trash $source
-    done
-  }
-fi
-
-# Zoom a pane.
-if [ ! -z "$TMUX" ]; then
-  function peek() {
-    tmux split-window -p 33 "$EDITOR" "$@"
-  }
-fi
-
-# smartresize inputfile.png 300 outputdir/
-,smartresize() {
-  mogrify -path $3 -filter Triangle -define filter:support=2 -thumbnail $2 -unsharp 0.25x0.08+8.3+0.045 -dither None -posterize 136 -quality 82 -define jpeg:fancy-upsampling=off -define png:compression-filter=5 -define png:compression-level=9 -define png:compression-strategy=1 -define png:exclude-chunk=all -interlace none -colorspace sRGB $1
-}
-
+# Firmware update helper.
 alias ,fwupdate="fwupdmgr refresh; fwupdmgr update"
 
 # Use Modern Make when available.

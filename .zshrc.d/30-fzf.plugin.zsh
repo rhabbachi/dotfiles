@@ -1,2 +1,5 @@
 ## If we are inside a Tmux session open fzf in a pane.
-[[ -n $TMUX ]] && export FZF_TMUX=1
+if [[ -n $TMUX ]]; then
+	export FZF_TMUX=1
+	export FZF_TMUX_OPTS="-p"
+fi

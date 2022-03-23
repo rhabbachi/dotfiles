@@ -12,5 +12,10 @@
     "editor.lineNumbers": "relative",
     "[dockerfile]": {
         "editor.defaultFormatter": "ms-azuretools.vscode-docker"
-    }
+    },
+    "gitlens.currentLine.enabled": false,
+    "gitlens.hovers.currentLine.over": "line",
+    "gitlens.codeLens.enabled": false,
+    "gitlens.hovers.enabled": false,
+    "editor.scrollBeyondLastLine": false
 }
