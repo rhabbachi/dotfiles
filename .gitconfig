@@ -1,7 +1,3 @@
-[user]
-  name = Riadh Habbachi
-  email = habbachi.riadh@gmail.com
-
 [push]
   default = current
 
@@ -16,8 +12,6 @@
   patch = !git --no-pager diff --no-color
 
 [credential]
-  ; helper = /usr/lib/git-core/git-credential-libsecret
-  ;
 [core]
   trustctime = false
   fileMode = false
@@ -73,3 +67,9 @@
 	follow = true
 [diff]
 	renames = copies
+
+[includeIf "gitdir:~/Desktop/med.tn/"]
+  path = ~/Desktop/med.tn/.gitconfig
+
+[includeIf "gitdir:~/Desktop/swiver/"]
+  path = ~/Desktop/swiver/.gitconfig
