@@ -3,8 +3,6 @@ function ,docker-prune-vlm() {
   docker volume rm $(docker volume ls -f dangling=true -q)
 }
 
-alias ,docker-system-prune="{ docker system prune all ; ,docker-prune-vlm ; }"
+alias -g ,docker-system-prune="{ docker system prune all ; ,docker-prune-vlm ; }"
 
-function ,ocrmypdf() {
-  docker run --rm  -i --user "$(id -u):$(id -g)" --workdir /data -v "$PWD:/data" jbarlow83/ocrmypdf
-}
+alias -g ,ocrmypdf='docker run --rm  -i --user "$(id -u):$(id -g)" --workdir /data -v "$PWD:/data" jbarlow83/ocrmypdf'

@@ -63,6 +63,10 @@ call plug#begin()
 " sensible.vim: Defaults everyone can agree on
 Plug 'tpope/vim-sensible'
 
+" tabline plugin with re-orderable, auto-sizing, clickable tabs, icons, nice highlighting, sort-by commands and a magic jump-to-buffer mode.
+Plug 'kyazdani42/nvim-web-devicons', Cond(!exists('g:vscode')) |
+Plug 'romgrk/barbar.nvim', Cond(!exists('g:vscode'))
+
 Plug 'chriskempson/base16-vim', Cond(!exists('g:vscode')) |
 " A light and configurable statusline/tabline plugin for Vim.
 Plug 'itchyny/lightline.vim', Cond(!exists('g:vscode')) |
@@ -76,6 +80,7 @@ Plug 'sheerun/vim-polyglot', Cond(!exists('g:vscode'))
 " Seamless navigation between tmux panes and vim splits.
 Plug 'sunaku/tmux-navigate', Cond(!exists('g:vscode'))
 " Make terminal vim and tmux work better together.
+" TODO seems to be depercated.
 " Plug 'tmux-plugins/vim-tmux-focus-events', Cond(!exists('g:vscode'))
 
 " sleuth.vim: Heuristically set buffer options
@@ -83,6 +88,10 @@ Plug 'tpope/vim-sleuth'
 
 "surround.vim: quoting/parenthesizing made simple
 Plug 'tpope/vim-surround'
+
+" Next-generation motion plugin using incremental input processing, allowing
+" for unparalleled speed with minimal cognitive effort
+Plug 'ggandor/lightspeed.nvim', { 'branch': 'main' }
 
 " Vim plugin that provides additional text objects
 Plug 'wellle/targets.vim'
@@ -97,7 +106,14 @@ Plug 'sgur/vim-editorconfig', Cond(!exists('g:vscode'))
 " An alternative sudo.vim for Vim and Neovim, limited support sudo in Windows.
 Plug 'lambdalisue/suda.vim'
 
-" Helpers for UNIX
+" Make Vim handle line and column numbers in file names with a minimum of
+" fuss.
+Plug 'wsdjeg/vim-fetch', Cond(!exists('g:vscode'))
+
+" Vim plugin which asks for the right file to open
+Plug 'EinfachToll/DidYouMean', Cond(!exists('g:vscode'))
+
+" Vim sugar for the UNIX shell commands that need it the most.
 Plug 'tpope/vim-eunuch'
 
 " vinegar.vim: Combine with netrw to create a delicious salad dressing
@@ -117,9 +133,9 @@ endif
 " Toggles between relative and absolute line numbers automatically
 Plug 'myusuf3/numbers.vim', Cond(!exists('g:vscode'))
 
- " A Git wrapper so awesome, it should be illegal
+ " A Git wrapper so awesome, it should be illegal.
 Plug 'tpope/vim-fugitive', Cond(!exists('g:vscode')) |
-" A git commit browser in Vim 
+" A git commit browser in Vim.
 Plug 'junegunn/gv.vim' |
 " rhubarb.vim: GitHub extension for fugitive.vim
 Plug 'tpope/vim-rhubarb' |
@@ -129,16 +145,12 @@ Plug 'christoomey/vim-conflicted'
 " A Vim plugin which shows a git diff in the gutter (sign column) and
 " stages/undoes hunks and partial hunks.
 Plug 'airblade/vim-gitgutter', Cond(!exists('g:vscode'))
- 
-" Make Vim handle line and column numbers in file names with a minimum of
-" fuss.
-Plug 'wsdjeg/vim-fetch', Cond(!exists('g:vscode'))
 
 " Tags
 Plug 'ludovicchabant/vim-gutentags', Cond(!exists('g:vscode')) |
 Plug 'liuchengxu/vista.vim', Cond(!exists('g:vscode'))
 
-" Rainbow Parentheses
+" Rainbow Parentheses.
 Plug 'luochen1990/rainbow', Cond(!exists('g:vscode'))
 
 " Vim plugin, insert or delete brackets, parens, quotes in pair
@@ -158,9 +170,6 @@ Plug 'jszakmeister/vim-togglecursor', Cond(!exists('g:vscode'))
 " of a word
 Plug 'tpope/vim-abolish'
 
-" Vim plugin which asks for the right file to open
-Plug 'EinfachToll/DidYouMean', Cond(!exists('g:vscode'))
-
 " Plugin that adds a 'cut' operation separate from 'delete'
 " Plug 'svermeulen/vim-cutlass'
 
@@ -175,11 +184,6 @@ Plug 'prabirshrestha/asyncomplete.vim', Cond(!exists('g:vscode'))
 Plug 'prabirshrestha/asyncomplete-tags.vim', Cond(!exists('g:vscode'))
 Plug 'machakann/asyncomplete-ezfilter.vim', Cond(!exists('g:vscode'))
 
-" fzf heart vim
-Plug 'junegunn/fzf.vim', Cond(!exists('g:vscode')) |
-" Improve the project search experience when using tools like ag and rg.
- Plug 'jesseleite/vim-agriculture'
-
 " On save, create directories if they don't exist
 Plug 'dockyard/vim-easydir'
 
@@ -189,9 +193,17 @@ Plug 'vim-vdebug/vdebug', Cond(!exists('g:vscode'))
 " A Vim plugin for more pleasant editing on commit messages.
 Plug 'rhysd/committia.vim', Cond(!exists('g:vscode'))
 
-" Lightning fast left-right movement in Vim 
+" Lightning fast left-right movement in Vim.
 Plug 'unblevable/quick-scope'
 
 " Vim plugin that shows keybindings in popup.
 Plug 'liuchengxu/vim-which-key', Cond(!exists('g:vscode'))
+
+" All the lua functions I don't want to write twice.
+Plug 'nvim-lua/plenary.nvim' |
+" Find, Filter, Preview, Pick. All lua, all the time.
+Plug 'nvim-telescope/telescope.nvim' |
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'branch': 'main', 'do': 'make' } |
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
 call plug#end()
