@@ -17,5 +17,8 @@
     "gitlens.hovers.currentLine.over": "line",
     "gitlens.codeLens.enabled": false,
     "gitlens.hovers.enabled": false,
-    "editor.scrollBeyondLastLine": false
+    "editor.scrollBeyondLastLine": false,
+    "files.associations": {
+        "*.hcl": "terraform"
+    }
 }
