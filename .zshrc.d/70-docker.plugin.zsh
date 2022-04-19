@@ -6,3 +6,9 @@ function ,docker-prune-vlm() {
 alias -g ,docker-system-prune="{ docker system prune all ; ,docker-prune-vlm ; }"
 
 alias -g ,ocrmypdf='docker run --rm  -i --user "$(id -u):$(id -g)" --workdir /data -v "$PWD:/data" jbarlow83/ocrmypdf'
+
+function ,ocrmypdf_dir() {
+  for file in *.tif; do
+    ,ocrmypdf -l fra -r -d -i --image-dpi 600 "$file" "./ocrmypdf/${file%.tif}.pdf"
+  done
+}

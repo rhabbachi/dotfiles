@@ -36,8 +36,8 @@ else
   alias ldot='ls -ld .*'
 fi
 
-alias zshrc='$EDITOR ~/.zshrc'                # Quick access to the ~/.zshrc file
-alias tmuxrc='$EDITOR ~/.tmux.conf'           # Quick access to the ~/.tmux.conf file
+alias zshrc='$EDITOR ~/.zshrc'                 # Quick access to the ~/.zshrc file
+alias tmuxrc='$EDITOR ~/.tmux.conf'            # Quick access to the ~/.tmux.conf file
 alias nvimrc='$EDITOR ~/.config/nvim/init.vim' # Quick access to the ~/.vimrc file
 
 # Grep

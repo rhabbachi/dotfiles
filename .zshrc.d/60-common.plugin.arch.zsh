@@ -1,12 +1,7 @@
-if command -v pacaur >/dev/null 2>&1; then
-  # alias pacman="PKGDEST=\"/home/rhabbachi/.local/cache/pacman/pkg/\" pacaur"
-  # alias pawsu="pacaur -Sy --noconfirm && pacaur -Suwr --noconfirm && PKGDEST=\"/home/rhabbachi/.local/cache/pacman/pkg/\" pacaur -Suwa --noconfirm"
-fi
-
-function ,yarmorph () {
+function ,yarmorph() {
   orphaned=$(yay -Qtdq)
 
-  if [[ ! -z $orphaned ]]; then
+  if [[ -n $orphaned ]]; then
     # Make sure to strip any new lines from the input.
     yay -Rs $(printf "%s" $orphaned)
   fi

@@ -1,5 +1,5 @@
 # Default to vim.
-export EDITOR="vim"
+export EDITOR="lvim"
 export VISUAL=$EDITOR
 
 # Source local defaults if missing.
