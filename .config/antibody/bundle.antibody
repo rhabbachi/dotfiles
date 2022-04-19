@@ -73,7 +73,3 @@ robbyrussell/oh-my-zsh path:plugins/systemadmin
 
 ## NVM
 lukechilds/zsh-nvm
-
-# Base16 Shell.
-chriskempson/base16-shell
-nicodebo/base16-fzf
