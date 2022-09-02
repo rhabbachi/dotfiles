@@ -49,9 +49,6 @@ robbyrussell/oh-my-zsh path:plugins/mosh
 # NMAP
 robbyrussell/oh-my-zsh path:plugins/nmap
 
-# Node.js
-robbyrussell/oh-my-zsh path:plugins/npm
-
 # FZF: A command-line fuzzy finder written in Go.
 junegunn/fzf path:shell kind:zsh
 

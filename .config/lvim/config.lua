@@ -11,7 +11,7 @@ an executable
 -- general
 lvim.log.level = "warn"
 lvim.format_on_save = true
-lvim.colorscheme = "onedarkpro"
+-- lvim.colorscheme = "onedarkpro"
 
 -- keymappings [view all the defaults by pressing <leader>Lk]
 lvim.leader = "space"
@@ -20,8 +20,21 @@ lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
 
 -- unmap a default keymapping
 -- lvim.keys.normal_mode["<C-Up>"] = false
+-- Disable exec mode.
+lvim.keys.normal_mode["Q"] = false
+
 -- edit a default keymapping
-lvim.keys.normal_mode["Q"] = "<NOP>"
+-- lvim.keys.normal_mode["<C-q>"] = ":q<cr>"
+
+-- Keybindings vim style
+-- https://www.lunarvim.org/configuration/02-keybindings.html#vim-style
+-- Use Esc to return to normal mode in terminal.
+vim.cmd("tnoremap <Esc> <C-\\><C-n>")
+vim.cmd("au FocusGained,BufEnter * :checktime")
+
+
+vim.opt.wrap = false -- display lines as one long line
+vim.opt.guifont = "JetBrains Mono:h10" -- display lines as one long line
 
 -- Change Telescope navigation to use j and k for navigation and n and p for history in both input and normal mode.
 -- we use protected-mode (pcall) just in case the plugin wasn't loaded yet.
@@ -60,13 +73,14 @@ lvim.builtin.alpha.mode = "dashboard"
 lvim.builtin.notify.active = true
 lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
-lvim.builtin.nvimtree.show_icons.git = 0
+-- lvim.builtin.nvimtree.show_icons.git = 0
 
 -- if you don't want all the parsers change this to a table of the ones you want
 lvim.builtin.treesitter.ensure_installed = {
   "bash",
   "css",
   "dockerfile",
+  "hcl",
   "html",
   "http",
   "javascript",
@@ -141,24 +155,89 @@ lvim.builtin.treesitter.highlight.enabled = true
 
 -- Additional Plugins
 lvim.plugins = {
-{ "olimorris/onedarkpro.nvim" },
-{ "tpope/vim-repeat" },
-{
+  { "tpope/vim-repeat" },
+  {
     "ggandor/lightspeed.nvim",
     event = "BufRead",
   },
   -- Make Vim handle line and column numbers in file names with a minimum of fuss.
-{ "wsdjeg/vim-fetch" },
+  { "wsdjeg/vim-fetch" },
   -- Vim plugin which asks for the right file to open
-{ "EinfachToll/DidYouMean" },
+  { "EinfachToll/DidYouMean" },
   -- Seamless tmux/vim navigation (over SSH too!)
-{ "sunaku/tmux-navigate" },
+  { "sunaku/tmux-navigate" },
   -- surround.vim: Delete/change/add parentheses/quotes/XML-tags/much more with
   -- ease.
-{ "tpope/vim-surround",
-    keys = {"c", "d", "y"}
+  { "tpope/vim-surround",
+    keys = { "c", "d", "y" }
   },
-{ "myusuf3/numbers.vim" },
+  -- numbers.vim is a vim plugin for better line numbers
+  { "myusuf3/numbers.vim" },
+  -- Smooth scrolling neovim plugin written in lua
+  {
+    "karb94/neoscroll.nvim",
+    event = "WinScrolled",
+    config = function()
+      require('neoscroll').setup({
+        -- All these keys will be mapped to their corresponding default scrolling animation
+        mappings = { '<C-u>', '<C-d>', '<C-b>', '<C-f>',
+          '<C-y>', '<C-e>', 'zt', 'zz', 'zb' },
+        hide_cursor = true, -- Hide cursor while scrolling
+        stop_eof = true, -- Stop at <EOF> when scrolling downwards
+        use_local_scrolloff = false, -- Use the local scope of scrolloff instead of the global scope
+        respect_scrolloff = false, -- Stop scrolling when the cursor reaches the scrolloff margin of the file
+        cursor_scrolls_alone = true, -- The cursor will keep on scrolling even if the window cannot scroll further
+        easing_function = nil, -- Default easing function
+        pre_hook = nil, -- Function to run before the scrolling animation starts
+        post_hook = nil, -- Function to run after the scrolling animation ends
+      })
+    end
+  },
+  -- white_check_mark Highlight, list and search todo comments in your projects
+  {
+    "folke/todo-comments.nvim",
+    event = "BufRead",
+    config = function()
+      require("todo-comments").setup()
+    end,
+  },
+  -- vim match-up: even better % fist_oncoming navigate and highlight matching
+  -- words fist_oncoming modern matchit and matchparen
+  {
+    "andymass/vim-matchup",
+    event = "CursorMoved",
+    config = function()
+      vim.g.matchup_matchparen_offscreen = { method = "popup" }
+    end,
+  },
+  -- sleuth.vim: Heuristically set buffer options
+  {
+    "tpope/vim-sleuth",
+  },
+  {
+    "tpope/vim-fugitive",
+    cmd = {
+      "G",
+      "Git",
+      "Gdiffsplit",
+      "Gread",
+      "Gwrite",
+      "Ggrep",
+      "GMove",
+      "GDelete",
+      "GBrowse",
+      "GRemove",
+      "GRename",
+      "Glgrep",
+      "Gedit"
+    },
+    ft = { "fugitive" }
+  },
+  { "lambdalisue/suda.vim",
+    config = function()
+      vim.g.suda_smart_edit = 1
+    end,
+  },
 }
 
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)

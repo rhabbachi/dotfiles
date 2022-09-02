@@ -9,6 +9,6 @@ alias -g ,ocrmypdf='docker run --rm  -i --user "$(id -u):$(id -g)" --workdir /da
 
 function ,ocrmypdf_dir() {
   for file in *.tif; do
-    ,ocrmypdf -l fra -r -d -i --image-dpi 600 "$file" "./ocrmypdf/${file%.tif}.pdf"
+    ,ocrmypdf -l fra --rotate-pages --deskew --clean-final --image-dpi 600 "$file" "./ocrmypdf/${file%.tif}.pdf"
   done
 }

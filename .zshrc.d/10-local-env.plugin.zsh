@@ -1,4 +1,5 @@
-# Default to vim.
+# Default to lvim.
+alias vim=lvim
 export EDITOR="lvim"
 export VISUAL=$EDITOR
 
