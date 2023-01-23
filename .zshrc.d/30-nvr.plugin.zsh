@@ -12,3 +12,7 @@ if command -v nvr >/dev/null 2>&1; then
     nvr -s "$@"
   }
 fi
+
+nvd() {
+  neovide --multigrid --maximized -- -u "$LUNARVIM_RUNTIME_DIR/lvim/init.lua" "$@"
+}

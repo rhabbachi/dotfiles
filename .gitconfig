@@ -73,3 +73,6 @@
 
 [includeIf "gitdir:~/Desktop/swiver/"]
   path = ~/Desktop/swiver/.gitconfig
+
+[includeIf "gitdir:~/Desktop/sbc4d/"]
+  path = ~/Desktop/sbc4d/.gitconfig

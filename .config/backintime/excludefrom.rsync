@@ -103,3 +103,6 @@ Private
 .icedtea
 .gnome2/epiphany/favicon_cache
 node_modules
+.cargo/
+.go/
+.npm/

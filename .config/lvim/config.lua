@@ -11,7 +11,7 @@ an executable
 -- general
 lvim.log.level = "warn"
 lvim.format_on_save = true
--- lvim.colorscheme = "onedarkpro"
+lvim.colorscheme = "onedark"
 
 -- keymappings [view all the defaults by pressing <leader>Lk]
 lvim.leader = "space"
@@ -33,8 +33,13 @@ vim.cmd("tnoremap <Esc> <C-\\><C-n>")
 vim.cmd("au FocusGained,BufEnter * :checktime")
 
 
-vim.opt.wrap = false -- display lines as one long line
+vim.opt.wrap = true -- display lines as one long line
 vim.opt.guifont = "JetBrains Mono:h10" -- display lines as one long line
+vim.opt.clipboard = "unnamedplus" -- allows neovim to access the system clipboard
+vim.opt.scrolloff = 8 -- Minimal number of screen lines to keep above and below the cursor.
+vim.opt.sidescrolloff = 8 -- 	The minimal number of screen columns to keep to the left and to the right of the cursor if 'nowrap' is set.
+vim.opt.title = true -- set the title of window to the value of the titlestring
+vim.opt.titlestring = "%<%F%=%l/%L - nvim" -- what the title of the window will be set to
 
 -- Change Telescope navigation to use j and k for navigation and n and p for history in both input and normal mode.
 -- we use protected-mode (pcall) just in case the plugin wasn't loaded yet.
@@ -70,7 +75,6 @@ vim.opt.guifont = "JetBrains Mono:h10" -- display lines as one long line
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
 lvim.builtin.alpha.active = true
 lvim.builtin.alpha.mode = "dashboard"
-lvim.builtin.notify.active = true
 lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
 -- lvim.builtin.nvimtree.show_icons.git = 0
@@ -156,6 +160,7 @@ lvim.builtin.treesitter.highlight.enabled = true
 -- Additional Plugins
 lvim.plugins = {
   { "tpope/vim-repeat" },
+  { "joshdick/onedark.vim" },
   {
     "ggandor/lightspeed.nvim",
     event = "BufRead",

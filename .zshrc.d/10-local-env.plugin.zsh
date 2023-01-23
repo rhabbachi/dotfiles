@@ -1,3 +1,8 @@
+# lvim envs
+export LUNARVIM_RUNTIME_DIR="${LUNARVIM_RUNTIME_DIR:-"$HOME/.local/share/lunarvim"}"
+export LUNARVIM_CONFIG_DIR="${LUNARVIM_CONFIG_DIR:-"$HOME/.config/lvim"}"
+export LUNARVIM_CACHE_DIR="${LUNARVIM_CACHE_DIR:-"$HOME/.cache/lvim"}"
+
 # Default to lvim.
 alias vim=lvim
 export EDITOR="lvim"
@@ -12,13 +17,6 @@ export VISUAL=$EDITOR
 ### PATHS ###
 # Local bin dir.
 export PATH="$HOME/.local/bin:$PATH"
-
-# Android
-export ANDROID_HOME=$HOME/Android/Sdk
-export PATH=$PATH:$ANDROID_HOME/emulator
-export PATH=$PATH:$ANDROID_HOME/tools
-export PATH=$PATH:$ANDROID_HOME/tools/bin
-export PATH=$PATH:$ANDROID_HOME/platform-tools
 
 # Go
 export GOPATH="$HOME/.go"
