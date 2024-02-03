@@ -21,3 +21,9 @@ export PATH="$HOME/.local/bin:$PATH"
 # Go
 export GOPATH="$HOME/.go"
 export PATH="$PATH:$GOPATH/bin"
+
+# DotNet
+export PATH="$PATH:$HOME/.dotnet/tools"
+
+# GIT_CONTRIB is needed for git contrib scripts.
+export GIT_CONTRIB="/usr/share/git"

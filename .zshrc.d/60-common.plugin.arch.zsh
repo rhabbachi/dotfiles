@@ -1,23 +1,36 @@
 function ,yarmorph() {
-  orphaned=$(yay -Qtdq)
+	if ! command -v yay >/dev/null 2>&1; then
+		echo "yay command not available."
+		return
+	fi
 
-  if [[ -n $orphaned ]]; then
-    # Make sure to strip any new lines from the input.
-    yay -Rs $(printf "%s" $orphaned)
-  fi
+	orphaned=$(yay -Qtdq)
+
+	if [[ -n $orphaned ]]; then
+		# Make sure to strip any new lines from the input.
+		yay -Rs $(printf "%s" $orphaned)
+	fi
 }
 
-if command -v yay >/dev/null 2>&1; then
-  cmd_aur="yay -Syu --noconfirm --aur --devel --answerupgrade Repo --answerclean None --answerdiff None"
+function ,upgrade() {
+	if ! command -v yay >/dev/null 2>&1; then
+		echo "yay command not available."
+		return
+	fi
 
-  if command -v pacman-offline >/dev/null 2>&1; then
-    cmd_repo="sudo pacman-offline -y"
-  else
-    cmd_repo="yay -Syuw --repo --answerupgrade None --noconfirm"
-  fi
+	# Remove orphaned.
+	,yarmorph
 
-  alias ,upgrade=",yarmorph; $cmd_aur; $cmd_repo; sudo paccache -rvk2"
-fi
+	# Package upgrade.
+	yay -Syu --noconfirm --aur --devel --answerupgrade Repo --answerclean None --answerdiff None
 
-# GIT_CONTRIB is needed for git contrib scripts.
-export GIT_CONTRIB="/usr/share/git"
+	if command -v pacman-offline >/dev/null 2>&1; then
+		sudo pacman-offline -y
+	else
+		yay -Syuw --repo --answerupgrade None --noconfirm
+	fi
+
+	# Firmware upgrade.
+	fwupdmgr refresh
+	fwupdmgr update
+}

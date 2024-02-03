@@ -50,10 +50,10 @@ robbyrussell/oh-my-zsh path:plugins/mosh
 robbyrussell/oh-my-zsh path:plugins/nmap
 
 # FZF: A command-line fuzzy finder written in Go.
-junegunn/fzf path:shell kind:zsh
+# junegunn/fzf path:shell kind:zsh
 
 ## Extras
-atweiden/fzf-extras kind:zsh
+# atweiden/fzf-extras kind:zsh
 
 # Globalias plugin: Expands all glob expressions, subcommands and aliases
 # (including global).
@@ -68,5 +68,5 @@ robbyrussell/oh-my-zsh path:plugins/docker-compose
 
 robbyrussell/oh-my-zsh path:plugins/systemadmin
 
-## NVM
-lukechilds/zsh-nvm
+# ASDF
+robbyrussell/oh-my-zsh path:plugins/asdf

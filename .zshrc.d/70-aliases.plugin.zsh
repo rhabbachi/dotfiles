@@ -3,11 +3,11 @@
 #
 
 # ls, the common ones I use a lot shortened for rapid fire usage
-if command -v exa >/dev/null 2>&1; then
+if command -v eza >/dev/null 2>&1; then
 
   #
-  # Project:  zsh-aliases-exa
-  # File:     /zsh-aliases-exa.plugin.zsh
+  # Project:  zsh-aliases-eza
+  # File:     /zsh-aliases-eza.plugin.zsh
   # Created:  2019-04-12 19:07:28
   # Author:   Darrin Tisdale
   # -----
@@ -16,16 +16,16 @@ if command -v exa >/dev/null 2>&1; then
   #
 
   # general use
-  alias ls='exa'                                                        # ls
-  alias l='exa -lbF --git'                                              # list, size, type, git
-  alias ll='exa -lbGF --git'                                            # long list
-  alias llm='exa -lbGF --git --sort=modified'                           # long list, modified date sort
-  alias la='exa -lbhHigmuSa --time-style=long-iso --git --color-scale'  # all list
-  alias lx='exa -lbhHigmuSa@ --time-style=long-iso --git --color-scale' # all + extended list
+  alias ls='eza'                                                        # ls
+  alias l='eza -lbF --git'                                              # list, size, type, git
+  alias ll='eza -lbGF --git'                                            # long list
+  alias llm='eza -lbGF --git --sort=modified'                           # long list, modified date sort
+  alias la='eza -lbhHigmuSa --time-style=long-iso --git --color-scale'  # all list
+  alias lx='eza -lbhHigmuSa@ --time-style=long-iso --git --color-scale' # all + extended list
 
   # speciality views
-  alias lS='exa -1' # one column, just names
-  alias lt='exa --tree --level=2'
+  alias lS='eza -1' # one column, just names
+  alias lt='eza --tree --level=2'
 elif command -v k >/dev/null 2>&1; then
   alias ll='k -h'  #size,show type,human readable
   alias la='k -Ah' #long list,show almost all,show type,human readable
@@ -48,18 +48,13 @@ alias sgrep='grep -R -n -H -C 5 --exclude-dir={.git,.svn,CVS} '
 ## Better git show alias.
 alias gsm='git show -s --format=%B'
 
-## using the vim plugin 'GV'!
-## from: https://github.com/wookayin/dotfiles/blob/master/zsh/zsh.d/alias.zsh
-function _vim_gv() {
-  vim +"GV $1" +"autocmd BufWipeout <buffer> qall"
-}
-alias gv='_vim_gv'
-alias gva='gv --all'
-
 # Open file with the right application
 alias o="open_command"
 
 # Tail
+if command -v dust >/dev/null 2>&1; then
+  alias tail='tspin'
+fi
 alias t='tail -f'
 
 # Command line head / tail shortcuts.
@@ -97,7 +92,11 @@ alias unexport='unset'
 alias cp='cp -ivr'
 alias mv='mv -iv'
 
-alias top="htop"
+if command -v btm >/dev/null 2>&1; then
+  alias top="btm -b"
+elif command -v htop >/dev/null 2>&1; then
+  alias top="htop"
+fi
 
 if command -v gping >/dev/null 2>&1; then
   alias ,pingo="gping google.com"
@@ -106,9 +105,6 @@ else
 fi
 
 alias ,date-time='date +%Y%m%d-%H%M%S'
-
-# Apache
-alias a2log="multitail -f /var/log/httpd/localhost.error.log"
 
 # Clear Vim tmp files
 alias vim-clear="trash ~/.vimswap ~/.vimviews/ ~/.vimbackup ~/.vimundo"
@@ -221,9 +217,6 @@ fi
 
 # Make zsh know about hosts already accessed by SSH
 zstyle -e ':completion:*:(ssh|scp|sftp|rsh|rsync):hosts' hosts 'reply=(${=${${(f)"$(cat {/etc/ssh_,~/.ssh/known_}hosts(|2)(N) /dev/null)"}%%[# ]*}//,/ })'
-
-# Firmware update helper.
-alias ,fwupdate="fwupdmgr refresh; fwupdmgr update"
 
 # Use Modern Make when available.
 if command -v mmake >/dev/null 2>&1; then

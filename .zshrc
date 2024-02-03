@@ -15,8 +15,6 @@ zstyle ':completion:*' rehash true
 # want to load different plugins and vars for each platform.
 source /etc/os-release
 
-ANTIBODY_HOME="$(antibody home)"
-
 for plugin in ~/.zshrc.d/*.plugin(|.$ID|.$XDG_CURRENT_DESKTOP).zsh; do
   source $plugin
 done

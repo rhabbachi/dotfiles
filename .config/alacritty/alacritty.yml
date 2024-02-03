@@ -9,7 +9,8 @@
 # All imports must either be absolute paths starting with `/`, or paths relative
 # to the user's home directory starting with `~/`.
 import:
-  - ./alacritty_onedark.yml
+  # - ~/.config/alacritty/themes/vscode.yml
+  - ~/.config/alacritty/themes/kanagawa.yml
 
 # Any items in the `env` entry below will be added as
 # environment variables. Some entries may override variables
@@ -52,7 +53,7 @@ window:
   #
   # Values for `startup_mode` (macOS only):
   #   - SimpleFullscreen
-  startup_mode: Maximized
+  # startup_mode: Maximized
 
   # Allow terminal applications to change Alacritty's window title.
   dynamic_title: true
@@ -163,8 +164,8 @@ bell:
   #     args: ["Hello, World!"]
   #
   command:
-    program: ntfy
-    args: ["-o", "timeout", "2000", "-t", "Alacritty Terminal", "send", ":bell:"]
+    program: /home/rhabbachi/.local/bin/_alacritty_notify
+    # args: [ "-u", "low", "-t", "2000", "-a", "alacritty", "BEL from terminal"]
 
   # Background opacity
   #
@@ -293,9 +294,6 @@ live_config_reload: true
 # Alacritty will fall back to the WinPTY automatically if the ConPTY
 # backend cannot be initialized.
 enable_experimental_conpty_backend: false
-
-# Send ESC (\x1b) before characters when alt is pressed.
-alt_send_esc: true
 
 debug:
   # Display the time it takes to redraw each frame.

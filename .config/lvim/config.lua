@@ -1,20 +1,19 @@
 --[[
 lvim is the global options object
 
-Linters should be
+"Linters should be"
 filled in as strings with either
 a global executable or a path to
 an executable
 ]]
--- THESE ARE EXAMPLE CONFIGS FEEL FREE TO CHANGE TO WHATEVER YOU WANT
 
 -- general
 lvim.log.level = "warn"
-lvim.format_on_save = true
-lvim.colorscheme = "onedark"
+lvim.format_on_save = false
 
 -- keymappings [view all the defaults by pressing <leader>Lk]
 lvim.leader = "space"
+lvim.colorscheme = 'kanagawa'
 -- add your own keymapping
 lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
 
@@ -39,8 +38,16 @@ vim.opt.clipboard = "unnamedplus" -- allows neovim to access the system clipboar
 vim.opt.scrolloff = 8 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.sidescrolloff = 8 -- 	The minimal number of screen columns to keep to the left and to the right of the cursor if 'nowrap' is set.
 vim.opt.title = true -- set the title of window to the value of the titlestring
-vim.opt.titlestring = "%<%F%=%l/%L - nvim" -- what the title of the window will be set to
+-- vim.opt.title = true -- set the title of window to the value of the titlestring
+-- vim.opt.titlestring = "%<%F%=%l/%L - nvim" -- what the title of the window will be set to
+-- vim.opt.titlestring = [[%f %h%m%r%w %{v:progname} (%{tabpagenr()} of %{tabpagenr('$')})]]
 
+
+-- BUILTINS
+-- Lualine
+lvim.builtin.lualine.options.theme = "auto"
+
+-- Telescope
 -- Change Telescope navigation to use j and k for navigation and n and p for history in both input and normal mode.
 -- we use protected-mode (pcall) just in case the plugin wasn't loaded yet.
 -- local _, actions = pcall(require, "telescope.actions")
@@ -71,7 +78,6 @@ vim.opt.titlestring = "%<%F%=%l/%L - nvim" -- what the title of the window will 
 --   w = { "<cmd>Trouble lsp_workspace_diagnostics<cr>", "Diagnostics" },
 -- }
 
--- TODO: User Config for predefined plugins
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
 lvim.builtin.alpha.active = true
 lvim.builtin.alpha.mode = "dashboard"
@@ -100,7 +106,20 @@ lvim.builtin.treesitter.ensure_installed = {
 lvim.builtin.treesitter.ignore_install = { "haskell" }
 lvim.builtin.treesitter.highlight.enabled = true
 
+lvim.builtin.indentlines.options.use_treesitter = false
+
+-- andymass/vim-matchup
+lvim.builtin.treesitter.matchup.enable = true
+
+
 -- generic LSP settings
+-- add `intelephense` to `skipped_servers` list
+-- vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "intelephense" })
+
+-- remove `pylsp` from `skipped_servers` list
+lvim.lsp.automatic_configuration.skipped_servers = vim.tbl_filter(function(server)
+  return server ~= "pylsp"
+end, lvim.lsp.automatic_configuration.skipped_servers)
 
 -- ---@usage disable automatic installation of servers
 -- lvim.lsp.automatic_servers_installation = false
@@ -160,11 +179,6 @@ lvim.builtin.treesitter.highlight.enabled = true
 -- Additional Plugins
 lvim.plugins = {
   { "tpope/vim-repeat" },
-  { "joshdick/onedark.vim" },
-  {
-    "ggandor/lightspeed.nvim",
-    event = "BufRead",
-  },
   -- Make Vim handle line and column numbers in file names with a minimum of fuss.
   { "wsdjeg/vim-fetch" },
   -- Vim plugin which asks for the right file to open
@@ -174,7 +188,6 @@ lvim.plugins = {
   -- surround.vim: Delete/change/add parentheses/quotes/XML-tags/much more with
   -- ease.
   { "tpope/vim-surround",
-    keys = { "c", "d", "y" }
   },
   -- numbers.vim is a vim plugin for better line numbers
   { "myusuf3/numbers.vim" },
@@ -212,7 +225,7 @@ lvim.plugins = {
     "andymass/vim-matchup",
     event = "CursorMoved",
     config = function()
-      vim.g.matchup_matchparen_offscreen = { method = "popup" }
+      vim.g.matchup_matchparen_offscreen = { method = "popup", fullwidth = 1, syntax_hl = 1 }
     end,
   },
   -- sleuth.vim: Heuristically set buffer options
@@ -243,9 +256,79 @@ lvim.plugins = {
       vim.g.suda_smart_edit = 1
     end,
   },
+  {
+    "rebelot/kanagawa.nvim",
+    priority = 1000 -- Ensure it loads first
+  },
+  -- {
+  --   'nyngwang/NeoZoom.lua',
+  --   config = function()
+  --     require('neo-zoom').setup {
+  --       winopts = {
+  --         offset = {
+  --           -- NOTE: you can omit `top` and/or `left` to center the floating window.
+  --           -- top = 0,
+  --           -- left = 0.17,
+  --           width = 200,
+  --           height = 0.9,
+  --         },
+  --         -- NOTE: check :help nvim_open_win() for possible border values.
+  --         -- border = 'double',
+  --       },
+  --       exclude_filetypes = { 'lspinfo', 'mason', 'lazy', 'fzf', 'qf', 'spectre-panel' },
+  --       exclude_buftypes = { 'terminal' },
+  --       presets = {
+  --         {
+  --           filetypes = { 'dapui_.*', 'dap-repl' },
+  --           config = {
+  --             top = 0.25,
+  --             left = 0.6,
+  --             width = 0.4,
+  --             height = 0.65,
+  --           },
+  --           callbacks = {
+  --             function() vim.wo.wrap = true end,
+  --           },
+  --         },
+  --       },
+  --       -- popup = {
+  --       --   -- NOTE: Add popup-effect (replace the window on-zoom with a `[No Name]`).
+  --       --   -- This way you won't see two windows of the same buffer
+  --       --   -- got updated at the same time.
+  --       --   enabled = true,
+  --       --   exclude_filetypes = {},
+  --       --   exclude_buftypes = {},
+  --       -- },
+  --     }
+  --     vim.keymap.set('n', '<CR>', function() vim.cmd('NeoZoomToggle') end, { silent = true, nowait = true })
+  --   end
+  -- },
+  {
+    'towolf/vim-helm',
+  },
+  {
+    'NoahTheDuke/vim-just',
+  },
 }
 
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
--- lvim.autocommands.custom_groups = {
---   { "BufWinEnter", "*.lua", "setlocal ts=8 sw=8" },
--- }
+-- vim.api.nvim_create_autocmd("BufEnter", {
+--   pattern = { "*.json", "*.jsonc" },
+--   -- enable wrap mode for json files only
+--   command = "setlocal wrap",
+-- })
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = "zsh",
+--   callback = function()
+--     -- let treesitter use bash highlight for zsh files as well
+--     require("nvim-treesitter.highlight").attach(0, "bash")
+--   end,
+-- })
+-- Update titlestring on BufEnter.
+-- vim.api.nvim_create_autocmd("BufEnter", {
+--   pattern = "*",
+--   callback = function()
+--    set title titlestring=%{progname}\ %f\ #%{TmuxNavigateDirections()}
+--    vim.opt.titlestring = "[[%f %h%m%r%w %{v:progname} (%{tabpagenr()} of %{tabpagenr('$')})]]"
+--   end,
+-- })
